@@ -5,6 +5,10 @@ import {createServer} from './server.js';
 
 const server = await createServer();
 
+server.on('listening', () => {
+  logger.info(`Server listening on ${config.host}:${config.port}`);
+});
+
 server.listen({port: config.port, host: config.host});
 
 process.on('unhandledRejection', async (error) => {

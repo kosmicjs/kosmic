@@ -20,6 +20,15 @@ import {passport} from '#middleware/passport.js';
 
 type Logger = typeof logger;
 
+type Manifest = Record<
+  string,
+  {
+    css: string[];
+    file: string;
+    isEntry: boolean;
+    src: string;
+  }
+>;
 declare module 'koa' {
   interface Context {
     id: number | string;
@@ -31,15 +40,7 @@ declare module 'koa' {
   }
 
   interface State {
-    manifest?: Record<
-      string,
-      {
-        css: string[];
-        file: string;
-        isEntry: boolean;
-        src: string;
-      }
-    >;
+    manifest?: Manifest;
   }
 
   interface Response {
@@ -64,15 +65,7 @@ export async function createServer(): Promise<Server> {
           path.join(import.meta.dirname, 'public', '.vite', 'manifest.json'),
           'utf8',
         ),
-      ) as Record<
-        string,
-        {
-          css: string[];
-          file: string;
-          isEntry: boolean;
-          src: string;
-        }
-      >;
+      ) as Manifest;
       ctx.state.manifest = manifest;
       await next();
     });
