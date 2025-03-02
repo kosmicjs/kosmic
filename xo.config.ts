@@ -1,4 +1,4 @@
-import {type FlatXoConfig, TS_FILES_GLOB} from 'xo';
+import {type FlatXoConfig, tsFilesGlob} from 'xo';
 
 const config: FlatXoConfig = [
   {
@@ -19,7 +19,7 @@ const config: FlatXoConfig = [
     },
   },
   {
-    files: [TS_FILES_GLOB],
+    files: [tsFilesGlob],
     rules: {
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/naming-convention': 'off',
