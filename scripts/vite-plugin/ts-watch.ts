@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+
 import ts from 'typescript';
 
 const noop = async () => undefined;
 
-export function watchMain(callback?: () => Promise<void>) {
+export function tsWatch(callback?: () => Promise<void>) {
   const configPath = ts.findConfigFile(
     './',
     ts.sys.fileExists,
@@ -27,7 +27,7 @@ export function watchMain(callback?: () => Promise<void>) {
   // Note that there is another overload for `createWatchCompilerHost` that takes a set of root files.
   const host = ts.createWatchCompilerHost(
     configPath,
-    {preserveWatchOutput: true},
+    {preserveWatchOutput: true, noEmitOnError: true},
     ts.sys,
     ts.createEmitAndSemanticDiagnosticsBuilderProgram,
     origWatchDiagnosticReporter,

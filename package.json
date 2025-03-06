@@ -38,7 +38,7 @@
     "compile:cp": "cp -rp src/public ./dist/src",
     "compile:tsc": "tsc -p tsconfig.json",
     "compile:vite": "vite build",
-    "dev": "vite & node ./scripts/watch-public-files & node --watch ./dist/src/index.js",
+    "dev": "vite",
     "lint": "xo",
     "migrate": "npm run compile:tsc && node ./dist/src/db/migrate up",
     "migrate:down": "npm run compile:tsc && node ./dist/src/db/migrate down",

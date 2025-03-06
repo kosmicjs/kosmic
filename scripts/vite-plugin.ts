@@ -1,21 +1,18 @@
-/* eslint-disable no-console */
 import path from 'node:path';
 import process from 'node:process';
-import fs from 'node:fs';
+import fs from 'node:fs/promises';
 import colors from 'picocolors';
 import picomatch from 'picomatch';
 import {normalizePath, type Plugin} from 'vite';
-import {watchMain} from './vite-plugin/ts-watch.js';
+import chokidar from 'chokidar';
+import {tsWatch} from './vite-plugin/ts-watch.js';
 import {startOrRestartServer} from './vite-plugin/start-or-restart-server.js';
-
 /**
  * Allows to automatically reload the page when a watched file changes.
  * @param paths - The file paths to watch.
  * @param config - The plugin configuration.
  */
 const vitePluginFullReload = (): Plugin => {
-  fs.rmSync('dist', {recursive: true, force: true});
-
   function normalizePaths(root: string, fp: string | string[]) {
     return (Array.isArray(fp) ? fp : [fp])
       .map((fp) => path.resolve(root, fp))
@@ -23,14 +20,21 @@ const vitePluginFullReload = (): Plugin => {
   }
 
   return {
-    name: 'vite-plugin-full-reload',
-    // apply: 'serve',
+    name: 'vite-plugin-kosmic',
+    apply: 'serve',
     // NOTE: Enable globbing so that Vite keeps track of the template files.
     config: () => ({server: {watch: {disableGlobbing: false}}}),
 
     async configureServer({watcher, ws, config: {logger}}) {
-      watchMain();
       const root = process.cwd();
+
+      const distFolder = path.resolve(root, 'dist');
+
+      const publicFolder = path.resolve(distFolder, 'src', 'public');
+
+      await fs.rm(path.resolve(root, 'dist'), {recursive: true, force: true});
+
+      tsWatch();
 
       const files = normalizePaths(root, [
         path.join('dist', 'src', '**', '*.js'),
@@ -39,7 +43,6 @@ const vitePluginFullReload = (): Plugin => {
       const shouldReload = picomatch(files);
 
       const checkReload = async (fp: string) => {
-        console.log('detected change', fp);
         if (shouldReload(fp)) {
           await startOrRestartServer(ws);
           logger.info(
@@ -52,6 +55,26 @@ const vitePluginFullReload = (): Plugin => {
       watcher.add(files);
       watcher.on('add', checkReload);
       watcher.on('change', checkReload);
+
+      await fs.cp(path.resolve(root, 'src', 'public'), publicFolder, {
+        recursive: true,
+      });
+
+      chokidar
+        .watch(path.join(root, 'src', 'public'), {
+          ignored: (fp, stats) => !stats?.isFile(),
+        })
+        .on('all', async (event, fp) => {
+          if (['add', 'change'].includes(event)) {
+            await fs.mkdir(publicFolder, {recursive: true});
+            await fs.copyFile(fp, path.join(publicFolder, path.basename(fp)));
+          }
+
+          if (event === 'unlink') {
+            await fs.unlink(path.join(publicFolder, path.basename(fp)));
+          }
+        });
+
       await startOrRestartServer();
     },
   };

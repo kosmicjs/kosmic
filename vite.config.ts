@@ -3,17 +3,17 @@ import process from 'node:process';
 import path from 'node:path';
 import {type UserConfig, createLogger} from 'vite';
 import {pino} from 'pino';
-import fullReload from './scripts/vite-plugin-full-reload.js';
+import kosmic from './scripts/vite-plugin.js';
 
 const viteLogger = pino({
-  name: 'client',
+  name: '~vite~',
   ...(process.env.NODE_ENV === 'production'
     ? {}
     : {transport: {target: 'pino-princess'}}),
 });
 
 const config: UserConfig = {
-  plugins: [fullReload()],
+  plugins: [kosmic()],
   root: path.join(__dirname, 'src', 'client'),
   build: {
     manifest: true,
@@ -32,7 +32,7 @@ const config: UserConfig = {
   css: {
     preprocessorOptions: {
       scss: {
-        api: 'modern-compiler', // or "modern"
+        api: 'modern',
         silenceDeprecations: [
           'mixed-decls',
           'color-functions',

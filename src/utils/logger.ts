@@ -3,7 +3,7 @@ import {pino} from 'pino';
 import {config} from '../config/index.js';
 
 export const logger = pino({
-  name: 'server',
+  name: 'kosmic',
   level: process.env.LOG_LEVEL ?? 'debug',
   ...(config.nodeEnv === 'production'
     ? {}
