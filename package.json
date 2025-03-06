@@ -30,6 +30,7 @@
   "scripts": {
     "analyze": "vite-bundle-visualizer",
     "build": "npm run clean && npm run compile",
+    "build:vite-plugin": "tsc -p ./scripts/tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
     "check:watch": "tsc -p tsconfig.json --noEmit --watch",
     "clean": "rimraf -rf ./dist",
@@ -37,7 +38,7 @@
     "compile:cp": "cp -rp src/public ./dist/src",
     "compile:tsc": "tsc -p tsconfig.json",
     "compile:vite": "vite build",
-    "dev": "npm run compile:tsc && vite & node ./scripts/watch-public-files & node --watch ./dist/src/index.js & npm run compile:tsc -- --watch --preserveWatchOutput",
+    "dev": "vite & node ./scripts/watch-public-files & node --watch ./dist/src/index.js",
     "lint": "xo",
     "migrate": "npm run compile:tsc && node ./dist/src/db/migrate up",
     "migrate:down": "npm run compile:tsc && node ./dist/src/db/migrate down",
@@ -101,7 +102,6 @@
     "stripe": "^17.7.0",
     "swagger-ui-dist": "^5.20.0",
     "titleize": "^4.0.0",
-    "wait-on": "^8.0.2",
     "zod": "^3.24.2",
     "zod-validation-error": "^3.4.0"
   },
@@ -123,7 +123,9 @@
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-local": "^1.0.38",
     "@types/pg": "^8.11.11",
+    "@types/picomatch": "^3.0.2",
     "@types/swagger-ui-dist": "^3.30.5",
+    "@types/wait-on": "^5.3.4",
     "chokidar": "^4.0.3",
     "husky": "^9.1.7",
     "kosmic": "file:.",
@@ -131,6 +133,8 @@
     "meow": "^13.2.0",
     "npm-package-json-lint": "^8.0.0",
     "npm-package-json-lint-config-default": "^7.0.1",
+    "picocolors": "^1.1.1",
+    "picomatch": "^4.0.2",
     "prettier": "^3.5.2",
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-packagejson": "^2.5.9",
@@ -142,6 +146,8 @@
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
     "vite-bundle-visualizer": "^1.2.1",
+    "vite-plugin-tsc-watch": "^3.1.0",
+    "wait-on": "^8.0.2",
     "xo": "npm:@spence-s/flat-xo@^0.1.0"
   }
 }

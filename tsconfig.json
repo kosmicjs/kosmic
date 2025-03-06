@@ -15,13 +15,8 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2022",
+    "allowJs": true,
     "types": ["vite/client", "typed-htmx"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "scripts/*",
-    "test/**/*",
-    "vite.config.ts"
-  ]
+  "exclude": ["node_modules", "dist"]
 }

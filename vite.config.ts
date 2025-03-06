@@ -3,6 +3,7 @@ import process from 'node:process';
 import path from 'node:path';
 import {type UserConfig, createLogger} from 'vite';
 import {pino} from 'pino';
+import fullReload from './scripts/vite-plugin-full-reload.js';
 
 const viteLogger = pino({
   name: 'client',
@@ -12,6 +13,7 @@ const viteLogger = pino({
 });
 
 const config: UserConfig = {
+  plugins: [fullReload()],
   root: path.join(__dirname, 'src', 'client'),
   build: {
     manifest: true,
