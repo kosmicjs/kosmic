@@ -5,6 +5,7 @@ import colors from 'picocolors';
 import picomatch from 'picomatch';
 import {normalizePath, type Plugin} from 'vite';
 import chokidar from 'chokidar';
+import pDebounce from 'p-debounce';
 import {tsWatch} from './vite-plugin/ts-watch.js';
 import {startOrRestartServer} from './vite-plugin/start-or-restart-server.js';
 /**
@@ -42,15 +43,14 @@ const vitePluginFullReload = (): Plugin => {
 
       const shouldReload = picomatch(files);
 
-      const checkReload = async (fp: string) => {
+      const checkReload = pDebounce(async (fp: string) => {
         if (shouldReload(fp)) {
           await startOrRestartServer(ws);
           logger.info(
-            `${colors.green('Full Reload')} ${colors.dim(path.relative(root, fp))}`,
-            {clear: true, timestamp: true},
+            `${colors.green('Full Reload')} ${colors.dim(path.relative(distFolder, fp))}`,
           );
         }
-      };
+      }, 150);
 
       watcher.add(files);
       watcher.on('add', checkReload);
