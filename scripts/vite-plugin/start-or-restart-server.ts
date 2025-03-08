@@ -6,14 +6,17 @@ const $$ = $({stdio: 'inherit'});
 let serverProcess: ResultPromise<{stdio: 'inherit'}> | undefined;
 let isRestarting = false;
 
-const waitOnConfig = {
-  resources: ['tcp:127.0.0.1:3000', 'http://127.0.0.1:3000'],
-  timeout: 5000,
-  tcpTimeout: 1000,
-  reverse: true,
-};
+export const startOrRestartServer = async (
+  {port = 3000}: {port?: string | number} = {},
+  ws?: WebSocketServer,
+) => {
+  const waitOnConfig = {
+    resources: [`tcp:127.0.0.1:${port}`, `http://127.0.0.1:${port}`],
+    timeout: 5000,
+    tcpTimeout: 1000,
+    reverse: true,
+  };
 
-export const startOrRestartServer = async (ws?: WebSocketServer) => {
   if (isRestarting) {
     return;
   }

@@ -10,10 +10,8 @@ import {tsWatch} from './vite-plugin/ts-watch.js';
 import {startOrRestartServer} from './vite-plugin/start-or-restart-server.js';
 /**
  * Allows to automatically reload the page when a watched file changes.
- * @param paths - The file paths to watch.
- * @param config - The plugin configuration.
  */
-const vitePluginFullReload = (): Plugin => {
+const vitePluginFullReload = ({port}: {port: string | number}): Plugin => {
   function normalizePaths(root: string, fp: string | string[]) {
     return (Array.isArray(fp) ? fp : [fp])
       .map((fp) => path.resolve(root, fp))
@@ -45,7 +43,7 @@ const vitePluginFullReload = (): Plugin => {
 
       const checkReload = pDebounce(async (fp: string) => {
         if (shouldReload(fp)) {
-          await startOrRestartServer(ws);
+          await startOrRestartServer({port}, ws);
           logger.info(
             `${colors.green('Full Reload')} ${colors.dim(path.relative(distFolder, fp))}`,
           );
@@ -75,7 +73,7 @@ const vitePluginFullReload = (): Plugin => {
           }
         });
 
-      await startOrRestartServer();
+      await startOrRestartServer({port});
     },
   };
 };
