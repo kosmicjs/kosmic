@@ -11,7 +11,9 @@ import {startOrRestartServer} from './vite-plugin/start-or-restart-server.js';
 /**
  * Allows to automatically reload the page when a watched file changes.
  */
-const vitePluginFullReload = ({port}: {port: string | number}): Plugin => {
+const vitePluginFullReload = ({
+  port = 3000,
+}: {port?: string | number} = {}): Plugin => {
   function normalizePaths(root: string, fp: string | string[]) {
     return (Array.isArray(fp) ? fp : [fp])
       .map((fp) => path.resolve(root, fp))

@@ -5,8 +5,11 @@ import humanizeString from 'humanize-string';
 const pageList = [
   {name: 'installation'},
   {name: 'quick-start'},
-  {name: 'cli'},
+  {name: 'scripts'},
+  {name: 'db'},
+  {name: 'models'},
   {name: 'development'},
+  {name: 'client'},
 ];
 
 type Props = {

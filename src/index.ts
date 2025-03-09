@@ -15,8 +15,10 @@ process.on('unhandledRejection', async (error) => {
   throw error;
 });
 
-process.on('uncaughtException', async (error) => {
+process.on('uncaughtException', (error) => {
   logger.error(error);
   server.closeAllConnections();
-  server.close();
+  server.close(() => {
+    process.exit(1);
+  });
 });
