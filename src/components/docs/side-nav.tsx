@@ -1,15 +1,14 @@
 import clsx from 'clsx';
-import titleize from 'titleize';
-import humanizeString from 'humanize-string';
 
 const pageList = [
-  {name: 'installation'},
-  {name: 'quick-start'},
+  {name: 'About'},
+  {name: 'Installation'},
+  {name: 'Quick-Start'},
   {name: 'scripts'},
   {name: 'db'},
   {name: 'models'},
-  {name: 'development'},
   {name: 'client'},
+  {name: 'development'},
 ];
 
 type Props = {
@@ -25,9 +24,9 @@ export default function SideNav({pageName}: Props) {
           class={clsx('list-group-item list-group-item-action ', {
             'list-group-item-dark': pageName === page.name,
           })}
-          href={`/docs/${page.name}`}
+          href={`/docs/${page.name.toLowerCase()}`}
         >
-          {titleize(humanizeString(page.name))}
+          {page.name.replaceAll('-', ' ')}
         </a>
       ))}
     </div>
