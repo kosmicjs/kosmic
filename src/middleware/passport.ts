@@ -6,12 +6,12 @@ import {Strategy as LocalStrategy} from 'passport-local';
 //   type Profile,
 //   type VerifyCallback,
 // } from 'passport-google-oauth20';
+import {Strategy as GithubStrategy} from 'passport-github2';
 import argon2 from 'argon2';
-import {type SelectableUser} from '../models/users.js';
-import {db} from '../db/index.js';
-import logger from '../utils/logger.js';
-
-// const {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET} = process.env;
+import {type SelectableUser} from '#models/users.js';
+import {db} from '#db/index.js';
+import logger from '#utils/logger.js';
+import {config} from '#config/index.js';
 
 declare module 'koa' {
   interface State {
@@ -80,65 +80,72 @@ passport.use(
   ),
 );
 
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: GOOGLE_CLIENT_ID!,
-//       clientSecret: GOOGLE_CLIENT_SECRET!,
-//       scope: [
-//         'https://www.googleapis.com/auth/userinfo.profile',
-//         'https://www.googleapis.com/auth/userinfo.email',
-//       ],
-//       callbackURL: 'http://localhost:3000/auth/google/callback',
-//     },
-//     async function (
-//       accessToken,
-//       refreshToken,
-//       profile: Profile,
-//       cb: VerifyCallback,
-//     ) {
-//       logger.debug(
-//         {accessToken, refreshToken, profile},
-//         'google profile response',
-//       );
+if (config.github) {
+  passport.use(
+    new GithubStrategy(
+      {
+        clientID: config.github.clientID,
+        clientSecret: config.github.clientSecret,
+        callbackURL: config.github.callbackURL,
+        scope: ['user:email'],
+      },
+      async function (
+        accessToken: string,
+        refreshToken: string,
+        profile: {emails: Array<{value: string}>; displayName: string},
+        done: (err: Error | undefined, user?: SelectableUser) => void,
+      ) {
+        logger.debug(
+          {accessToken, refreshToken, profile},
+          'github profile response',
+        );
 
-//       if (!profile.emails?.[0].value) {
-//         cb(new Error('No email found in profile'));
-//         return;
-//       }
+        const email = profile.emails?.[0]?.value;
 
-//       let user = await db
-//         .selectFrom('users')
-//         .selectAll()
-//         .where('email', '=', profile.emails[0].value)
-//         .executeTakeFirst();
+        if (!email) {
+          done(new Error('No email found in profile'));
+          return;
+        }
 
-//       if (user) {
-//         cb(null, user);
-//         return;
-//       }
+        let user = await db
+          .selectFrom('users')
+          .selectAll()
+          .where('email', '=', email)
+          .executeTakeFirst();
 
-//       try {
-//         user = await db
-//           .insertInto('users')
-//           .values({
-//             first_name: profile.name?.givenName,
-//             last_name: profile.name?.familyName,
-//             email: profile.emails[0].value,
-//             google_access_token: accessToken,
-//             google_refresh_token: refreshToken,
-//           })
-//           .returningAll()
-//           .executeTakeFirstOrThrow();
-//       } catch (error) {
-//         logger.error(error);
-//         throw error;
-//       }
+        if (user) {
+          done(undefined, user);
+          return;
+        }
 
-//       cb(null, user);
-//     },
-//   ),
-// );
+        try {
+          user = await db
+            .insertInto('users')
+            .values({
+              first_name: profile.displayName?.split(' ')[0] || '',
+              last_name:
+                profile.displayName?.split(' ').slice(1).join(' ') || '',
+              email,
+              github_access_token: accessToken,
+              github_refresh_token: refreshToken,
+            })
+            .returningAll()
+            .executeTakeFirstOrThrow();
+        } catch (error) {
+          if (error instanceof Error) {
+            logger.error(error);
+            done(error);
+            return;
+          }
+
+          throw error;
+        }
+
+        done(undefined, user);
+      },
+    ),
+  );
+}
 
 // eslint-disable-next-line unicorn/prefer-export-from
 export {passport};

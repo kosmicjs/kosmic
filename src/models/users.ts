@@ -11,6 +11,8 @@ const schema = zod.object({
   hash: zod.string().max(255).nullable(),
   google_access_token: zod.string().max(255).nullable(),
   google_refresh_token: zod.string().max(255).nullable(),
+  github_access_token: zod.string().max(255).nullable(),
+  github_refresh_token: zod.string().max(255).nullable(),
 });
 
 export type User = GeneratedId<zod.infer<typeof schema>>;

@@ -46,8 +46,6 @@ export function Layout({
 
   scripts ??= [];
 
-  ctx.log.debug({sessionMessages});
-
   if (ctx.session && sessionMessages.length > 0) {
     ctx.session.messages = [];
     ctx.session.save();

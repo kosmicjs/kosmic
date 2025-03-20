@@ -35,7 +35,7 @@ export function tsWatch(callback?: () => Promise<void>) {
   );
 
   // `createWatchProgram` creates an initial program, watches files, and updates the program over time.
-  ts.createWatchProgram(host);
+  return ts.createWatchProgram(host);
 }
 
 function createWatchStatusChanged(

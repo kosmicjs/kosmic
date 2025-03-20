@@ -80,6 +80,21 @@ export const configSchema = z.object({
     })
     .partial()
     .optional(),
+  github: z
+    .object({
+      clientID: z.string(),
+      clientSecret: z.string(),
+      callbackURL: z.string(),
+    })
+    .optional(),
+
+  google: z
+    .object({
+      clientID: z.string(),
+      clientSecret: z.string(),
+      callbackURL: z.string(),
+    })
+    .optional(),
   sessionKeys: z.array(z.string()).default(['kosmic-secret-keys']),
 });
 
