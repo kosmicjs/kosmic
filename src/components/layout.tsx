@@ -33,7 +33,7 @@ function Script({file}: {readonly file?: string | undefined}) {
   return <script type="module" src={file} />;
 }
 
-export default function Layout({
+export function Layout({
   children,
   title,
   scripts,
@@ -122,3 +122,5 @@ export default function Layout({
     </html>
   );
 }
+
+export default Layout;
