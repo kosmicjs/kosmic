@@ -17,4 +17,4 @@ src/public/assets
 src/public/.vite
 .vite-node
 data
-scripts/**/*.js
+scripts/archive

@@ -9,14 +9,24 @@ server.listen({port: config.port, host: config.host}, () => {
   logger.info(`Server listening on ${config.host}:${config.port}`);
 });
 
+// throw to bubble up to uncaughtException
 process.on('unhandledRejection', async (error) => {
   throw error;
 });
 
+// exit on exception
 process.on('uncaughtException', (error) => {
   logger.error(error);
+  process.exit(1);
+});
+
+// gracefully close server on all exits
+process.on('beforeExit', () => {
+  logger.info('Server shutting down');
+  logger.info('Server shutting down');
+
   server.closeAllConnections();
   server.close(() => {
-    process.exit(1);
+    process.exit(0);
   });
 });

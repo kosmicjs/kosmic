@@ -1,7 +1,6 @@
 import {type FlatXoConfig, tsFilesGlob} from 'xo';
 
 const config: FlatXoConfig = [
-  {ignores: ['scripts/**/*.js']},
   {
     space: true,
     prettier: true,
