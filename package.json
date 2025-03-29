@@ -38,7 +38,7 @@
     "compile:cp": "cp -rp src/public ./dist/src",
     "compile:tsc": "tsc -p tsconfig.json",
     "compile:vite": "vite build",
-    "dev": "node scripts/dev.js",
+    "dev": "node --no-warnings --experimental-strip-types scripts/dev.ts",
     "lint": "xo",
     "migrate": "npm run compile:tsc && node ./dist/src/db/migrate up",
     "migrate:down": "npm run compile:tsc && node ./dist/src/db/migrate down",
@@ -152,6 +152,6 @@
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-tsc-watch": "^3.1.0",
     "wait-on": "^8.0.3",
-    "xo": "npm:@spence-s/flat-xo@^0.1.0"
+    "xo": "file:../flat-xo"
   }
 }

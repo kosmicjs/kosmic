@@ -8,7 +8,7 @@ import pDebounce from 'p-debounce';
 import {
   waitForPortToBeTaken,
   waitForPortToBeFree,
-} from './vite-plugin/wait-on-port-taken.js';
+} from './wait-on-port-taken.js';
 
 function normalizePaths(root: string, fp: string | string[]) {
   return (Array.isArray(fp) ? fp : [fp])
@@ -55,9 +55,10 @@ const vitePluginFullReload = ({
 
         await waitForPortToBeFree(Number(port));
         await waitForPortToBeTaken(Number(port));
+
         ws.send({type: 'full-reload', path: '*'});
         logger.info(
-          `${colors.green('Full Reload')} ${colors.dim(path.relative(distFolder, fp))}`,
+          `${colors.green('Refresh Browser')} ${colors.dim(path.relative(distFolder, fp))}`,
         );
       }, 200);
 
