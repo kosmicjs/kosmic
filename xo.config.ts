@@ -1,4 +1,4 @@
-import {type FlatXoConfig, tsFilesGlob} from 'xo';
+import {type FlatXoConfig} from 'xo';
 
 const config: FlatXoConfig = [
   {
@@ -16,11 +16,6 @@ const config: FlatXoConfig = [
       'react/self-closing-comp': 'off',
       'unicorn/no-array-reduce': 'off',
       'unicorn/prevent-abbreviations': 'off',
-    },
-  },
-  {
-    files: [tsFilesGlob],
-    rules: {
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/naming-convention': 'off',
       '@typescript-eslint/no-unused-vars': [
