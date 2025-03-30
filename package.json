@@ -33,7 +33,7 @@
     "build:vite-plugin": "tsc -p ./scripts/tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
     "check:watch": "tsc -p tsconfig.json --noEmit --watch",
-    "clean": "rimraf -rf ./dist",
+    "clean": "rimraf dist",
     "compile": "npm run compile:tsc && npm run compile:vite && npm run compile:cp",
     "compile:cp": "cp -rp src/public ./dist/src",
     "compile:tsc": "tsc -p tsconfig.json",
@@ -45,7 +45,8 @@
     "prepare": "husky || true",
     "prepublishOnly": "npm run build",
     "start": "NODE_ENV=production node dist/src/index.js",
-    "test": "npm run clean && npm run compile:tsc && node --test dist/test/server.test.js"
+    "test": "rimraf dist && tsc -p tsconfig.json --watch & wait-on dist/test/server.test.js && node --test dist/test/server.test.js",
+    "test:watch": "rimraf dist && tsc -p tsconfig.json --watch & wait-on dist/test/server.test.js && node --test --watch dist/test/server.test.js"
   },
   "prettier": {
     "plugins": [
@@ -130,6 +131,7 @@
     "@types/picomatch": "^3.0.2",
     "@types/swagger-ui-dist": "^3.30.5",
     "@types/wait-on": "^5.3.4",
+    "cheerio": "^1.0.0",
     "chokidar": "^4.0.3",
     "husky": "^9.1.7",
     "kosmic": "file:.",
@@ -152,6 +154,6 @@
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-tsc-watch": "^3.1.0",
     "wait-on": "^8.0.3",
-    "xo": "npm:@spence-s/flat-xo@^0.2.1"
+    "xo": "npm:@spence-s/flat-xo@^0.2.2"
   }
 }

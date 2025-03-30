@@ -4,11 +4,10 @@ export type Props = {
   readonly title?: string;
 };
 
-export default function Header({title}: Props) {
+export default function Header() {
   return (
     <header className="w-100 mb-5">
       <Nav />
-      <h1>{title}</h1>
     </header>
   );
 }
