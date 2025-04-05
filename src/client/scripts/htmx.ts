@@ -4,13 +4,17 @@ import {initializeTooltips} from './tooltips.js';
 import {initializeCodeCopy} from './copy.js';
 import {initializeIslands} from './islands.js';
 import {initializeProgressBar} from './progress-bar.js';
+import {initializeOffcanvas} from './off-canvas.js';
 import {$} from './query.js';
+import {initializeColorModeSwitch} from './color-mode-switch.js';
 
 htmx.onLoad(function ($content) {
   initializeTooltips($content);
   initializeCodeCopy($content);
   initializeIslands($content);
   initializeProgressBar($content);
+  initializeOffcanvas($content);
+  initializeColorModeSwitch($content);
 });
 
 declare global {
@@ -25,9 +29,9 @@ declare global {
   }
 }
 
-htmx.on('htmx:afterSwap', function (evt) {
-  initializeIslands(evt?.detail?.target ?? $('body')!);
-});
+// htmx.on('htmx:afterSwap', function (evt) {
+//   // initializeIslands(evt?.detail?.target ?? $('body')!);
+// });
 
 htmx.on('htmx:beforeSwap', function (evt) {
   if (

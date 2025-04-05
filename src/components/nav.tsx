@@ -95,6 +95,24 @@ export default function Nav() {
             )}
           </ul>
           <div>
+            <div class="form-check form-switch">
+              <input // eslint-disable-line react/checked-requires-onchange-or-readonly
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="color-mode-switch"
+                checked={
+                  ctx.cookies?.get('kosmic-color-mode') === 'light'
+                    ? true
+                    : undefined
+                }
+              />
+              <label class="form-check-label" for="color-mode-switch">
+                Theme
+              </label>
+            </div>
+          </div>
+          <div>
             {ctx.state.user?.email ? (
               <a class="btn btn-outline-warning" type="button" href="/logout">
                 Logout

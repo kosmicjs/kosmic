@@ -23,7 +23,6 @@ process.on('uncaughtException', (error) => {
 // gracefully close server on all exits
 process.on('beforeExit', () => {
   logger.info('Server shutting down');
-  logger.info('Server shutting down');
 
   server.closeAllConnections();
   server.close(() => {

@@ -7,7 +7,7 @@
  */
 import 'vite/modulepreload-polyfill';
 import '@popperjs/core';
-import 'bootstrap';
+// Import all of Bootstrap's JS
 import '../styles/styles.scss';
 // eslint-disable-next-line import-x/order
 import 'highlight.js/styles/base16/dracula.css';

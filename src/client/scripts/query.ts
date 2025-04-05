@@ -55,3 +55,7 @@ export const $ = (s: string, c?: Element) =>
 export const $$ = (s: string, c?: Element) =>
   // eslint-disable-next-line @typescript-eslint/no-deprecated
   (c ?? document).querySelectorAll.bind(c ?? document)(s);
+
+export const isHtmlElement = (el: Element): el is HTMLElement => {
+  return el instanceof HTMLElement;
+};

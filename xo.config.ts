@@ -1,4 +1,6 @@
-import {type FlatXoConfig} from 'xo';
+// import {type FlatXoConfig} from 'xo';
+
+type FlatXoConfig = any;
 
 const config: FlatXoConfig = [
   {

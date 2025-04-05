@@ -95,7 +95,10 @@ export function Layout({
           </>
         )}
       </head>
-      <body data-bs-theme="dark" hx-boost="true">
+      <body
+        data-bs-theme={ctx.cookies?.get('kosmic-color-mode') ?? 'dark'}
+        hx-boost="true"
+      >
         <div
           class="progress nav-progress w-100"
           role="progressbar"

@@ -25,6 +25,18 @@ export default function DocsLayout({pageName, children}: Props) {
 
   return (
     <Layout title={`Docs - ${formattedPageName}`}>
+      <div class="row d-md-none">
+        <div class="col-12 pb-5 pb-md-0">
+          <button
+            type="button"
+            class="btn btn-warning border-0"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvas"
+          >
+            nav
+          </button>
+        </div>
+      </div>
       <div class="row">
         <div class="col-12 col-md-2 pb-5 pb-md-0">
           <SideNav pageName={page} />
