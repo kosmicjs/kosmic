@@ -1,5 +1,4 @@
 /* eslint-disable unicorn/prefer-module */
-import process from 'node:process';
 import path from 'node:path';
 import {type UserConfig, createLogger} from 'vite';
 import {pino} from 'pino';
@@ -8,7 +7,7 @@ import {config as kosmicConfig} from './src/config/index.js';
 
 const viteLogger = pino({
   name: '~vite~',
-  ...(process.env.NODE_ENV === 'production'
+  ...(kosmicConfig.kosmicEnv === 'production'
     ? {}
     : {transport: {target: 'pino-princess'}}),
 });
@@ -16,9 +15,6 @@ const viteLogger = pino({
 const config: UserConfig = {
   plugins: [kosmic({port: kosmicConfig.port})],
   root: path.join(__dirname, 'src', 'client'),
-  server: {
-    origin: `/public/`,
-  },
   build: {
     manifest: true,
     rollupOptions: {
