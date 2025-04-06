@@ -59,6 +59,7 @@
     "@stripe/stripe-js": "^7.0.0",
     "argon2": "^0.41.1",
     "bootstrap": "^5.3.5",
+    "bootstrap-icons": "^1.11.3",
     "camelcase": "^8.0.0",
     "clsx": "^2.1.1",
     "copy-to-clipboard": "^3.3.3",

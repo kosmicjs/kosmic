@@ -95,7 +95,7 @@ export default function Nav() {
               ),
             )}
           </ul>
-          <div>
+          <div class="me-5">
             <ThemeSwitchIsland
               isChecked={ctx.cookies?.get('kosmic-color-mode') === 'light'}
             />

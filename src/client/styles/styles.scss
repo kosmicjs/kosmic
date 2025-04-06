@@ -1,6 +1,9 @@
 @use "sass:meta";
 @import "./bootstrap";
 
+$bootstrap-icons-font-dir: "/fonts";
+@import "bootstrap-icons/font/bootstrap-icons";
+
 // https://github.com/highlightjs/highlight.js/issues/2115#issuecomment-1059981062
 body[data-bs-theme="light"] {
   @include meta.load-css("highlight.js/styles/base16/solarized-light.css");

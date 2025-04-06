@@ -5,7 +5,9 @@ export type Props = {
 };
 
 export function ThemeSwitch({isChecked = false}: Props = {}) {
-  const [colorMode, setColorMode] = useState(isChecked ? 'Light' : 'Dark');
+  const [colorMode, setColorMode] = useState(
+    isChecked ? <i class="bi bi-sun"></i> : <i class="bi bi-moon-stars"></i>,
+  );
   const [isCheckedState, setIsCheckedState] = useState(isChecked);
 
   return (
@@ -26,7 +28,13 @@ export function ThemeSwitch({isChecked = false}: Props = {}) {
 
           const colorMode = ev.currentTarget.checked ? 'light' : 'dark';
           setCookie('kosmic-color-mode', colorMode);
-          setColorMode(colorMode);
+          setColorMode(
+            ev.currentTarget.checked ? (
+              <i class="bi bi-sun"></i>
+            ) : (
+              <i class="bi bi-moon-stars"></i>
+            ),
+          );
           setIsCheckedState(ev.currentTarget.checked);
           const body = document.querySelector('body');
           if (body instanceof HTMLBodyElement) {
