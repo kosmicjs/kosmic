@@ -1,4 +1,14 @@
+@use "sass:meta";
 @import "./bootstrap";
+
+// https://github.com/highlightjs/highlight.js/issues/2115#issuecomment-1059981062
+body[data-bs-theme="light"] {
+  @include meta.load-css("highlight.js/styles/base16/solarized-light.css");
+}
+
+body[data-bs-theme="dark"] {
+  @include meta.load-css("highlight.js/styles/base16/dracula.css");
+}
 
 .cursor-pointer {
   cursor: pointer;

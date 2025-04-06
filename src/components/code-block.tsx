@@ -28,7 +28,7 @@ export default function CodeBlock({
           dangerouslySetInnerHTML={{
             __html: dedent`${isMultiline ? '' : '$ '}${hljs.highlight(code.trim(), {language}).value.trim()}`,
           }}
-          class={clsx('bg-black p-2 mt-0 d-block cursor-pointer', {
+          class={clsx('p-2 mt-0 d-block cursor-pointer border', {
             rounded: !isMultiline || !filename,
             'rounded-bottom': isMultiline && filename,
           })}
