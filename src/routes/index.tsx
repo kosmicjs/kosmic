@@ -1,5 +1,5 @@
 import {type Middleware} from 'koa';
-import Counter from '#components/islands/counter.js';
+import {CounterIsland} from '#components/islands/counter.js';
 import Layout from '#components/layout.js';
 
 declare module 'koa-session' {
@@ -73,13 +73,8 @@ export const get: Middleware = async function (ctx) {
           Hello from Preact! This is a small island of Preact that is hydrated
           and given interactivity on the client side.
         </div>
-        <div
-          class="p-2"
-          data-island="counter"
-          data-props={JSON.stringify({initialCount: 2})}
-        >
-          <Counter {...{initialCount: 2}} />
-        </div>
+
+        <CounterIsland {...{initialCount: 2}} />
       </div>
     </Layout>,
   );

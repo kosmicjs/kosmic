@@ -6,7 +6,6 @@ import {initializeIslands} from './islands.js';
 import {initializeProgressBar} from './progress-bar.js';
 import {initializeOffcanvas} from './off-canvas.js';
 import {$} from './query.js';
-import {initializeColorModeSwitch} from './color-mode-switch.js';
 
 htmx.onLoad(function ($content) {
   initializeTooltips($content);
@@ -14,7 +13,6 @@ htmx.onLoad(function ($content) {
   initializeIslands($content);
   initializeProgressBar($content);
   initializeOffcanvas($content);
-  initializeColorModeSwitch($content);
 });
 
 declare global {

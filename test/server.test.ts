@@ -24,6 +24,22 @@ await describe('server integration', async () => {
     strictEqual($h1.text(), 'Kosmic');
   });
 
+  await test('Get / 404 not found', async () => {
+    const response = await got('http://localhost:4567/404', {
+      throwHttpErrors: false,
+    });
+    strictEqual(response.statusCode, 404);
+    strictEqual(response.body, 'Not Found');
+  });
+
+  await test('Get /docs', async () => {
+    const response = await got('http://localhost:4567/docs', {
+      throwHttpErrors: false,
+      followRedirect: false,
+    });
+    strictEqual(response.statusCode, 302);
+  });
+
   after(() => {
     server.closeAllConnections();
     server.close();

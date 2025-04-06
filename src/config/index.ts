@@ -50,6 +50,7 @@ export const envSchema = z
     DB_PASSWORD: z.string(),
     DB_CONNECTION_STRING: z.string(),
     SESSION_KEYS: z.string(),
+    LOG_LEVEL: z.string(),
   })
   .partial();
 
@@ -70,6 +71,8 @@ export const configSchema = z.object({
   port: z.coerce.number().default(3000),
   /** The host the server is started on, defaults to 127.0.0.1 */
   host: z.string().default('127.0.0.1'),
+  /** logger */
+  logLevel: z.string().default('info'),
   /** Passed directly to the postgres pool */
   pg: z.intersection(
     z.object({
@@ -122,6 +125,7 @@ const configByEnv = {
     port: env.PORT,
     host: env.SERVER_HOST,
     sessionKeys: env.SESSION_KEYS?.split(','),
+    logLevel: env.LOG_LEVEL,
     pg: {
       connectionString: env.DB_CONNECTION_STRING,
       user: env.DB_USER,
@@ -134,18 +138,22 @@ const configByEnv = {
     connectionTimeoutMillis: 2000,
   },
   development: {
+    logLevel: 'debug',
     stripe: {
       secretKey: env.STRIPE_SECRET_KEY,
       endpointSecret: env.STRIPE_ENDPOINT_SECRET,
     },
   },
   production: {
+    logLevel: 'info',
     stripe: {
       secretKey: env.STRIPE_SECRET_KEY,
       endpointSecret: env.STRIPE_ENDPOINT_SECRET,
     },
   },
-  test: {},
+  test: {
+    logLevel: 'silent',
+  },
 };
 
 export const config = (() => {

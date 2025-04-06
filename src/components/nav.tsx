@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import {ColorModeSwitch} from './partials/color-mode-switch.js';
+import {ThemeSwitchIsland} from './islands/theme-switch.js';
 import {getCtx} from '#server';
 
 const NavItems = [
@@ -96,7 +96,9 @@ export default function Nav() {
             )}
           </ul>
           <div>
-            <ColorModeSwitch />
+            <ThemeSwitchIsland
+              isChecked={ctx.cookies?.get('kosmic-color-mode') === 'light'}
+            />
           </div>
           <div>
             {ctx.state.user?.email ? (
