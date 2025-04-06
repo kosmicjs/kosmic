@@ -7,7 +7,6 @@
  */
 import 'vite/modulepreload-polyfill';
 import '@popperjs/core';
-// import icon font
 // Import all of Bootstrap's JS
 import '../styles/styles.scss';
 // We can then use query syntax in other scripts
