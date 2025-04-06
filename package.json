@@ -45,8 +45,8 @@
     "prepare": "husky || true",
     "prepublishOnly": "npm run build",
     "start": "NODE_ENV=production KOSMIC_ENV=production node dist/src/index.js",
-    "test": "rimraf dist && tsc -p tsconfig.json & wait-on dist/test/server.test.js && node --test dist/test/server.test.js",
-    "test:watch": "rimraf dist && tsc -p tsconfig.json --watch & wait-on dist/test/server.test.js && KOSMIC_ENV=test node --test --watch dist/test/server.test.js"
+    "test": "rimraf dist && tsc -p tsconfig.json & wait-on dist/test/server.test.js && NODE_ENV=test KOSMIC_ENV=test node --test dist/test/server.test.js",
+    "test:watch": "rimraf dist && tsc -p tsconfig.json --watch & wait-on dist/test/server.test.js && NODE_ENV=test KOSMIC_ENV=test node --test --watch dist/test/server.test.js"
   },
   "prettier": {
     "plugins": [
