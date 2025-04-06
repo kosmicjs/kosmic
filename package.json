@@ -74,7 +74,7 @@
     "htmx.org": "^1.9.12",
     "humanize-string": "^3.0.0",
     "kcors": "^2.2.2",
-    "koa": "^2.16.0",
+    "koa": "^2.16.1",
     "koa-404-handler": "^0.1.0",
     "koa-bodyparser": "^4.4.1",
     "koa-compose": "^4.1.0",
