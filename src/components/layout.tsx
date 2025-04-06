@@ -22,7 +22,7 @@ function Css({files}: {readonly files?: string[] | undefined}) {
   return (
     <>
       {files.map((fileName) => (
-        <link key={fileName} rel="stylesheet" href={fileName} />
+        <link key={fileName} rel="stylesheet" href={`/${fileName}`} />
       ))}
     </>
   );
@@ -30,7 +30,7 @@ function Css({files}: {readonly files?: string[] | undefined}) {
 
 function Script({file}: {readonly file?: string | undefined}) {
   if (!file) return null;
-  return <script type="module" src={file} />;
+  return <script type="module" src={`/${file}`} />;
 }
 
 export function Layout({

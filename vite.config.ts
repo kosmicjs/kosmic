@@ -16,6 +16,9 @@ const viteLogger = pino({
 const config: UserConfig = {
   plugins: [kosmic({port: kosmicConfig.port})],
   root: path.join(__dirname, 'src', 'client'),
+  server: {
+    origin: `/public/`,
+  },
   build: {
     manifest: true,
     rollupOptions: {
