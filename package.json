@@ -44,7 +44,7 @@
     "migrate:down": "npm run compile:tsc && node ./dist/src/db/migrate down",
     "prepare": "husky || true",
     "prepublishOnly": "npm run build",
-    "start": "NODE_ENV=production node dist/src/index.js",
+    "start": "NODE_ENV=production KOSMIC_ENV=production node dist/src/index.js",
     "test": "rimraf dist && tsc -p tsconfig.json --watch & wait-on dist/test/server.test.js && node --test dist/test/server.test.js",
     "test:watch": "rimraf dist && tsc -p tsconfig.json --watch & wait-on dist/test/server.test.js && node --test --watch dist/test/server.test.js"
   },
@@ -100,7 +100,7 @@
     "pino": "9.6.0",
     "pino-http": "^10.4.0",
     "pino-princess": "^1.0.0",
-    "preact": "^10.26.4",
+    "preact": "^10.26.5",
     "preact-render-to-string": "^6.5.13",
     "queue": "^7.0.0",
     "short-uuid": "^5.2.0",

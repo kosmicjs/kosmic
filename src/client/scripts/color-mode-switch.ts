@@ -24,12 +24,14 @@ const setCookie = (name: string, value: string, days = 30): void => {
 export const initializeColorModeSwitch = ($content: Element) => {
   const [$switch] = $$('#color-mode-switch', $content);
   const [$body] = $$('body');
-
+  // console.log('initializeColorModeSwitch', $switch, $body);
   if (!($switch instanceof HTMLInputElement) || !($body instanceof HTMLElement))
     return;
 
   // Initialize from cookie or system preference
   const savedMode = getCookie(COLOR_MODE_COOKIE);
+
+  // console.log('Saved mode:', savedMode);
 
   if (savedMode) {
     // Apply saved mode

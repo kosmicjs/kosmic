@@ -22,8 +22,20 @@ const kosmicEnv = z
   .default('development')
   .parse(process.env.KOSMIC_ENV);
 
+const parsedEnv: Record<string, string> = {};
+
+// laod .env first
 dotenv.config({
+  path: path.resolve(import.meta.dirname, process.cwd(), `.env`),
+  processEnv: parsedEnv,
+});
+
+// then override with specific env
+dotenv.config({
+  // TODO: should this use KOSMIC_ENV instead of NODE_ENV?
   path: path.resolve(import.meta.dirname, process.cwd(), `.env.${nodeEnv}`),
+  processEnv: parsedEnv,
+  override: true,
 });
 
 export const envSchema = z
@@ -41,7 +53,11 @@ export const envSchema = z
   })
   .partial();
 
-const env = envSchema.parse(process.env);
+// Variables set outside of the env files override the env files
+const env = envSchema.parse({
+  ...parsedEnv,
+  ...process.env,
+});
 
 /**
  * The configuration schema for the application
