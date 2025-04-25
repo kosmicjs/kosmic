@@ -1,14 +1,6 @@
 export default function SignupForm() {
-  const handleSubmit = (evt: Event) => {
-    evt.preventDefault();
-    // eslint-disable-next-line no-console
-    console.log(evt);
-
-    return false;
-  };
-
   return (
-    <form method="post" onSubmit={handleSubmit}>
+    <form method="post" action="/signup">
       <div class="modal-body">
         <div class="mb-3">
           <label for="email" class="form-label">
@@ -36,7 +28,6 @@ export default function SignupForm() {
             class="form-control"
             minlength={8}
             maxlength={64}
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
           />
           <div id="validationServerUsernameFeedback" class="invalid-feedback">
             Please choose a username.
@@ -53,7 +44,6 @@ export default function SignupForm() {
             class="form-control"
             minlength={8}
             maxlength={64}
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
           />
         </div>
 

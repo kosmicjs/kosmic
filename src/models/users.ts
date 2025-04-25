@@ -7,7 +7,7 @@ const schema = zod.object({
   first_name: zod.string().max(255).nullable(),
   last_name: zod.string().max(255).nullable(),
   phone: zod.string().max(255).nullable(),
-  email: zod.string().max(255).email().nullable(),
+  email: zod.string().max(255).email(),
   hash: zod.string().max(255).nullable(),
   google_access_token: zod.string().max(255).nullable(),
   google_refresh_token: zod.string().max(255).nullable(),
@@ -27,10 +27,11 @@ export type InsertableUser = Insertable<User>;
 
 export const validateInsertableUser = async (
   user: unknown,
-): Promise<InsertableUser> => schema.parseAsync(user);
+): Promise<InsertableUser> =>
+  schema.partial().required({email: true}).parseAsync(user);
 
 export type UpdatedableUser = Updateable<User>;
 
 export const validateUpdatedableUser = async (
   user: unknown,
-): Promise<UpdatedableUser> => schema.parseAsync(user);
+): Promise<UpdatedableUser> => schema.partial().parseAsync(user);

@@ -15,8 +15,8 @@ export async function post(ctx: Context, next: Next) {
 export async function get(ctx: Context, next: Next) {
   return ctx.render(
     <Layout>
-      <div class="row justify-content-center">
-        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
           <LoginForm />
         </div>
       </div>

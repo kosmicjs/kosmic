@@ -3,23 +3,39 @@ import argon2 from 'argon2';
 import z from 'zod';
 import * as User from '#models/users.js';
 import {db} from '#db/index.js';
+import {SignupForm} from '#components/signup-form.js';
+import Layout from '#components/layout.js';
+import {config} from '#config/index.js';
 
-const passwordSchema = z
-  .string()
-  .min(8)
-  .max(255)
-  .refine((password) => /[A-Z]/.test(password), {
-    message: 'Password must contain an uppercase letter',
-  })
-  .refine((password) => /[a-z]/.test(password), {
-    message: 'Password must contain a lowercase letter',
-  })
-  .refine((password) => /\d/.test(password), {
-    message: 'Password must contain a digit',
-  })
-  .refine((password) => /[!@#$%^&*]/.test(password), {
-    message: 'Password must contain a special character',
-  });
+export async function get(ctx: Context, next: Next) {
+  await ctx.render(
+    <Layout>
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+          <SignupForm />
+        </div>
+      </div>
+    </Layout>,
+  );
+}
+
+const passwordSchema = z.string().min(8).max(255);
+
+if (config.kosmicEnv === 'production') {
+  passwordSchema
+    .refine((password) => /[A-Z]/.test(password), {
+      message: 'Password must contain an uppercase letter',
+    })
+    .refine((password) => /[a-z]/.test(password), {
+      message: 'Password must contain a lowercase letter',
+    })
+    .refine((password) => /\d/.test(password), {
+      message: 'Password must contain a digit',
+    })
+    .refine((password) => /[!@#$%^&*]/.test(password), {
+      message: 'Password must contain a special character',
+    });
+}
 
 export async function post(ctx: Context, next: Next) {
   const userData = await User.validateInsertableUser(ctx.request.body);

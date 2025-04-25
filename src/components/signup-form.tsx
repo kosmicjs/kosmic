@@ -28,7 +28,6 @@ export function SignupForm() {
             class="form-control"
             minlength={8}
             maxlength={64}
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
           />
           <div id="validationServerUsernameFeedback" class="invalid-feedback">
             Please choose a username.
@@ -45,7 +44,6 @@ export function SignupForm() {
             class="form-control"
             minlength={8}
             maxlength={64}
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
           />
         </div>
 
