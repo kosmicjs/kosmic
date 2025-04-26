@@ -15,7 +15,7 @@ export default function AddEntity() {
         <form
           hx-post="/admin/entities"
           hx-target="#entity-list"
-          hx-swap="beforebegin"
+          hx-swap="afterbegin"
         >
           <div class="mb-3">
             <label for="name" class="form-label">

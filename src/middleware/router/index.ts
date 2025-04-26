@@ -94,7 +94,9 @@ export async function createFsRouter(
         ? 1
         : a.uriPath.split('/').length < b.uriPath.split('/').length
           ? -1
-          : 1,
+          : a.uriPath.startsWith(':')
+            ? 1
+            : -1,
   );
 
   const routesByUriPath: Record<string, RouteDefinition> = {};
@@ -171,6 +173,8 @@ export async function createFsRouter(
 
     route.collectedMiddleware = collectedMiddleware;
   }
+
+  logger.debug({routes: routes.map((r) => r.uriPath)}, 'loaded routes');
 
   const middleware: Middleware = async function (ctx: Context, next) {
     const matchedRoute = routes.find((route) => {

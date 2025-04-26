@@ -6,7 +6,7 @@ const entitySchema = zod.object({
   id: zod.number().int().positive(),
   user_id: zod.number().int().positive().nullable(),
   name: zod.string().min(1).max(255).nullable(),
-  description: zod.string().min(1).max(255).nullable(),
+  description: zod.string().max(255).nullable(),
 });
 
 const entityPartialSchema = entitySchema.partial();
