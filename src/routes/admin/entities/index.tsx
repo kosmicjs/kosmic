@@ -4,7 +4,6 @@ import * as Entity from '#models/entites.js';
 import Layout from '#components/layout.js';
 import {ModalButton} from '#components/modal-button.js';
 import {EntityCard} from '#components/entities/entity-card.js';
-import {EntityEdit} from '#components/entities/entity-edit.js';
 
 export const get: Middleware = async (ctx, next) => {
   if (!ctx.state.user) {
@@ -24,7 +23,7 @@ export const get: Middleware = async (ctx, next) => {
       <div class="row">
         <div class="col-12 p-5">
           <div className="d-flex justify-content-center">
-            <h2>Entities</h2>
+            <h2>{ctx.state.user?.first_name}&apos;s Entities</h2>
           </div>
         </div>
       </div>
@@ -66,7 +65,7 @@ export const post: Middleware = async (ctx, next) => {
   ctx.status = 201;
   await ctx.render(
     <div class="row">
-      <EntityEdit entity={entity} />
+      <EntityCard entity={entity} />
     </div>,
   );
 };

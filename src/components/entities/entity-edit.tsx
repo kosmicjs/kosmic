@@ -17,9 +17,16 @@ export function EntityEdit({entity}: {readonly entity: SelectableEntity}) {
             value={entity.name ?? ''}
           />
           <div class="mb-3"></div>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            value={entity.description ?? ''}
+          />
+          <div class="mb-3"></div>
           <div class="d-flex justify-content-between">
-            <button type="submit" class="btn btn-primary">
-              Save
+            <button type="submit" class="btn btn-sm btn-outline-primary">
+              <i class="bi bi-floppy p-0 m-0" />
             </button>
             <button
               type="button"
