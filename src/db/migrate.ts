@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+/* eslint-disable no-await-in-loop */
+
 import path from 'node:path';
 import process from 'node:process';
 import fs from 'node:fs/promises';
@@ -10,7 +13,7 @@ class ESMFileMigrationProvider implements MigrationProvider {
   constructor(private readonly relativePath: string) {}
 
   async getMigrations(): Promise<Record<string, Migration>> {
-    const migrations: Record<string, Migration> = {};
+    let migrations: Record<string, Migration> = {};
     const __dirname = import.meta.dirname;
     const resolvedPath = path.resolve(__dirname, this.relativePath);
     const files = await fs.readdir(resolvedPath);
@@ -21,10 +24,17 @@ class ESMFileMigrationProvider implements MigrationProvider {
       const importPath = path
         .join(this.relativePath, fileName)
         .replaceAll('\\', '/');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const migration: {up: () => Promise<void>; down: () => Promise<void>} =
-        // eslint-disable-next-line no-await-in-loop
-        await import(/* @vite-ignore */ importPath);
+
+      if (importPath.includes('base-db-setup.js')) {
+        migrations = (await import(importPath)) as Record<string, Migration>;
+        continue;
+      }
+
+      const migration = (await import(importPath)) as {
+        up: () => Promise<void>;
+        down: () => Promise<void>;
+      };
+
       const migrationKey = fileName.slice(
         0,
         Math.max(0, fileName.lastIndexOf('.')),
@@ -50,12 +60,10 @@ if (process.argv[2] === 'up') {
 
   if (error) {
     logger.error(error);
-    // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1);
   }
 
   logger.info({results}, 'Migration results:');
-  // eslint-disable-next-line unicorn/no-process-exit
   process.exit();
 }
 
@@ -65,12 +73,10 @@ if (process.argv[2] === 'down') {
 
   if (error) {
     logger.error(error);
-    // eslint-disable-next-line unicorn/no-process-exit
     process.exit(1);
   }
 
   logger.info({results}, 'Migration results:');
-  // eslint-disable-next-line unicorn/no-process-exit
   process.exit();
 }
 

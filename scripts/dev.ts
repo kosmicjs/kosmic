@@ -23,6 +23,7 @@ await Promise.all([
     node: true,
     nodeOptions: ['--watch', '--watch-preserve-output'],
   })`${path.join(cwd, 'dist', 'src', 'index.js')}`,
+  $$`node dist/src/jobs.js`,
   $$`vite`,
 ]);
 

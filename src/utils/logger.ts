@@ -9,4 +9,12 @@ export const logger = pino({
     : {transport: {target: 'pino-princess'}}),
 });
 
+export const jobsLogger = pino({
+  name: '~jobs~',
+  level: config.logLevel,
+  ...(config.nodeEnv === 'production'
+    ? {}
+    : {transport: {target: 'pino-princess'}}),
+});
+
 export default logger;
