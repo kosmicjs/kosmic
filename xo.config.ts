@@ -16,7 +16,6 @@ const config: FlatXoConfig = [
       'react/no-unknown-property': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/self-closing-comp': 'off',
-      'unicorn/no-array-reduce': 'off',
       'unicorn/prevent-abbreviations': 'off',
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/naming-convention': 'off',

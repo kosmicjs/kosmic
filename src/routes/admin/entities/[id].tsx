@@ -2,7 +2,6 @@ import {type Context, type Next} from 'koa';
 import {db} from '../../../db/index.js';
 import {validateUpdatedableEntity} from '#models/entites.js';
 import {EntityCard} from '#components/entities/entity-card.js';
-import {EntityEdit} from '#components/entities/entity-edit.js';
 
 export const del = async (ctx: Context, next: Next) => {
   if (!ctx.params?.id) throw new Error('id is required');
@@ -35,7 +34,7 @@ export const get = async (ctx: Context, next: Next) => {
   ctx.log.debug({entity}, 'fetched entity');
 
   ctx.status = 200;
-  await ctx.render(<EntityEdit entity={entity} />);
+  await ctx.render(<EntityCard isEditable entity={entity} />);
 };
 
 export const put = async (ctx: Context, next: Next) => {
