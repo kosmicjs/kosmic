@@ -7,7 +7,7 @@ import responseTime from 'koa-response-time';
 import session from 'koa-session';
 import etag from 'koa-etag';
 import conditional from 'koa-conditional-get';
-import Koa from 'koa';
+import Koa, {type Context} from 'koa';
 import serve from 'koa-static';
 import {renderMiddleware} from '#middleware/jsx.middleware.js';
 import {helmetMiddleware} from '#middleware/helmet.js';
@@ -30,16 +30,20 @@ type Manifest = Record<
   }
 >;
 declare module 'koa' {
-  interface Context {
+  interface DefaultContext {
     id: number | string;
     log: Logger;
+    // session: {
+    //   [key: string]: unknown;
+    //   messages: string[];
+    // };
   }
 
   interface Request {
     log: Logger;
   }
 
-  interface State {
+  interface DefaultState {
     manifest?: Manifest;
   }
 
@@ -108,5 +112,5 @@ export async function createServer(): Promise<Server> {
 export const getCtx = () => {
   const ctx = app.currentContext;
   if (!ctx) throw new Error('No context found');
-  return ctx;
+  return ctx as Context;
 };

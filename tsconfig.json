@@ -1,5 +1,4 @@
 {
-  "extends": "./node_modules/@kosmic/types/tsconfig.kosmic",
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",

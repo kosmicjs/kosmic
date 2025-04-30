@@ -7,7 +7,7 @@ const stripe = config.stripe?.secretKey
   : undefined;
 
 declare module 'koa' {
-  interface State {
+  interface DefaultState {
     session?: Stripe.Checkout.Session;
   }
 }

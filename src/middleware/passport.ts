@@ -14,7 +14,7 @@ import logger from '#utils/logger.js';
 import {config} from '#config/index.js';
 
 declare module 'koa' {
-  interface State {
+  interface DefaultState {
     user?: SelectableUser;
   }
 }

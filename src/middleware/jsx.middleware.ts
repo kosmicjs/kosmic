@@ -8,7 +8,7 @@ declare module 'koa' {
    */
   type Render = (component: VNode) => Promise<void>;
 
-  interface Context {
+  interface DefaultContext {
     render: Render;
   }
   /**

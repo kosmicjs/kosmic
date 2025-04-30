@@ -1,4 +1,4 @@
-import {type Kysely, type Migration} from 'kysely';
+import {type Kysely, type Migration, sql} from 'kysely';
 import logger from '../../utils/logger.js';
 
 export const users: Migration = {
@@ -66,7 +66,9 @@ export const emails: Migration = {
       .addColumn('subject', 'varchar')
       .addColumn('text', 'varchar')
       .addColumn('attachments', 'varchar')
-      .addColumn('status', 'varchar')
+      .addColumn('status', 'varchar', (col) =>
+        col.notNull().check(sql`status in ('pending', 'sent', 'failed')`),
+      )
       .addColumn('description', 'varchar')
       .addColumn('created_at', 'timestamp')
       .addColumn('updated_at', 'timestamp')

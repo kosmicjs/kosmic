@@ -22,7 +22,7 @@ declare module 'koa' {
     params?: Params;
   }
 
-  interface Context {
+  interface DefaultContext {
     params?: Params;
   }
 }
@@ -190,9 +190,9 @@ export async function createFsRouter(
 
     logger.trace(matchedRoute);
 
-    if (!matchedRoute) return next();
+    if (!matchedRoute) return next() as Promise<void>;
     const fn = matchedRoute?.[ctx.method?.toLowerCase() as HttpVerb];
-    if (!fn || typeof fn !== 'function') return next();
+    if (!fn || typeof fn !== 'function') return next() as Promise<void>;
     ctx.request.params = matchedRoute?.params;
     ctx.params = matchedRoute?.params;
     await fn(ctx, next);
