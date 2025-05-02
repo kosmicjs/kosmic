@@ -10,8 +10,7 @@ const job = new CronJob(
   '* * * * *', // => every 30s i think
   async function () {
     try {
-      logger.debug('Starting email job');
-      await $`node ./dist/src/jobs/emails.js`;
+      await $({stdio: 'inherit'})`node ./dist/src/jobs/emails.js`;
     } catch (error) {
       logger.error(error, 'Error running cron job');
     }
