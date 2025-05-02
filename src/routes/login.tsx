@@ -4,6 +4,7 @@ import {Layout} from '#components/layout.js';
 import {LoginForm} from '#components/login-form.js';
 
 export async function post(ctx: Context, next: Next) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return passport.authenticate('local', {
     successRedirect: '/admin',
     failureRedirect: '/',

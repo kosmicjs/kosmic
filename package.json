@@ -159,6 +159,6 @@
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-tsc-watch": "^3.1.0",
     "wait-on": "^8.0.3",
-    "xo": "^0.61.0-0"
+    "xo": "^0.61.0-2"
   }
 }

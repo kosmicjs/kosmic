@@ -53,5 +53,6 @@ export const post: Middleware = stripe
       ctx.status = 200;
     }
   : async (ctx, next) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return next();
     };
