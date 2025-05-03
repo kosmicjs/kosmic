@@ -24,7 +24,7 @@ await describe('server integration', async () => {
     strictEqual($h1.text(), 'Kosmic');
   });
 
-  await test('Get / 404 not found', async () => {
+  await test('Get / 404 not found returns expected response', async () => {
     const response = await got('http://localhost:4567/404', {
       throwHttpErrors: false,
     });
@@ -32,12 +32,20 @@ await describe('server integration', async () => {
     strictEqual(response.body, 'Not Found');
   });
 
-  await test('Get /docs', async () => {
+  await test('Get /docs 302 redirects to /docs/installation', async () => {
     const response = await got('http://localhost:4567/docs', {
       throwHttpErrors: false,
       followRedirect: false,
     });
     strictEqual(response.statusCode, 302);
+  });
+
+  await test('Get /admin - no auth - 401 response', async () => {
+    const response = await got('http://localhost:4567/admin', {
+      throwHttpErrors: false,
+      followRedirect: false,
+    });
+    strictEqual(response.statusCode, 401);
   });
 
   after(() => {

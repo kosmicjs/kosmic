@@ -21,7 +21,7 @@ await pWaitFor(async () => pathExists('dist/src/index.js'));
 await Promise.all([
   $$({
     node: true,
-    nodeOptions: ['--watch', '--watch-preserve-output'],
+    nodeOptions: ['--watch', '--watch-preserve-output', '--watch-path=./dist'],
   })`${path.join(cwd, 'dist', 'src', 'index.js')}`,
   $$`node dist/src/jobs.js`,
   $$`vite`,
