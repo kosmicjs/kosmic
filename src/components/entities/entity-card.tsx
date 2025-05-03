@@ -1,4 +1,4 @@
-import {type SelectableEntity} from '#models/entites.js';
+import {type SelectableEntity} from '#models/entities.js';
 
 export function EntityCard({
   entity,

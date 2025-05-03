@@ -1,6 +1,6 @@
 import {type Middleware} from 'koa';
 import {db} from '#db/index.js';
-import * as Entity from '#models/entites.js';
+import * as Entity from '#models/entities.js';
 import Layout from '#components/layout.js';
 import {ModalButton} from '#components/modal-button.js';
 import {EntityCard} from '#components/entities/entity-card.js';

@@ -1,5 +1,5 @@
 import {type User} from './users.js';
-import {type Entity} from './entites.js';
+import {type Entity} from './entities.js';
 import {type Email} from './emails.js';
 
 export type Database = {
@@ -10,4 +10,4 @@ export type Database = {
 
 export {type User} from './users.js';
 
-export {type Entity} from './entites.js';
+export {type Entity} from './entities.js';

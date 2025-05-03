@@ -33,10 +33,6 @@ declare module 'koa' {
   interface DefaultContext {
     id: number | string;
     log: Logger;
-    // session: {
-    //   [key: string]: unknown;
-    //   messages: string[];
-    // };
   }
 
   interface Request {

@@ -1,6 +1,6 @@
 import {type Context, type Next} from 'koa';
 import {db} from '../../../db/index.js';
-import {validateUpdatedableEntity} from '#models/entites.js';
+import {validateUpdatedableEntity} from '#models/entities.js';
 import {EntityCard} from '#components/entities/entity-card.js';
 
 export const del = async (ctx: Context, next: Next) => {
