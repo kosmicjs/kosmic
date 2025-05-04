@@ -107,7 +107,7 @@ export default function Nav() {
               </a>
             ) : (
               <>
-                <button
+                {/* <button
                   class="btn btn-outline-warning mx-2"
                   type="button"
                   hx-get="/modals/login"
@@ -117,8 +117,8 @@ export default function Nav() {
                   data-bs-target="#modal"
                 >
                   Login
-                </button>
-                <button
+                </button> */}
+                {/* <button
                   class="btn btn-outline-warning"
                   type="button"
                   hx-get="/modals/signup"
@@ -128,7 +128,21 @@ export default function Nav() {
                   data-bs-target="#modal"
                 >
                   Signup
-                </button>
+                </button> */}
+                <a
+                  class="btn btn-outline-warning mx-2"
+                  type="button"
+                  href="/login"
+                >
+                  Login
+                </a>
+                <a
+                  class="btn btn-outline-warning mx-2"
+                  type="button"
+                  href="/signup"
+                >
+                  Signup
+                </a>
               </>
             )}
           </div>

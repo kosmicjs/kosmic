@@ -198,8 +198,6 @@ export async function createFsRouter(
       return match;
     });
 
-    logger.trace(matchedRoute);
-
     if (!matchedRoute) return next() as Promise<void>;
     const fn = matchedRoute?.[ctx.method?.toLowerCase() as HttpVerb];
     if (!fn || typeof fn !== 'function') return next() as Promise<void>;
