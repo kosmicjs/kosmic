@@ -113,7 +113,9 @@ export function Layout({
           <Header />
           <Toast show={false} />
           {sessionMessages.map((message) => (
-            <Toast show> {message} </Toast>
+            <Toast show isSuccess={message.trim() === 'Logged in'}>
+              {message}
+            </Toast>
           ))}
           <main class="min-vh-100">{children}</main>
           <Footer />

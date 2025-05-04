@@ -3,7 +3,10 @@ import {db} from '../../db/index.js';
 import {validateInsertableUser} from '#models/users.js';
 
 export async function get(ctx: Context, next: Next) {
-  const users = await db.selectFrom('users').selectAll().execute();
+  const users = await db
+    .selectFrom('users')
+    .select(['id', 'first_name', 'last_name', 'email'])
+    .execute();
 
   ctx.req.log.info(users, 'users');
 

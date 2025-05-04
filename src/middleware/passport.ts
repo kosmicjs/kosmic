@@ -93,7 +93,13 @@ if (config.github) {
         accessToken: string,
         refreshToken: string,
         profile: {emails: Array<{value: string}>; displayName: string},
-        done: (err: Error | undefined, user?: SelectableUser) => void,
+        done: (
+          err: Error | undefined,
+          user?: Pick<
+            SelectableUser,
+            'id' | 'email' | 'first_name' | 'last_name'
+          >,
+        ) => void,
       ) {
         logger.debug(
           {accessToken, refreshToken, profile},
@@ -109,7 +115,7 @@ if (config.github) {
 
         let user = await db
           .selectFrom('users')
-          .selectAll()
+          .select(['id', 'email', 'first_name', 'last_name'])
           .where('email', '=', email)
           .executeTakeFirst();
 

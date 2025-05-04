@@ -2,6 +2,7 @@
 /* eslint-disable max-depth */
 import process from 'node:process';
 import path from 'node:path';
+import {METHODS} from 'node:http';
 import {type Middleware, type Context} from 'koa';
 import {globby} from 'globby';
 import {match as createMatchFn} from 'path-to-regexp';
@@ -174,7 +175,16 @@ export async function createFsRouter(
     route.collectedMiddleware = collectedMiddleware;
   }
 
-  logger.debug({routes: routes.map((r) => r.uriPath)}, 'loaded routes');
+  logger.debug(
+    {
+      routes: routes.flatMap((r) =>
+        Object.keys(r.module)
+          .filter((v) => METHODS.includes(v.toUpperCase()))
+          .map((v) => ({method: v.toUpperCase(), path: r.uriPath || '/'})),
+      ),
+    },
+    'loaded routes',
+  );
 
   const middleware: Middleware = async function (ctx: Context, next) {
     const matchedRoute = routes.find((route) => {
