@@ -6,6 +6,7 @@ import {db} from '#db/index.js';
 import {SignupForm} from '#components/signup-form.js';
 import Layout from '#components/layout.js';
 import {config} from '#config/index.js';
+import * as Emails from '#models/emails.js';
 
 export async function get(ctx: Context, next: Next) {
   await ctx.render(
@@ -71,8 +72,10 @@ export async function post(ctx: Context, next: Next) {
       ...userData,
       hash,
     })
-    .returning(['email', 'id'])
+    .returning(['email', 'id', 'first_name'])
     .executeTakeFirstOrThrow();
+
+  await Emails.queueWelcomeEmail(user.id, user.email, user.first_name ?? '');
 
   await ctx.login(user);
 
