@@ -51,6 +51,8 @@ export const envSchema = z
     DB_CONNECTION_STRING: z.string(),
     SESSION_KEYS: z.string(),
     LOG_LEVEL: z.string(),
+    OPENAI_API_KEY: z.string(),
+    GEMINI_API_KEY: z.string(),
   })
   .partial();
 
@@ -106,12 +108,15 @@ export const configSchema = z.object({
       callbackURL: z.string(),
     })
     .optional(),
-
-  google: z
+  google: z.object({
+    clientID: z.string().optional(),
+    clientSecret: z.string().optional(),
+    callbackURL: z.string().optional(),
+    geminyApiKey: z.string(),
+  }),
+  openAi: z
     .object({
-      clientID: z.string(),
-      clientSecret: z.string(),
-      callbackURL: z.string(),
+      apiKey: z.string().optional(),
     })
     .optional(),
   sessionKeys: z.array(z.string()).default(['kosmic-secret-keys']),
@@ -132,6 +137,12 @@ const configByEnv = {
       database: env.DB_DATABASE,
       password: env.DB_PASSWORD,
       host: env.DB_HOST,
+    },
+    openAi: {
+      apiKey: env.OPENAI_API_KEY,
+    },
+    google: {
+      geminyApiKey: env.GEMINI_API_KEY,
     },
     max: 10,
     idleTimeoutMillis: 30_000,
@@ -158,9 +169,11 @@ const configByEnv = {
 
 export const config = (() => {
   try {
-    return configSchema.parse(
+    const parsedConfig = configSchema.parse(
       defaults(configByEnv[nodeEnv], configByEnv.default),
     );
+
+    return parsedConfig;
   } catch (error) {
     // too early to use logger
     // eslint-disable-next-line no-console
