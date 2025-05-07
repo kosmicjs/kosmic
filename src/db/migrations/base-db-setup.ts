@@ -81,3 +81,74 @@ export const emails: Migration = {
     logger.info('Dropped table emails');
   },
 };
+
+export const rateLimitAbuse: Migration = {
+  async up(db: Kysely<any>): Promise<void> {
+    logger.debug('Creating table rate_limit_abuse...');
+    await db.schema
+      .createTable('rate_limit_abuse')
+      .ifNotExists()
+      .addColumn('id', 'serial', (col) => col.primaryKey())
+      .addColumn('key', 'varchar')
+      .addColumn('prefix', 'varchar')
+      .addColumn('nb_max', 'integer')
+      .addColumn('nb_hit', 'integer')
+      .addColumn('interval', 'varchar')
+      .addColumn('ip', 'varchar')
+      .addColumn('user_id', 'integer', (col) => col.references('users.id'))
+      .addColumn('date_end', 'timestamp', (col) => col.notNull())
+      .addColumn('created_at', 'timestamp')
+      .addColumn('updated_at', 'timestamp')
+      .execute();
+    // Add a unique index on key and date_end columns
+    await db.schema
+      .createIndex('rate_limit_abuse_key_date_end_unique_idx')
+      .ifNotExists()
+      .on('rate_limit_abuse')
+      .columns(['key', 'date_end'])
+      .unique()
+      .execute();
+    logger.info('Created table rate_limit_abuse');
+  },
+  async down(db: Kysely<any>): Promise<void> {
+    logger.debug('Dropping table rate_limit_abuse...');
+    // Drop the index first (though it will be dropped automatically with the table in most databases)
+    await db.schema
+      .dropIndex('rate_limit_abuse_key_date_end_unique_idx')
+      .ifExists()
+      .execute();
+    await db.schema.dropTable('rate_limit_abuse').ifExists().execute();
+    logger.info('Dropped table rate_limit_abuse');
+  },
+};
+
+export const rateLimiter: Migration = {
+  async up(db: Kysely<any>): Promise<void> {
+    logger.debug('Creating table rate_limiters...');
+    await db.schema
+      .createTable('rate_limiters')
+      .ifNotExists()
+      .addColumn('key', 'varchar(255)', (col) => col.notNull().primaryKey())
+      .addColumn('counter', 'integer', (col) => col.notNull().defaultTo(0))
+      .addColumn('date_end', 'timestamp', (col) => col.notNull())
+      .addColumn('created_at', 'timestamp', (col) => col.notNull())
+      .addColumn('updated_at', 'timestamp', (col) => col.notNull())
+      .execute();
+    // Add indexes
+    // The unique index on 'key' is already created implicitly by the primary key
+    await db.schema
+      .createIndex('rate_limiter_date_end_idx')
+      .ifNotExists()
+      .on('rate_limiters')
+      .columns(['date_end'])
+      .execute();
+    logger.info('Created table rate_limiters');
+  },
+
+  async down(db: Kysely<any>): Promise<void> {
+    logger.debug('Dropping table rate_limiter...');
+    await db.schema.dropIndex('rate_limiter_date_end_idx').ifExists().execute();
+    await db.schema.dropTable('rate_limiters').ifExists().execute();
+    logger.info('Dropped table rate_limiter');
+  },
+};

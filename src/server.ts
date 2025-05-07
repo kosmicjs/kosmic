@@ -9,6 +9,7 @@ import etag from 'koa-etag';
 import conditional from 'koa-conditional-get';
 import Koa, {type Context} from 'koa';
 import serve from 'koa-static';
+import {RateLimit} from 'koa2-ratelimit';
 import {renderMiddleware} from '#middleware/jsx.middleware.js';
 import {helmetMiddleware} from '#middleware/helmet.js';
 import {createPinoMiddleware} from '#middleware/pino-http.js';
@@ -17,6 +18,7 @@ import createFsRouter from '#middleware/router/index.js';
 import logger from '#utils/logger.js';
 import {config} from '#config/index.js';
 import {passport} from '#middleware/passport.js';
+import {KyselyRateLimitStore} from '#utils/kysely-rate-limit-store.js';
 
 type Logger = typeof logger;
 
@@ -84,6 +86,14 @@ export async function createServer(): Promise<Server> {
 
   // error handler
   app.use(errorHandler());
+
+  app.use(
+    RateLimit.middleware({
+      max: 100,
+      message: 'Too many requests, please try again later.',
+      store: new KyselyRateLimitStore(),
+    }),
+  );
 
   app.keys = config.sessionKeys;
 
