@@ -10,6 +10,7 @@ import conditional from 'koa-conditional-get';
 import Koa, {type Context} from 'koa';
 import serve from 'koa-static';
 import {RateLimit} from 'koa2-ratelimit';
+import MemoryStore from 'koa2-ratelimit/src/MemoryStore.js';
 import {renderMiddleware} from '#middleware/jsx.middleware.js';
 import {helmetMiddleware} from '#middleware/helmet.js';
 import {createPinoMiddleware} from '#middleware/pino-http.js';
@@ -91,7 +92,10 @@ export async function createServer(): Promise<Server> {
     RateLimit.middleware({
       max: 100,
       message: 'Too many requests, please try again later.',
-      store: new KyselyRateLimitStore(),
+      store:
+        config.kosmicEnv === 'test'
+          ? new MemoryStore()
+          : new KyselyRateLimitStore(),
     }),
   );
 

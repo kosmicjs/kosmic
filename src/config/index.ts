@@ -112,7 +112,7 @@ export const configSchema = z.object({
     clientID: z.string().optional(),
     clientSecret: z.string().optional(),
     callbackURL: z.string().optional(),
-    geminyApiKey: z.string(),
+    geminyApiKey: z.string().optional(),
   }),
   openAi: z
     .object({
