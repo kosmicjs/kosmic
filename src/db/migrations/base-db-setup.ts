@@ -1,7 +1,12 @@
 import {type Kysely, type Migration, sql} from 'kysely';
 import logger from '../../utils/logger.js';
 
-export const users: Migration = {
+export type KosmicMigration = Migration & {
+  sequence: number;
+};
+
+export const users: KosmicMigration = {
+  sequence: 1,
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table users...');
 
@@ -24,12 +29,13 @@ export const users: Migration = {
   },
   async down(db: Kysely<any>): Promise<void> {
     logger.debug('Dropping table users...');
-    await db.schema.dropTable('users').cascade().execute();
+    await db.schema.dropTable('users').ifExists().cascade().execute();
     logger.info('Dropped table users');
   },
 };
 
-export const entities: Migration = {
+export const entities: KosmicMigration = {
+  sequence: 2,
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table entity...');
     await db.schema
@@ -46,12 +52,13 @@ export const entities: Migration = {
   },
   async down(db: Kysely<any>): Promise<void> {
     logger.debug('Dropping table entity...');
-    await db.schema.dropTable('entity').cascade().execute();
+    await db.schema.dropTable('entities').ifExists().cascade().execute();
     logger.info('Dropped table entity');
   },
 };
 
-export const emails: Migration = {
+export const emails: KosmicMigration = {
+  sequence: 3,
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table emails...');
     await db.schema
@@ -77,12 +84,13 @@ export const emails: Migration = {
   },
   async down(db: Kysely<any>): Promise<void> {
     logger.debug('Dropping table emails...');
-    await db.schema.dropTable('emails').cascade().execute();
+    await db.schema.dropTable('emails').ifExists().cascade().execute();
     logger.info('Dropped table emails');
   },
 };
 
-export const rateLimitAbuse: Migration = {
+export const rateLimitAbuse: KosmicMigration = {
+  sequence: 4,
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table rate_limit_abuse...');
     await db.schema
@@ -122,7 +130,8 @@ export const rateLimitAbuse: Migration = {
   },
 };
 
-export const rateLimiter: Migration = {
+export const rateLimiter: KosmicMigration = {
+  sequence: 5,
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table rate_limiters...');
     await db.schema

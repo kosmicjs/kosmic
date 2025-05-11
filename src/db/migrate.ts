@@ -4,8 +4,14 @@
 import path from 'node:path';
 import process from 'node:process';
 import fs from 'node:fs/promises';
-import {type Migration, type MigrationProvider, Migrator} from 'kysely';
+import {
+  type Migration,
+  type MigrationProvider,
+  Migrator,
+  NO_MIGRATIONS,
+} from 'kysely';
 import logger from '../utils/logger.js';
+import {type KosmicMigration} from './migrations/base-db-setup.js';
 import {db} from './index.js';
 
 // https://github.com/kysely-org/kysely/issues/277#issuecomment-1385995789
@@ -13,7 +19,7 @@ class ESMFileMigrationProvider implements MigrationProvider {
   constructor(private readonly relativePath: string) {}
 
   async getMigrations(): Promise<Record<string, Migration>> {
-    let migrations: Record<string, Migration> = {};
+    let migrations: Record<string, Migration | KosmicMigration> = {};
     const __dirname = import.meta.dirname;
     const resolvedPath = path.resolve(__dirname, this.relativePath);
     const files = await fs.readdir(resolvedPath);
@@ -26,7 +32,18 @@ class ESMFileMigrationProvider implements MigrationProvider {
         .replaceAll('\\', '/');
 
       if (importPath.includes('base-db-setup.js')) {
-        migrations = (await import(importPath)) as Record<string, Migration>;
+        migrations = (await import(importPath)) as Record<
+          string,
+          KosmicMigration
+        >;
+
+        migrations = Object.fromEntries(
+          Object.entries(migrations).map(([key, value]) => {
+            if (!('sequence' in value)) return [key, value];
+            const {sequence, ...migration} = value;
+            return [`${sequence}_${key}`, migration];
+          }),
+        );
         continue;
       }
 
@@ -52,6 +69,7 @@ const migrator = new Migrator({
   provider: new ESMFileMigrationProvider(
     path.join(import.meta.dirname, 'migrations'),
   ),
+  allowUnorderedMigrations: true,
 });
 
 if (process.argv[2] === 'up') {
@@ -69,7 +87,7 @@ if (process.argv[2] === 'up') {
 
 if (process.argv[2] === 'down') {
   logger.info('Migrating down');
-  const {error, results} = await migrator.migrateDown();
+  const {error, results} = await migrator.migrateTo(NO_MIGRATIONS);
 
   if (error) {
     logger.error(error);

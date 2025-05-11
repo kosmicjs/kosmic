@@ -149,7 +149,7 @@ const configByEnv = {
     connectionTimeoutMillis: 2000,
   },
   development: {
-    logLevel: 'trace',
+    logLevel: 'debug',
     stripe: {
       secretKey: env.STRIPE_SECRET_KEY,
       endpointSecret: env.STRIPE_ENDPOINT_SECRET,
