@@ -73,7 +73,11 @@ export const post: Middleware = async function (ctx) {
       <div class="card-header">AI Chat Response</div>
       <div class="card-body">
         <h5 class="card-title">Response</h5>
-        <p class="card-text">{response.text}</p>
+        <p class="card-text">
+          <pre>
+            <code>{response.text}</code>
+          </pre>
+        </p>
       </div>
       <div class="card-footer text-muted">
         <small>Powered by Kosmic AI</small>
