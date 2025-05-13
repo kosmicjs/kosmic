@@ -7,6 +7,7 @@ const server = await createServer();
 
 server.listen({port: config.port, host: config.host}, () => {
   logger.info(`Server listening on ${config.host}:${config.port}`);
+  process?.send?.('ready!');
 });
 
 // throw to bubble up to uncaughtException

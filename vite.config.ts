@@ -2,7 +2,7 @@
 import path from 'node:path';
 import {type UserConfig, createLogger} from 'vite';
 import {pino} from 'pino';
-import kosmic from './scripts/vite-plugin.js';
+// import kosmic from './scripts/vite-plugin.js';
 import {config as kosmicConfig} from './src/config/index.js';
 
 const viteLogger = pino({
@@ -13,7 +13,7 @@ const viteLogger = pino({
 });
 
 const config: UserConfig = {
-  plugins: [kosmic({port: kosmicConfig.port})],
+  // plugins: [kosmic({port: kosmicConfig.port})],
   root: path.join(__dirname, 'src', 'client'),
   build: {
     manifest: true,
