@@ -1,12 +1,12 @@
 import {type Kysely, type Migration, sql} from 'kysely';
-import logger from '../../utils/logger.js';
+import logger from '#utils/logger.js';
 
 export type KosmicMigration = Migration & {
-  sequence: number;
+  sequence: string;
 };
 
 export const triggers: KosmicMigration = {
-  sequence: 0,
+  sequence: '2025-01-01',
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating trigger function update_timestamp...');
     await sql`
@@ -43,7 +43,7 @@ async function dropTimestampTrigger(db: Kysely<any>, tableName: string) {
 }
 
 export const users: KosmicMigration = {
-  sequence: 1,
+  sequence: '2025-01-02',
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table users...');
 
@@ -79,7 +79,7 @@ export const users: KosmicMigration = {
 };
 
 export const entities: KosmicMigration = {
-  sequence: 2,
+  sequence: '2025-01-03',
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table entity...');
     await db.schema
@@ -92,17 +92,20 @@ export const entities: KosmicMigration = {
       .addColumn('created_at', 'timestamp', (col) => col.notNull())
       .addColumn('updated_at', 'timestamp', (col) => col.notNull())
       .execute();
+
+    await createTimestampTrigger(db, 'entities');
     logger.info('Created table entity');
   },
   async down(db: Kysely<any>): Promise<void> {
     logger.debug('Dropping table entity...');
     await db.schema.dropTable('entities').ifExists().cascade().execute();
+    await dropTimestampTrigger(db, 'entities');
     logger.info('Dropped table entity');
   },
 };
 
 export const emails: KosmicMigration = {
-  sequence: 3,
+  sequence: '2025-01-04',
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table emails...');
     await db.schema
@@ -124,17 +127,20 @@ export const emails: KosmicMigration = {
       .addColumn('created_at', 'timestamp', (col) => col.notNull())
       .addColumn('updated_at', 'timestamp', (col) => col.notNull())
       .execute();
+
+    await createTimestampTrigger(db, 'emails');
     logger.info('Created table emails');
   },
   async down(db: Kysely<any>): Promise<void> {
     logger.debug('Dropping table emails...');
     await db.schema.dropTable('emails').ifExists().cascade().execute();
+    await dropTimestampTrigger(db, 'emails');
     logger.info('Dropped table emails');
   },
 };
 
 export const rateLimitAbuse: KosmicMigration = {
-  sequence: 4,
+  sequence: '2025-01-05',
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table rate_limit_abuse...');
     await db.schema
@@ -175,7 +181,7 @@ export const rateLimitAbuse: KosmicMigration = {
 };
 
 export const rateLimiter: KosmicMigration = {
-  sequence: 5,
+  sequence: '2025-01-06',
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table rate_limiters...');
     await db.schema

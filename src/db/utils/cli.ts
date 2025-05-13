@@ -9,29 +9,14 @@ import logger from '#utils/logger.js';
 const cli = meow(
   `
   Usage
-    $ node cli.js <command> [options]
-  Commands
+    $ npm run migrate <command> [options]
+  Flags
     up       Run all pending migrations
     down     Rollback the last migration
-    create   Create a new migration
-  Options
-    --name   Name of the migration file to create
-  Examples
-    $ node cli.js up
-    $ node cli.js down
-    $ node cli.js create --name my_migration
+    reset    Rollback all migrations
 `,
   {
     importMeta: import.meta,
-    flags: {
-      name: {
-        type: 'string',
-        alias: 'n',
-        isRequired: false,
-        isMultiple: false,
-        default: 'migration',
-      },
-    },
   },
 );
 
@@ -50,7 +35,20 @@ if (cli.input.length === 0 || cli.input.includes('up')) {
 }
 
 if (cli.input.includes('down')) {
-  logger.info('Migrating down');
+  logger.info('Rolling back last migration');
+  const {error, results} = await migrator.migrateDown();
+
+  if (error) {
+    logger.error(error);
+    process.exit(1);
+  }
+
+  logger.info({results}, 'Migration results:');
+  process.exit();
+}
+
+if (cli.input.includes('reset')) {
+  logger.info('Resetting Database (rolling back all migrations)');
   const {error, results} = await migrator.migrateTo(NO_MIGRATIONS);
 
   if (error) {
