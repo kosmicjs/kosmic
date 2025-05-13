@@ -1,10 +1,19 @@
 import {type Kysely, type Migration, sql} from 'kysely';
+import {
+  createTimestampTrigger,
+  dropTimestampTrigger,
+  addTimestampsColumns,
+} from './utils/helpers.js';
 import logger from '#utils/logger.js';
 
 export type KosmicMigration = Migration & {
   sequence: string;
 };
 
+/**
+ * Create a trigger function to update the updated_at column
+ * on every update of the table.
+ */
 export const triggers: KosmicMigration = {
   sequence: '2025-01-01',
   async up(db: Kysely<any>): Promise<void> {
@@ -27,21 +36,10 @@ export const triggers: KosmicMigration = {
     logger.info('Dropped trigger function update_timestamp');
   },
 };
-async function createTimestampTrigger(db: Kysely<any>, tableName: string) {
-  return sql`
-    CREATE TRIGGER update_${sql.raw(tableName)}_updated_at
-    BEFORE UPDATE ON ${sql.table(tableName)}
-    FOR EACH ROW
-    EXECUTE PROCEDURE update_timestamp();
-  `.execute(db);
-}
 
-async function dropTimestampTrigger(db: Kysely<any>, tableName: string) {
-  return sql`
-    DROP TRIGGER IF EXISTS update_${sql.raw(tableName)}_updated_at ON ${sql.table(tableName)};
-  `.execute(db);
-}
-
+/**
+ * Create the users table
+ */
 export const users: KosmicMigration = {
   sequence: '2025-01-02',
   async up(db: Kysely<any>): Promise<void> {
@@ -56,28 +54,34 @@ export const users: KosmicMigration = {
       .addColumn('phone', 'varchar')
       .addColumn('email', 'varchar')
       .addColumn('hash', 'varchar', (col) => col.notNull())
-      .addColumn('created_at', 'timestamp', (col) =>
-        col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
-      )
-      .addColumn('updated_at', 'timestamp', (col) =>
-        col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
-      )
       .addColumn('google_refresh_token', 'varchar')
       .addColumn('google_access_token', 'varchar')
+      .$call(addTimestampsColumns)
       .execute();
 
     await createTimestampTrigger(db, 'users');
+
+    await db.schema
+      .createIndex('users_email_idx')
+      .ifNotExists()
+      .on('users')
+      .columns(['email'])
+      .execute();
 
     logger.info('Created table users');
   },
   async down(db: Kysely<any>): Promise<void> {
     logger.debug('Dropping table users...');
     await db.schema.dropTable('users').ifExists().cascade().execute();
+    await db.schema.dropIndex('users_email_idx').ifExists().cascade().execute();
     await dropTimestampTrigger(db, 'users');
     logger.info('Dropped table users');
   },
 };
 
+/**
+ * Create the entities table
+ */
 export const entities: KosmicMigration = {
   sequence: '2025-01-03',
   async up(db: Kysely<any>): Promise<void> {
@@ -89,8 +93,7 @@ export const entities: KosmicMigration = {
       .addColumn('user_id', 'integer', (col) => col.references('users.id'))
       .addColumn('name', 'varchar')
       .addColumn('description', 'varchar')
-      .addColumn('created_at', 'timestamp', (col) => col.notNull())
-      .addColumn('updated_at', 'timestamp', (col) => col.notNull())
+      .$call(addTimestampsColumns)
       .execute();
 
     await createTimestampTrigger(db, 'entities');
@@ -104,6 +107,9 @@ export const entities: KosmicMigration = {
   },
 };
 
+/**
+ * Create the emails table
+ */
 export const emails: KosmicMigration = {
   sequence: '2025-01-04',
   async up(db: Kysely<any>): Promise<void> {
@@ -124,8 +130,7 @@ export const emails: KosmicMigration = {
         col.notNull().check(sql`status in ('pending', 'sent', 'failed')`),
       )
       .addColumn('description', 'varchar')
-      .addColumn('created_at', 'timestamp', (col) => col.notNull())
-      .addColumn('updated_at', 'timestamp', (col) => col.notNull())
+      .$call(addTimestampsColumns)
       .execute();
 
     await createTimestampTrigger(db, 'emails');
@@ -139,6 +144,9 @@ export const emails: KosmicMigration = {
   },
 };
 
+/**
+ * Create the rate_limit_abuse table
+ */
 export const rateLimitAbuse: KosmicMigration = {
   sequence: '2025-01-05',
   async up(db: Kysely<any>): Promise<void> {
@@ -155,8 +163,7 @@ export const rateLimitAbuse: KosmicMigration = {
       .addColumn('ip', 'varchar')
       .addColumn('user_id', 'integer', (col) => col.references('users.id'))
       .addColumn('date_end', 'timestamp', (col) => col.notNull())
-      .addColumn('created_at', 'timestamp', (col) => col.notNull())
-      .addColumn('updated_at', 'timestamp', (col) => col.notNull())
+      .$call(addTimestampsColumns)
       .execute();
     // Add a unique index on key and date_end columns
     await db.schema
@@ -180,6 +187,9 @@ export const rateLimitAbuse: KosmicMigration = {
   },
 };
 
+/**
+ * Create the rate_limiters table
+ */
 export const rateLimiter: KosmicMigration = {
   sequence: '2025-01-06',
   async up(db: Kysely<any>): Promise<void> {
@@ -190,8 +200,7 @@ export const rateLimiter: KosmicMigration = {
       .addColumn('key', 'varchar(255)', (col) => col.notNull().primaryKey())
       .addColumn('counter', 'integer', (col) => col.notNull().defaultTo(0))
       .addColumn('date_end', 'timestamp', (col) => col.notNull())
-      .addColumn('created_at', 'timestamp', (col) => col.notNull())
-      .addColumn('updated_at', 'timestamp', (col) => col.notNull())
+      .$call(addTimestampsColumns)
       .execute();
     // Add indexes
     // The unique index on 'key' is already created implicitly by the primary key
