@@ -7,7 +7,8 @@ const server = await createServer();
 
 server.listen({port: config.port, host: config.host}, () => {
   logger.info(`Server listening on ${config.host}:${config.port}`);
-  process?.send?.('ready!');
+
+  if (process.send) process.send({status: 'ready'});
 });
 
 // throw to bubble up to uncaughtException
@@ -24,7 +25,6 @@ process.on('uncaughtException', (error) => {
 // gracefully close server on all exits
 process.on('beforeExit', () => {
   logger.info('Server shutting down');
-
   server.closeAllConnections();
   server.close(() => {
     process.exit(0);

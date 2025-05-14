@@ -7,17 +7,15 @@ import {execa} from 'execa';
 import pWaitFor from 'p-wait-for';
 import {pathExists} from 'path-exists';
 import {createServer} from 'vite';
-import colors from 'picocolors';
-import {tsWatch} from './ts-watch.ts';
 
 const cwd = process.cwd();
 const distFolder = path.resolve(cwd, 'dist');
 const publicFolder = path.resolve(distFolder, 'src', 'public');
 await fs.rm('dist', {recursive: true, force: true});
 
-const program = tsWatch();
-
 const $$ = execa({cwd, stdio: 'inherit'});
+
+const program = $$`tsc --watch --preserveWatchOutput`;
 
 await pWaitFor(async () => pathExists('dist/src/index.js'));
 
@@ -30,21 +28,23 @@ const server = await createServer();
 await Promise.all([
   (async () => {
     const cp = $$({
-      stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
-      verbose: 'full',
-    })`node --watch --watch-preserve-output ${path.join('dist', 'src', 'index.js')}`;
+      ipc: true,
+    })`node --watch --watch-preserve-output --enable-source-maps ${path.join('dist', 'src', 'index.js')}`;
 
-    cp.on('message', (msg) => {
-      if (typeof msg === 'string' && msg.startsWith('ready')) {
-        server.config.logger.info(`${colors.green('Refresh Browser')}`);
+    cp.on('message', (msg: unknown) => {
+      if (
+        typeof msg === 'object' &&
+        msg !== null &&
+        'status' in msg &&
+        msg.status === 'ready'
+      ) {
         server.ws.send({
           type: 'full-reload',
         });
       }
     });
   })(),
-  $$`node dist/src/jobs.js`,
+  $$`node --watch --watch-preserve-output --enable-source-maps ${path.join('dist', 'src', 'jobs.js')}`,
   server.listen(),
+  program,
 ]);
-
-program.close();
