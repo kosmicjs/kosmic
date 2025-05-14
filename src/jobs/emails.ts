@@ -37,21 +37,21 @@ for (const email of unsentEmails) {
     await transport.sendMail(message);
     await db
       .updateTable('emails')
+      .where('id', '=', id)
       .set({
         sent_at: new Date(),
         status: 'sent',
       })
-      .where('id', '=', id)
       .execute();
     logger.info({id}, 'Email sent successfully');
   } catch (error) {
     await db
       .updateTable('emails')
+      .where('id', '=', id)
       .set({
         sent_at: new Date(),
         status: 'failed',
       })
-      .where('id', '=', id)
       .execute();
     logger.error(error, 'Error sending email');
   }
