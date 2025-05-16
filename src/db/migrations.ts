@@ -22,7 +22,7 @@ export const triggers: KosmicMigration = {
       CREATE OR REPLACE FUNCTION update_timestamp()
       RETURNS TRIGGER AS $$
       BEGIN
-        NEW.updated_at = NOW();
+        NEW.updated_at = CURRENT_TIMESTAMP;
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
@@ -218,5 +218,30 @@ export const rateLimiter: KosmicMigration = {
     await db.schema.dropIndex('rate_limiter_date_end_idx').ifExists().execute();
     await db.schema.dropTable('rate_limiters').ifExists().execute();
     logger.info('Dropped table rate_limiter');
+  },
+};
+
+export const sessions: KosmicMigration = {
+  sequence: '2025-01-07',
+  async up(db: Kysely<any>): Promise<void> {
+    logger.debug('Creating table sessions...');
+    await db.schema
+      .createTable('sessions')
+      .ifNotExists()
+      .addColumn('key', 'uuid', (col) =>
+        col
+          .notNull()
+          .primaryKey()
+          .defaultTo(sql`gen_random_uuid()`),
+      )
+      .addColumn('value', 'json')
+      .execute();
+
+    logger.info('Created table sessions');
+  },
+  async down(db: Kysely<any>): Promise<void> {
+    logger.debug('Dropping table sessions...');
+    await db.schema.dropTable('sessions').ifExists().execute();
+    logger.info('Dropped table sessions');
   },
 };

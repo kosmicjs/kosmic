@@ -40,7 +40,7 @@ await fs.cp(path.resolve(cwd, 'src', 'public'), publicFolder, {
 const server = await createServer();
 
 async function runKosmicDevServer() {
-  const cp = $$`node --watch --watch-preserve-output --enable-source-maps ${path.join('dist', 'src', 'index.js')}`;
+  const cp = $$`node --watch --watch-preserve-output --enable-source-maps --inspect ${path.join('dist', 'src', 'index.js')}`;
 
   cp.on('message', (msg: unknown) => {
     if (
@@ -60,7 +60,7 @@ await Promise.all([
   // start the kosmic server
   runKosmicDevServer(),
   // start the jobs server from the dist folder in watch mode and enable source maps
-  $$`node --watch --watch-preserve-output --enable-source-maps ${path.join('dist', 'src', 'jobs.js')}`,
+  // $$`node --watch --watch-preserve-output --enable-source-maps ${path.join('dist', 'src', 'jobs.js')}`,
   // start the vite server running and wait for it to end
   server.listen(),
   // await the end of the ts --watch program

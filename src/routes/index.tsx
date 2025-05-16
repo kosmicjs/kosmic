@@ -12,11 +12,6 @@ declare module 'koa-session' {
 export const get: Middleware = async function (ctx) {
   const messages = ctx.session?.messages ?? [];
 
-  if (ctx.session) {
-    ctx.session.messages = [];
-    ctx.session.save();
-  }
-
   await ctx.render(
     <Layout>
       <div class="toast-container text-center d-flex align-items-center justify-content-center margin-bottom-5 w-100 pt-5 px-5 position-relative">

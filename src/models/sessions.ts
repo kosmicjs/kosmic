@@ -1,33 +1,34 @@
 import type {Insertable, Selectable, Updateable} from 'kysely';
 import zod from 'zod';
-import {type GeneratedId} from './types.js';
 
-const entitySchema = zod.object({
-  id: zod.number().int().positive(),
+const sessionsSchema = zod.object({
+  key: zod.string().min(1).max(255),
+  value: zod.record(zod.string(), zod.any()),
   user_id: zod.number().int().positive().nullable(),
-  agent: zod.string().min(1).max(255).nullable(),
-  description: zod.string().min(1).max(255).nullable(),
+  expires_at: zod.date().nullable(),
 });
 
-const entityPartialSchema = entitySchema.partial();
+export type Sessions = zod.infer<typeof sessionsSchema>;
 
-export type Entity = GeneratedId<zod.infer<typeof entitySchema>>;
+export type SelectableSessions = Selectable<Sessions>;
 
-export type SelectableEntity = Selectable<Entity>;
+export const validateSelectableSessions = async (
+  sessions: unknown,
+): Promise<SelectableSessions> =>
+  sessionsSchema.required().parseAsync(sessions);
 
-export const validateSelectableEntity = async (
-  entity: unknown,
-): Promise<SelectableEntity> =>
-  entityPartialSchema.required().parseAsync(entity);
+export type InsertableSessions = Insertable<Sessions>;
 
-export type InsertableEntity = Insertable<Entity>;
+export const validateInsertableSessions = async (
+  sessions: unknown,
+): Promise<InsertableSessions> =>
+  sessionsSchema
+    .partial()
+    .required({key: true, value: true})
+    .parseAsync(sessions);
 
-export const validateInsertableEntity = async (
-  entity: unknown,
-): Promise<InsertableEntity> => entityPartialSchema.parseAsync(entity);
+export type UpdatedableSessions = Updateable<Sessions>;
 
-export type UpdatedableEntity = Updateable<Entity>;
-
-export const validateUpdatedableEntity = async (
-  entity: unknown,
-): Promise<UpdatedableEntity> => entityPartialSchema.parseAsync(entity);
+export const validateUpdatedableSessions = async (
+  sessions: unknown,
+): Promise<UpdatedableSessions> => sessionsSchema.parseAsync(sessions);

@@ -11,6 +11,7 @@ import Koa, {type Context} from 'koa';
 import serve from 'koa-static';
 import {RateLimit} from 'koa2-ratelimit';
 import MemoryStore from 'koa2-ratelimit/src/MemoryStore.js';
+import {KyselySessionStore} from '#utils/kysely-session-store.js';
 import {renderMiddleware} from '#middleware/jsx.middleware.js';
 import {helmetMiddleware} from '#middleware/helmet.js';
 import {createPinoMiddleware} from '#middleware/pino-http.js';
@@ -101,7 +102,14 @@ export async function createServer(): Promise<Server> {
 
   app.keys = config.sessionKeys;
 
-  app.use(session(app));
+  app.use(
+    session(
+      {
+        store: new KyselySessionStore(),
+      },
+      app,
+    ),
+  );
   // passport auth
   app.use(passport.initialize({userProperty: 'email'}));
   app.use(passport.session());
@@ -124,3 +132,15 @@ export const getCtx = () => {
   if (!ctx) throw new Error('No context found');
   return ctx as Context;
 };
+
+app.on('session:missed', (...ev) => {
+  logger.warn({...ev}, 'session:missed');
+});
+
+app.on('session:invalid', (...ev) => {
+  logger.warn({...ev}, 'session:invalid');
+});
+
+app.on('session:expired', (...ev) => {
+  logger.warn({...ev}, 'session:expired');
+});
