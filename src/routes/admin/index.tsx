@@ -1,5 +1,5 @@
 import {type Middleware} from 'koa';
-import Layout from '../../components/layout.js';
+import Layout from '#components/layout.js';
 import {type Use} from '#middleware/router/types.js';
 
 export const use: Use = async (ctx, next) => {

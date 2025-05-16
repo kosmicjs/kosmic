@@ -2,9 +2,9 @@ import path from 'node:path';
 import {type ComponentChildren} from 'preact';
 import humanize from 'humanize-string';
 import titleize from 'titleize';
-import Layout from '../layout.js';
-import ActiveDevWarning from '../active-dev-warning.js';
-import SideNav from './side-nav.js';
+import SideNav from '#components/docs/side-nav.js';
+import ActiveDevWarning from '#components/active-dev-warning.js';
+import Layout from '#components/layout.js';
 import {getCtx} from '#server';
 
 type Props = {

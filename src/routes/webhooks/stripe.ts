@@ -1,6 +1,6 @@
 import {type Middleware} from 'koa';
 import Stripe from 'stripe';
-import {config} from '../../config/index.js';
+import {config} from '#config/index.js';
 
 const stripe = config.stripe?.secretKey
   ? new Stripe(config.stripe.secretKey)

@@ -1,4 +1,4 @@
-import SignupForm from '../islands/signup-form.js';
+import SignupForm from '#components/islands/signup-form.js';
 
 export default function SignupModalBody() {
   return (
