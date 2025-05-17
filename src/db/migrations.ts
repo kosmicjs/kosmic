@@ -4,6 +4,7 @@ import {
   createTimestampTrigger,
   dropTimestampTrigger,
   addTimestampsColumns,
+  addIdColumn,
 } from './utils/helpers.js';
 import logger from '#utils/logger.js';
 
@@ -49,20 +50,26 @@ export const users: KosmicMigration = {
     await db.schema
       .createTable('users')
       .ifNotExists()
-      .addColumn('id', 'serial', (col) => col.primaryKey().notNull())
-      .addColumn('role', 'varchar', (col) =>
+      .$call(addIdColumn)
+      .addColumn('email', 'text', (col) => col.notNull().unique())
+      .addColumn('hash', 'text', (col) => col.notNull())
+      .addColumn('role', 'text', (col) =>
         col
           .notNull()
           .check(sql`role in ('admin', 'user')`)
           .defaultTo('user'),
       )
-      .addColumn('first_name', 'varchar')
-      .addColumn('last_name', 'varchar')
-      .addColumn('phone', 'varchar')
-      .addColumn('email', 'varchar')
-      .addColumn('hash', 'varchar', (col) => col.notNull())
-      .addColumn('google_refresh_token', 'varchar')
-      .addColumn('google_access_token', 'varchar')
+      .addColumn('is_active', 'boolean', (col) => col.notNull().defaultTo(true))
+      .addColumn('is_verified', 'boolean', (col) =>
+        col.notNull().defaultTo(false),
+      )
+      .addColumn('verification_token', 'uuid')
+      .addColumn('verification_token_expires_at', 'timestamp')
+      .addColumn('first_name', 'text')
+      .addColumn('last_name', 'text')
+      .addColumn('phone', 'text')
+      .addColumn('google_refresh_token', 'text')
+      .addColumn('google_access_token', 'text')
       .$call(addTimestampsColumns)
       .execute();
 
@@ -107,10 +114,10 @@ export const entities: KosmicMigration = {
     await db.schema
       .createTable('entities')
       .ifNotExists()
-      .addColumn('id', 'serial', (col) => col.primaryKey())
+      .$call(addIdColumn)
       .addColumn('user_id', 'integer', (col) => col.references('users.id'))
-      .addColumn('name', 'varchar')
-      .addColumn('description', 'varchar')
+      .addColumn('name', 'text')
+      .addColumn('description', 'text')
       .$call(addTimestampsColumns)
       .execute();
 
@@ -135,19 +142,19 @@ export const emails: KosmicMigration = {
     await db.schema
       .createTable('emails')
       .ifNotExists()
-      .addColumn('id', 'serial', (col) => col.primaryKey())
+      .$call(addIdColumn)
       .addColumn('user_id', 'integer', (col) => col.references('users.id'))
-      .addColumn('sent_at', 'varchar')
-      .addColumn('html', 'varchar')
-      .addColumn('to', 'varchar')
-      .addColumn('from', 'varchar')
-      .addColumn('subject', 'varchar')
-      .addColumn('text', 'varchar')
-      .addColumn('attachments', 'varchar')
-      .addColumn('status', 'varchar', (col) =>
+      .addColumn('sent_at', 'text')
+      .addColumn('html', 'text')
+      .addColumn('to', 'text')
+      .addColumn('from', 'text')
+      .addColumn('subject', 'text')
+      .addColumn('text', 'text')
+      .addColumn('attachments', 'text')
+      .addColumn('status', 'text', (col) =>
         col.notNull().check(sql`status in ('pending', 'sent', 'failed')`),
       )
-      .addColumn('description', 'varchar')
+      .addColumn('description', 'text')
       .$call(addTimestampsColumns)
       .execute();
 
@@ -172,13 +179,13 @@ export const rateLimitAbuse: KosmicMigration = {
     await db.schema
       .createTable('rate_limit_abuse')
       .ifNotExists()
-      .addColumn('id', 'serial', (col) => col.primaryKey())
-      .addColumn('key', 'varchar')
-      .addColumn('prefix', 'varchar')
+      .$call(addIdColumn)
+      .addColumn('key', 'text')
+      .addColumn('prefix', 'text')
       .addColumn('nb_max', 'integer')
       .addColumn('nb_hit', 'integer')
-      .addColumn('interval', 'varchar')
-      .addColumn('ip', 'varchar')
+      .addColumn('interval', 'text')
+      .addColumn('ip', 'text')
       .addColumn('user_id', 'integer', (col) => col.references('users.id'))
       .addColumn('date_end', 'timestamp', (col) => col.notNull())
       .$call(addTimestampsColumns)
@@ -215,7 +222,7 @@ export const rateLimiter: KosmicMigration = {
     await db.schema
       .createTable('rate_limiters')
       .ifNotExists()
-      .addColumn('key', 'varchar(255)', (col) => col.notNull().primaryKey())
+      .addColumn('key', 'text', (col) => col.notNull().primaryKey())
       .addColumn('counter', 'integer', (col) => col.notNull().defaultTo(0))
       .addColumn('date_end', 'timestamp', (col) => col.notNull())
       .$call(addTimestampsColumns)

@@ -27,3 +27,9 @@ export function addTimestampsColumns(ctb: CreateTableBuilder<any, any>) {
       col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`),
     );
 }
+
+export function addIdColumn(ctb: CreateTableBuilder<any, any>) {
+  return ctb.addColumn('id', 'integer', (col) =>
+    col.primaryKey().generatedAlwaysAsIdentity(),
+  );
+}
