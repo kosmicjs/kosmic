@@ -1,4 +1,5 @@
 import {type Kysely, type Migration, sql} from 'kysely';
+import argon2 from 'argon2';
 import {
   createTimestampTrigger,
   dropTimestampTrigger,
@@ -49,6 +50,12 @@ export const users: KosmicMigration = {
       .createTable('users')
       .ifNotExists()
       .addColumn('id', 'serial', (col) => col.primaryKey().notNull())
+      .addColumn('role', 'varchar', (col) =>
+        col
+          .notNull()
+          .check(sql`role in ('admin', 'user')`)
+          .defaultTo('user'),
+      )
       .addColumn('first_name', 'varchar')
       .addColumn('last_name', 'varchar')
       .addColumn('phone', 'varchar')
@@ -66,6 +73,17 @@ export const users: KosmicMigration = {
       .ifNotExists()
       .on('users')
       .columns(['email'])
+      .execute();
+
+    await db
+      .insertInto('users')
+      .values({
+        first_name: 'Kosmic',
+        last_name: 'Admin',
+        email: 'superuser@kosmic.com',
+        hash: await argon2.hash('kosmic'),
+        role: 'admin',
+      })
       .execute();
 
     logger.info('Created table users');

@@ -4,6 +4,7 @@ import {type GeneratedId} from './types.js';
 
 const schema = zod.object({
   id: zod.number().int().positive(),
+  role: zod.enum(['admin', 'user']).default('user'),
   first_name: zod.string().max(255).nullable(),
   last_name: zod.string().max(255).nullable(),
   phone: zod.string().max(255).nullable(),
@@ -28,7 +29,7 @@ export type InsertableUser = Insertable<User>;
 export const validateInsertableUser = async (
   user: unknown,
 ): Promise<InsertableUser> =>
-  schema.partial().required({email: true}).parseAsync(user);
+  schema.partial().required({email: true, role: true}).parseAsync(user);
 
 export type UpdatedableUser = Updateable<User>;
 

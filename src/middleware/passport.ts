@@ -29,7 +29,7 @@ passport.deserializeUser(async (id: number, done) => {
   try {
     const user = await db
       .selectFrom('users')
-      .select(['id', 'email', 'first_name', 'last_name'])
+      .select(['id', 'email', 'first_name', 'last_name', 'role'])
       .where('id', '=', id)
       .executeTakeFirstOrThrow();
 
@@ -129,6 +129,7 @@ if (config.github) {
             .insertInto('users')
             .values({
               first_name: profile.displayName?.split(' ')[0] || '',
+              role: 'user',
               last_name:
                 profile.displayName?.split(' ').slice(1).join(' ') || '',
               email,

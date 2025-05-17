@@ -9,8 +9,8 @@ const logger = serverLogger.child({
 
 const $ = execa({stdio: 'inherit', cwd: process.cwd()});
 
-const job = new CronJob(
-  '* * * * *', // => every 30s i think
+const emailsJob = new CronJob(
+  '*/10 * * * * *', // => every 10s
   async function () {
     try {
       await $`node ./dist/src/jobs/emails.js`;
@@ -23,7 +23,27 @@ const job = new CronJob(
   'America/New_York',
 );
 
-job.start();
+emailsJob.start();
+
+logger.debug('emailsJob started');
+
+const rateLimitJob = new CronJob(
+  '*/30 * * * * *', // => every 30s
+  async function () {
+    try {
+      await $`node ./dist/src/jobs/rate-limit-cleanup.js`;
+    } catch (error) {
+      logger.error(error, 'Error running cron job');
+    }
+  },
+  null,
+  false,
+  'America/New_York',
+);
+
+rateLimitJob.start();
+
+logger.debug('rateLimitJob started');
 
 logger.info('Cron jobs started');
 
