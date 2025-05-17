@@ -11,7 +11,7 @@ export function EntityCard({
     return (
       <button
         type="button"
-        hx-delete={`/admin/entities/${entity.id}`}
+        hx-delete={`/account/entities/${entity.id}`}
         hx-target={`#entity${entity.id}`}
         hx-swap="delete"
         class="btn btn-outline-danger btn-sm"
@@ -25,7 +25,7 @@ export function EntityCard({
     return (
       <button
         type="button"
-        hx-get={`/admin/entities/${entity.id}`}
+        hx-get={`/account/entities/${entity.id}`}
         hx-target={`#entity${entity.id}`}
         hx-swap="outerHTML"
         class="btn btn-outline-primary btn-sm"
@@ -49,7 +49,7 @@ export function EntityCard({
         {isEditable ? (
           <form
             class="card-body"
-            hx-put={`/admin/entities/${entity.id}`}
+            hx-put={`/account/entities/${entity.id}`}
             hx-target={`#entity${entity.id}`}
             hx-swap="outerHTML"
           >

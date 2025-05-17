@@ -13,7 +13,7 @@ export default function AddEntity() {
 
       <div class="modal-body">
         <form
-          hx-post="/admin/entities"
+          hx-post="/account/entities"
           hx-target="#entity-list"
           hx-swap="afterbegin"
         >

@@ -19,14 +19,14 @@ const NavItems = [
     matchType: 'startsWith',
   },
   {
-    name: 'Admin',
-    href: '/admin',
+    name: 'Account',
+    href: '/account',
     matchType: 'startsWith',
     protected: true,
   },
   {
     name: 'Entities',
-    href: '/admin/entities',
+    href: '/account/entities',
     matchType: 'startsWith',
     protected: true,
   },

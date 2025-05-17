@@ -21,7 +21,7 @@ export const get: Middleware = async (ctx, next) => {
       <div class="row">
         <div class="col-12 p-5">
           <div className="d-flex justify-content-center">
-            <h2>Admin</h2>
+            <h2>My Account</h2>
           </div>
           <p>Welcome to your future admin panel, {ctx.state.user.email}</p>
           <form action={`/users/${ctx.state.user.id}`} method="put">

@@ -79,5 +79,5 @@ export async function post(ctx: Context, next: Next) {
 
   await ctx.login(user);
 
-  ctx.redirect('/admin');
+  ctx.redirect('/account');
 }

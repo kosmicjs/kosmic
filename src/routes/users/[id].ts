@@ -36,5 +36,5 @@ export const put = async (ctx: Context, next: Next) => {
 
   ctx.status = 303;
 
-  ctx.redirect(`/admin`);
+  ctx.redirect(`/account`);
 };

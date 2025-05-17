@@ -40,8 +40,8 @@ await describe('server integration', async () => {
     strictEqual(response.statusCode, 302);
   });
 
-  await test('Get /admin - no auth - 401 response', async () => {
-    const response = await got('http://localhost:4567/admin', {
+  await test('Get /account - no auth - 401 response', async () => {
+    const response = await got('http://localhost:4567/account', {
       throwHttpErrors: false,
       followRedirect: false,
     });
