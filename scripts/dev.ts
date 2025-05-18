@@ -7,6 +7,7 @@ import {execa} from 'execa';
 import pWaitFor from 'p-wait-for';
 import {pathExists} from 'path-exists';
 import {createServer} from 'vite';
+import {tsWatch} from './ts-watch.ts';
 
 /**
  * This script is used to start the development server for the application.
@@ -27,7 +28,7 @@ const $$ = execa({cwd, stdio: 'inherit', ipc: true});
 await fs.rm('dist', {recursive: true, force: true});
 
 // start ts
-const program = $$`tsc --watch --preserveWatchOutput`;
+const program = tsWatch();
 
 // wait for the ts output
 await pWaitFor(async () => pathExists('dist/src/index.js'));

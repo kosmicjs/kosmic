@@ -1,6 +1,6 @@
 import {type Context, type Next} from 'koa';
 import {db} from '#db/index.js';
-import {validateUpdatedableEntity} from '#models/entities.js';
+import * as Entities from '#models/entities.js';
 import {EntityCard} from '#components/entities/entity-card.js';
 
 export const del = async (ctx: Context, next: Next) => {
@@ -40,7 +40,9 @@ export const get = async (ctx: Context, next: Next) => {
 export const put = async (ctx: Context, next: Next) => {
   if (!ctx.params?.id) throw new Error('id is required');
 
-  const {name, description} = await validateUpdatedableEntity(ctx.request.body);
+  const {name, description} = await Entities.schema.parseAsync(
+    ctx.request.body,
+  );
 
   ctx.log.debug(
     {...ctx.params, body: {name, description}},

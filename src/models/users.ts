@@ -2,7 +2,7 @@ import type {Insertable, Selectable, Updateable} from 'kysely';
 import zod from 'zod';
 import {type GeneratedId} from './types.js';
 
-const schema = zod.object({
+export const schema = zod.object({
   id: zod.number().int().positive(),
   role: zod.enum(['admin', 'user']).default('user'),
   first_name: zod.string().max(255).nullable(),
@@ -10,6 +10,10 @@ const schema = zod.object({
   phone: zod.string().max(255).nullable(),
   email: zod.string().max(255).email(),
   hash: zod.string().max(255).nullable(),
+  is_verified: zod.boolean().default(false),
+  verification_token: zod.string().uuid().nullable(),
+  verification_token_expires_at: zod.date().nullable(),
+  is_active: zod.boolean().default(true),
   google_access_token: zod.string().max(255).nullable(),
   google_refresh_token: zod.string().max(255).nullable(),
   github_access_token: zod.string().max(255).nullable(),
@@ -17,22 +21,6 @@ const schema = zod.object({
 });
 
 export type User = GeneratedId<zod.infer<typeof schema>>;
-
 export type SelectableUser = Selectable<User>;
-
-export const validateSelectableUser = async (
-  user: unknown,
-): Promise<SelectableUser> => schema.parseAsync(user);
-
 export type InsertableUser = Insertable<User>;
-
-export const validateInsertableUser = async (
-  user: unknown,
-): Promise<InsertableUser> =>
-  schema.partial().required({email: true, role: true}).parseAsync(user);
-
 export type UpdatedableUser = Updateable<User>;
-
-export const validateUpdatedableUser = async (
-  user: unknown,
-): Promise<UpdatedableUser> => schema.partial().parseAsync(user);

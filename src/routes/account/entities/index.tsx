@@ -48,9 +48,7 @@ export const post: Middleware = async (ctx, next) => {
     throw new Error('Not logged in');
   }
 
-  const {name, description} = await Entity.validateInsertableEntity(
-    ctx.request.body,
-  );
+  const {name, description} = await Entity.schema.parseAsync(ctx.request.body);
 
   const entity = await db
     .insertInto('entities')

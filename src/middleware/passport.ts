@@ -12,6 +12,7 @@ import {type SelectableUser} from '#models/users.js';
 import {db} from '#db/index.js';
 import logger from '#utils/logger.js';
 import {config} from '#config/index.js';
+import * as User from '#models/users.js';
 
 declare module 'koa' {
   interface DefaultState {
@@ -127,15 +128,17 @@ if (config.github) {
         try {
           user = await db
             .insertInto('users')
-            .values({
-              first_name: profile.displayName?.split(' ')[0] || '',
-              role: 'user',
-              last_name:
-                profile.displayName?.split(' ').slice(1).join(' ') || '',
-              email,
-              github_access_token: accessToken,
-              github_refresh_token: refreshToken,
-            })
+            .values(
+              await User.schema.parseAsync({
+                first_name: profile.displayName?.split(' ')[0] || '',
+                role: 'user',
+                last_name:
+                  profile.displayName?.split(' ').slice(1).join(' ') || '',
+                email,
+                github_access_token: accessToken,
+                github_refresh_token: refreshToken,
+              }),
+            )
             .returningAll()
             .executeTakeFirstOrThrow();
         } catch (error) {

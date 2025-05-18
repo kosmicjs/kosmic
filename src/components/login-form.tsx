@@ -1,10 +1,17 @@
+import {getCtx} from '#server';
+
 export type Props = {
   readonly isSignup: boolean;
 };
 
 export function LoginForm() {
+  const ctx = getCtx();
+
   return (
-    <form action="/login" method="post">
+    <form
+      action={`/login?redirect=${ctx.query.redirect?.toString()}`}
+      method="post"
+    >
       <div class="modal-body">
         <div class="mb-3">
           <label for="modal-email" class="form-label">

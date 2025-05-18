@@ -2,11 +2,11 @@ import type {Context, Next} from 'koa';
 import argon2 from 'argon2';
 import z from 'zod';
 import * as User from '#models/users.js';
-import {db} from '#db/index.js';
 import {SignupForm} from '#components/signup-form.js';
 import Layout from '#components/layout.js';
 import {config} from '#config/index.js';
 import * as Emails from '#models/emails.js';
+import {db} from '#db/index.js';
 
 export async function get(ctx: Context, next: Next) {
   await ctx.render(
@@ -39,7 +39,7 @@ if (config.kosmicEnv === 'production') {
 }
 
 export async function post(ctx: Context, next: Next) {
-  const userData = await User.validateInsertableUser(ctx.request.body);
+  const userData = await User.schema.parseAsync(ctx.request.body);
 
   const passwords = await z
     .object({

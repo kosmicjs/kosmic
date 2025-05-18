@@ -5,7 +5,7 @@ import {db} from '#db/index.js';
 import {renderEmailToString} from '#emails/layout.js';
 import WelcomeEmail from '#emails/templates/welcome.js';
 
-const emailSchema = zod.object({
+export const schema = zod.object({
   id: zod.number().int().positive(),
   user_id: zod.number().int().positive().nullable(),
   sent_at: zod.date().nullable(),
@@ -19,27 +19,11 @@ const emailSchema = zod.object({
   description: zod.string().max(255).nullable(),
 });
 
-const emailPartialSchema = emailSchema.partial();
-
-export type Email = GeneratedId<zod.infer<typeof emailSchema>>;
-
+export type Email = GeneratedId<zod.infer<typeof schema>>;
 export type SelectableEmail = Selectable<Email>;
-
-export const validateSelectableEmail = async (
-  email: unknown,
-): Promise<SelectableEmail> => emailPartialSchema.required().parseAsync(email);
-
 export type InsertableEmail = Insertable<Email>;
-
-export const validateInsertableEmail = async (
-  email: unknown,
-): Promise<InsertableEmail> => emailPartialSchema.parseAsync(email);
-
 export type UpdatedableEmail = Updateable<Email>;
 
-export const validateUpdatedableEmail = async (
-  email: unknown,
-): Promise<UpdatedableEmail> => emailPartialSchema.parseAsync(email);
 // Example function to queue a welcome email
 export async function queueWelcomeEmail(
   userId: number,

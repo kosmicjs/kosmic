@@ -105,6 +105,8 @@ export async function createServer(): Promise<Server> {
   app.use(
     session(
       {
+        secure: config.nodeEnv === 'production',
+        sameSite: 'lax',
         store: new KyselySessionStore(),
       },
       app,

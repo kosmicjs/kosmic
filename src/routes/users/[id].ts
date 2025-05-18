@@ -18,9 +18,7 @@ export const put = async (ctx: Context, next: Next) => {
 
   ctx.log.debug(ctx.request.body, 'updating user');
 
-  const userData: User.UpdatedableUser = await User.validateUpdatedableUser(
-    ctx.request.body,
-  );
+  const userData = await User.schema.parseAsync(ctx.request.body);
 
   const user = await db
     .updateTable('users')
