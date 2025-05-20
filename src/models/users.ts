@@ -21,6 +21,18 @@ export const schema = zod.object({
 });
 
 export type User = GeneratedId<zod.infer<typeof schema>>;
+
 export type SelectableUser = Selectable<User>;
+
 export type InsertableUser = Insertable<User>;
+
+export const insertSchema = schema.partial().required({
+  role: true,
+  email: true,
+  is_verified: true,
+  is_active: true,
+});
+
 export type UpdatedableUser = Updateable<User>;
+
+export const updateSchema = schema.partial();

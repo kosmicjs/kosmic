@@ -18,14 +18,11 @@ export const put = async (ctx: Context, next: Next) => {
 
   ctx.log.debug(ctx.request.body, 'updating user');
 
-  const userData = await User.schema.parseAsync(ctx.request.body);
+  const userData = await User.updateSchema.parseAsync(ctx.request.body);
 
   const user = await db
     .updateTable('users')
-    .set({
-      ...ctx.state.user,
-      ...userData,
-    })
+    .set(userData)
     .where('id', '=', Number.parseInt(ctx.params.id, 10))
     .returning(['id', 'first_name', 'last_name', 'phone', 'email'])
     .executeTakeFirstOrThrow();

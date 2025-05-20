@@ -55,7 +55,7 @@
     ]
   },
   "dependencies": {
-    "@google/genai": "^0.14.1",
+    "@google/genai": "^1.0.0",
     "@popperjs/core": "^2.11.8",
     "@stripe/stripe-js": "^7.3.0",
     "@types/koa-session": "^6.4.5",
@@ -108,7 +108,7 @@
     "path-exists": "^5.0.0",
     "path-to-regexp": "^8.2.0",
     "pg": "^8.16.0",
-    "pino": "9.6.0",
+    "pino": "9.7.0",
     "pino-http": "^10.4.0",
     "pino-princess": "^1.0.0",
     "preact": "^10.26.6",
@@ -116,9 +116,9 @@
     "preview-email": "^3.1.0",
     "queue": "^7.0.0",
     "short-uuid": "^5.2.0",
-    "stripe": "^18.1.0",
+    "stripe": "^18.1.1",
     "titleize": "^4.0.0",
-    "zod": "^3.24.4",
+    "zod": "^3.25.7",
     "zod-validation-error": "^3.4.1"
   },
   "devDependencies": {
@@ -136,7 +136,7 @@
     "@types/koa-response-time": "^2",
     "@types/koa-static": "^4.0.4",
     "@types/koa2-ratelimit": "^0.9.6",
-    "@types/node": "~22.15.18",
+    "@types/node": "~22.15.19",
     "@types/passport-github2": "^1.2.9",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-local": "^1.0.38",
@@ -153,7 +153,7 @@
     "picomatch": "^4.0.2",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-attributes": "^1.0.0",
-    "prettier-plugin-packagejson": "^2.5.13",
+    "prettier-plugin-packagejson": "^2.5.14",
     "rimraf": "^6.0.1",
     "sass": "1.89.0",
     "swagger-ui-dist": "^5.21.0",

@@ -40,7 +40,7 @@ export const get = async (ctx: Context, next: Next) => {
 export const put = async (ctx: Context, next: Next) => {
   if (!ctx.params?.id) throw new Error('id is required');
 
-  const {name, description} = await Entities.schema.parseAsync(
+  const {name, description} = await Entities.updateSchema.parseAsync(
     ctx.request.body,
   );
 

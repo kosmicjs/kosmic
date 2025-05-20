@@ -39,7 +39,7 @@ if (config.kosmicEnv === 'production') {
 }
 
 export async function post(ctx: Context, next: Next) {
-  const userData = await User.schema.parseAsync(ctx.request.body);
+  const userData = await User.insertSchema.parseAsync(ctx.request.body);
 
   const passwords = await z
     .object({
@@ -58,7 +58,6 @@ export async function post(ctx: Context, next: Next) {
       ctx.session.messages = [
         'Password and password confirmation do not match',
       ];
-      ctx.session.save();
     }
 
     ctx.redirect('/');

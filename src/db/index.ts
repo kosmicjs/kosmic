@@ -15,7 +15,7 @@ export const db = new Kysely<Database>({
         sql: event.query.sql,
       });
     } else {
-      logger.debug({
+      logger.trace({
         msg: 'postgres query executed',
         durationMs: event.queryDurationMillis,
         sql: event.query.sql.replaceAll('"', "'"),

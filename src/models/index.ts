@@ -12,7 +12,3 @@ export type Database = {
   rate_limiters: RateLimiter;
   sessions: Sessions;
 };
-
-export {type User} from './users.js';
-
-export {type Entity} from './entities.js';

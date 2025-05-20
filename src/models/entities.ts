@@ -12,4 +12,6 @@ export const schema = zod.object({
 export type Entity = GeneratedId<zod.infer<typeof schema>>;
 export type SelectableEntity = Selectable<Entity>;
 export type InsertableEntity = Insertable<Entity>;
+export const insertSchema = schema.partial();
 export type UpdatedableEntity = Updateable<Entity>;
+export const updateSchema = schema.partial();
