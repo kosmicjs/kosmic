@@ -45,7 +45,7 @@ await describe('server integration', async () => {
       throwHttpErrors: false,
       followRedirect: false,
     });
-    strictEqual(response.statusCode, 401);
+    strictEqual(response.statusCode, 302);
   });
 
   after(() => {

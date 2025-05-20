@@ -4,7 +4,6 @@ import {type Use} from '#middleware/router/types.js';
 
 export const use: Use = async (ctx, next) => {
   if (!ctx.isAuthenticated()) {
-    ctx.status = 401;
     if (ctx.session)
       ctx.session.messages = [
         'Not authorized. Please log in to access this page.',
