@@ -9,7 +9,7 @@ export function LoginForm() {
 
   return (
     <form
-      action={`/login?redirect=${ctx.query.redirect?.toString()}`}
+      action={`/login${typeof ctx.query.redirect === 'string' ? `?redirect=${ctx.query.redirect}` : ''}`}
       method="post"
     >
       <div class="modal-body">

@@ -4,8 +4,9 @@ import {Layout} from '#components/layout.js';
 import {LoginForm} from '#components/login-form.js';
 
 export async function post(ctx: Context, next: Next) {
-  passport.authenticate('local', {
-    successRedirect: ctx.query.redirect ?? '/account',
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return passport.authenticate('local', {
+    successRedirect: '/account',
     failureRedirect: '/',
     failureMessage: 'Invalid email or password',
     successMessage: 'Logged in',

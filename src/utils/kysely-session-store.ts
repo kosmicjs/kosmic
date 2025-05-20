@@ -4,7 +4,7 @@ import {logger} from '#utils/logger.js';
 
 export class KyselySessionStore implements SessionStore {
   async get(key: string) {
-    logger.debug({key}, 'KyselySessionStore.get');
+    logger.trace({key}, 'KyselySessionStore.get');
     const result = await db
       .selectFrom('sessions')
       .selectAll()
@@ -21,7 +21,7 @@ export class KyselySessionStore implements SessionStore {
       _maxAge?: number | undefined;
     },
   ) {
-    logger.debug({key, value}, 'KyselySessionStore.set');
+    logger.trace({key, value}, 'KyselySessionStore.set');
     await db
       .insertInto('sessions')
       .values({key, value})
@@ -34,7 +34,7 @@ export class KyselySessionStore implements SessionStore {
   }
 
   async destroy(key: string) {
-    logger.debug({key}, 'KyselySessionStore.destroy');
+    logger.trace({key}, 'KyselySessionStore.destroy');
     await db.deleteFrom('sessions').where('key', '=', key).execute();
   }
 }
