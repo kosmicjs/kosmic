@@ -15,6 +15,11 @@ const config: FlatXoConfig = [
       'react/react-in-jsx-scope': 'off',
       'react/self-closing-comp': 'off',
       'unicorn/prevent-abbreviations': 'off',
+    },
+  },
+  {
+    files: '**/*.{ts,tsx}',
+    rules: {
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/naming-convention': 'off',
       '@typescript-eslint/no-unused-vars': [
