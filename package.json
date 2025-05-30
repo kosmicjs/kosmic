@@ -136,7 +136,7 @@
     "@types/koa-response-time": "^2",
     "@types/koa-static": "^4.0.4",
     "@types/koa2-ratelimit": "^0.9.6",
-    "@types/node": "~22.15.27",
+    "@types/node": "~22.15.29",
     "@types/passport-github2": "^1.2.9",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-local": "^1.0.38",
@@ -164,6 +164,6 @@
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-tsc-watch": "^3.1.0",
     "wait-on": "^8.0.3",
-    "xo": "^1.0.3"
+    "xo": "^1.0.4"
   }
 }
