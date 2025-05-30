@@ -55,7 +55,7 @@
     ]
   },
   "dependencies": {
-    "@google/genai": "^1.1.0",
+    "@google/genai": "^1.2.0",
     "@popperjs/core": "^2.11.8",
     "@stripe/stripe-js": "^7.3.1",
     "@types/koa-session": "^6.4.5",
@@ -67,7 +67,7 @@
     "camelcase": "^8.0.0",
     "clsx": "^2.1.1",
     "copy-to-clipboard": "^3.3.3",
-    "cron": "^4.3.0",
+    "cron": "^4.3.1",
     "dedent": "^1.6.0",
     "defaults": "^3.0.0",
     "dotenv": "^16.5.0",
@@ -98,7 +98,7 @@
     "kysely": "^0.28.2",
     "nodemailer": "^7.0.3",
     "npm-check-updates": "^18.0.1",
-    "openai": "^4.103.0",
+    "openai": "^5.0.1",
     "p-debounce": "^4.0.0",
     "p-queue": "^8.1.0",
     "p-wait-for": "^5.0.2",
@@ -111,14 +111,14 @@
     "pino": "9.7.0",
     "pino-http": "^10.4.0",
     "pino-princess": "^1.2.0",
-    "preact": "^10.26.7",
+    "preact": "^10.26.8",
     "preact-render-to-string": "^6.5.13",
     "preview-email": "^3.1.0",
     "queue": "^7.0.0",
     "short-uuid": "^5.2.0",
-    "stripe": "^18.1.1",
+    "stripe": "^18.2.0",
     "titleize": "^4.0.0",
-    "zod": "^3.25.31",
+    "zod": "^3.25.42",
     "zod-validation-error": "^3.4.1"
   },
   "devDependencies": {
@@ -136,7 +136,7 @@
     "@types/koa-response-time": "^2",
     "@types/koa-static": "^4.0.4",
     "@types/koa2-ratelimit": "^0.9.6",
-    "@types/node": "~22.15.23",
+    "@types/node": "~22.15.27",
     "@types/passport-github2": "^1.2.9",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-local": "^1.0.38",
@@ -164,6 +164,6 @@
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-tsc-watch": "^3.1.0",
     "wait-on": "^8.0.3",
-    "xo": "^1.0.0"
+    "xo": "^1.0.3"
   }
 }
