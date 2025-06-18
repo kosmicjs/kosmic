@@ -171,80 +171,82 @@ export const emails: KosmicMigration = {
 
 /**
  * Create the rate_limit_abuse table
+ *  @deprecated This migration is not used anymore, as we moved to a different rate limiting strategy
  */
-export const rateLimitAbuse: KosmicMigration = {
-  sequence: '2025-01-05',
-  async up(db: Kysely<any>): Promise<void> {
-    logger.debug('Creating table rate_limit_abuse...');
-    await db.schema
-      .createTable('rate_limit_abuse')
-      .ifNotExists()
-      .$call(addIdColumn)
-      .addColumn('key', 'text')
-      .addColumn('prefix', 'text')
-      .addColumn('nb_max', 'integer')
-      .addColumn('nb_hit', 'integer')
-      .addColumn('interval', 'text')
-      .addColumn('ip', 'text')
-      .addColumn('user_id', 'integer', (col) => col.references('users.id'))
-      .addColumn('date_end', 'timestamp', (col) => col.notNull())
-      .$call(addTimestampsColumns)
-      .execute();
-    // Add a unique index on key and date_end columns
-    await db.schema
-      .createIndex('rate_limit_abuse_key_date_end_unique_idx')
-      .ifNotExists()
-      .on('rate_limit_abuse')
-      .columns(['key', 'date_end'])
-      .unique()
-      .execute();
-    logger.info('Created table rate_limit_abuse');
-  },
-  async down(db: Kysely<any>): Promise<void> {
-    logger.debug('Dropping table rate_limit_abuse...');
-    // Drop the index first (though it will be dropped automatically with the table in most databases)
-    await db.schema
-      .dropIndex('rate_limit_abuse_key_date_end_unique_idx')
-      .ifExists()
-      .execute();
-    await db.schema.dropTable('rate_limit_abuse').ifExists().execute();
-    logger.info('Dropped table rate_limit_abuse');
-  },
-};
+// export const rateLimitAbuse: KosmicMigration = {
+//   sequence: '2025-01-05',
+//   async up(db: Kysely<any>): Promise<void> {
+//     logger.debug('Creating table rate_limit_abuse...');
+//     await db.schema
+//       .createTable('rate_limit_abuse')
+//       .ifNotExists()
+//       .$call(addIdColumn)
+//       .addColumn('key', 'text')
+//       .addColumn('prefix', 'text')
+//       .addColumn('nb_max', 'integer')
+//       .addColumn('nb_hit', 'integer')
+//       .addColumn('interval', 'text')
+//       .addColumn('ip', 'text')
+//       .addColumn('user_id', 'integer', (col) => col.references('users.id'))
+//       .addColumn('date_end', 'timestamp', (col) => col.notNull())
+//       .$call(addTimestampsColumns)
+//       .execute();
+//     // Add a unique index on key and date_end columns
+//     await db.schema
+//       .createIndex('rate_limit_abuse_key_date_end_unique_idx')
+//       .ifNotExists()
+//       .on('rate_limit_abuse')
+//       .columns(['key', 'date_end'])
+//       .unique()
+//       .execute();
+//     logger.info('Created table rate_limit_abuse');
+//   },
+//   async down(db: Kysely<any>): Promise<void> {
+//     logger.debug('Dropping table rate_limit_abuse...');
+//     // Drop the index first (though it will be dropped automatically with the table in most databases)
+//     await db.schema
+//       .dropIndex('rate_limit_abuse_key_date_end_unique_idx')
+//       .ifExists()
+//       .execute();
+//     await db.schema.dropTable('rate_limit_abuse').ifExists().execute();
+//     logger.info('Dropped table rate_limit_abuse');
+//   },
+// };
 
 /**
  * Create the rate_limiters table
+ * @deprecated This migration is not used anymore, as we moved to a different rate limiting strategy
  */
-export const rateLimiter: KosmicMigration = {
-  sequence: '2025-01-06',
-  async up(db: Kysely<any>): Promise<void> {
-    logger.debug('Creating table rate_limiters...');
-    await db.schema
-      .createTable('rate_limiters')
-      .ifNotExists()
-      .addColumn('key', 'text', (col) => col.notNull().primaryKey())
-      .addColumn('counter', 'integer', (col) => col.notNull().defaultTo(0))
-      .addColumn('date_end', 'timestamp', (col) => col.notNull())
-      .$call(addTimestampsColumns)
-      .execute();
-    // Add indexes
-    // The unique index on 'key' is already created implicitly by the primary key
-    await db.schema
-      .createIndex('rate_limiter_date_end_idx')
-      .ifNotExists()
-      .on('rate_limiters')
-      .columns(['date_end'])
-      .execute();
-    logger.info('Created table rate_limiters');
-  },
+// export const rateLimiter: KosmicMigration = {
+//   sequence: '2025-01-06',
+//   async up(db: Kysely<any>): Promise<void> {
+//     logger.debug('Creating table rate_limiters...');
+//     await db.schema
+//       .createTable('rate_limiters')
+//       .ifNotExists()
+//       .addColumn('key', 'text', (col) => col.notNull().primaryKey())
+//       .addColumn('counter', 'integer', (col) => col.notNull().defaultTo(0))
+//       .addColumn('date_end', 'timestamp', (col) => col.notNull())
+//       .$call(addTimestampsColumns)
+//       .execute();
+//     // Add indexes
+//     // The unique index on 'key' is already created implicitly by the primary key
+//     await db.schema
+//       .createIndex('rate_limiter_date_end_idx')
+//       .ifNotExists()
+//       .on('rate_limiters')
+//       .columns(['date_end'])
+//       .execute();
+//     logger.info('Created table rate_limiters');
+//   },
 
-  async down(db: Kysely<any>): Promise<void> {
-    logger.debug('Dropping table rate_limiter...');
-    await db.schema.dropIndex('rate_limiter_date_end_idx').ifExists().execute();
-    await db.schema.dropTable('rate_limiters').ifExists().execute();
-    logger.info('Dropped table rate_limiter');
-  },
-};
+//   async down(db: Kysely<any>): Promise<void> {
+//     logger.debug('Dropping table rate_limiter...');
+//     await db.schema.dropIndex('rate_limiter_date_end_idx').ifExists().execute();
+//     await db.schema.dropTable('rate_limiters').ifExists().execute();
+//     logger.info('Dropped table rate_limiter');
+//   },
+// };
 
 export const sessions: KosmicMigration = {
   sequence: '2025-01-07',
