@@ -5,7 +5,7 @@ import path from 'node:path';
 import bodyParser from 'koa-bodyparser';
 import responseTime from 'koa-response-time';
 import session from 'koa-session';
-import etag from 'koa-etag';
+import etag from '@koa/etag';
 import conditional from 'koa-conditional-get';
 import Koa, {type Context} from 'koa';
 import serve from 'koa-static';
