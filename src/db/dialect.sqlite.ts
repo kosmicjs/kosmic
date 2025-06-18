@@ -3,7 +3,7 @@ import Database from 'better-sqlite3';
 import {SqliteDialect} from 'kysely';
 import logger from '#utils/logger.js';
 
-const databasePath = process.env.SQLITE_DATABASE ?? './kosmic.db';
+const databasePath = process.env.SQLITE_DATABASE ?? ':memory:';
 
 const database = new Database(databasePath);
 

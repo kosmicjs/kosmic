@@ -4,12 +4,14 @@ import {strictEqual} from 'node:assert';
 import got from 'got';
 import * as cheerio from 'cheerio';
 import {createServer} from '../src/server.js';
+import {migrator} from '#db/utils/migrator.js';
 
 await describe('server integration', async () => {
   let server: Server;
 
   before(async () => {
     server = await createServer();
+    await migrator.migrateToLatest();
     server.listen(4567);
   });
 
