@@ -2,8 +2,10 @@ import process from 'node:process';
 import {config} from './config/index.js';
 import {logger} from './utils/logger.js';
 import {createServer} from './server.js';
+import {migrator} from '#db/utils/migrator.js';
 
 const server = await createServer();
+await migrator.migrateToLatest();
 
 server.listen({port: config.port, host: config.host}, () => {
   logger.info(`Server listening on ${config.host}:${config.port}`);

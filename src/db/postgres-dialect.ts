@@ -1,4 +1,5 @@
 import pkg from 'pg';
+import {PostgresDialect} from 'kysely';
 import logger from '#utils/logger.js';
 import {config} from '#config/index.js';
 
@@ -26,4 +27,8 @@ pool.on('remove', () => {
 
 pool.on('acquire', () => {
   logger.trace('postgres acquired');
+});
+
+export const dialect = new PostgresDialect({
+  pool,
 });

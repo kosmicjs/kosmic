@@ -1,6 +1,6 @@
 import {type FlatXoConfig} from 'xo';
 
-const config: FlatXoConfig = [
+export default [
   {
     space: true,
     prettier: true,
@@ -29,6 +29,4 @@ const config: FlatXoConfig = [
       'import-x/no-unassigned-import': 'off',
     },
   },
-];
-
-export default config;
+] satisfies FlatXoConfig[];
