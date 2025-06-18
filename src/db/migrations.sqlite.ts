@@ -5,7 +5,7 @@ import {
   dropTimestampTrigger,
   addTimestampsColumns,
   addIdColumn,
-} from './utils/helpers.js';
+} from './utils/helpers.sqlite.js';
 import logger from '#utils/logger.js';
 
 export type KosmicMigration = Migration & {
@@ -18,24 +18,19 @@ export type KosmicMigration = Migration & {
  */
 export const triggers: KosmicMigration = {
   sequence: '2025-01-01',
-  async up(db: Kysely<any>): Promise<void> {
+  async up(): Promise<void> {
     logger.debug('Creating trigger function update_timestamp...');
-    await sql`
-      CREATE OR REPLACE FUNCTION update_timestamp()
-      RETURNS TRIGGER AS $$
-      BEGIN
-        NEW.updated_at = CURRENT_TIMESTAMP;
-        RETURN NEW;
-      END;
-      $$ LANGUAGE plpgsql;
-  `.execute(db);
-    logger.info('Created trigger function update_timestamp');
+    // SQLite doesn't have stored functions like PostgreSQL,
+    // so we'll create individual triggers for each table instead
+    logger.info(
+      'Trigger function setup complete (SQLite uses per-table triggers)',
+    );
   },
 
-  async down(db: Kysely<any>): Promise<void> {
+  async down(): Promise<void> {
     logger.debug('Dropping trigger function update_timestamp...');
-    await sql`DROP FUNCTION IF EXISTS update_timestamp() CASCADE`.execute(db);
-    logger.info('Dropped trigger function update_timestamp');
+    // No function to drop in SQLite
+    logger.info('Trigger function cleanup complete');
   },
 };
 
@@ -63,8 +58,8 @@ export const users: KosmicMigration = {
       .addColumn('is_verified', 'boolean', (col) =>
         col.notNull().defaultTo(false),
       )
-      .addColumn('verification_token', 'uuid')
-      .addColumn('verification_token_expires_at', 'timestamp')
+      .addColumn('verification_token', 'text') // SQLite doesn't have uuid type
+      .addColumn('verification_token_expires_at', 'datetime') // SQLite uses datetime
       .addColumn('first_name', 'text')
       .addColumn('last_name', 'text')
       .addColumn('phone', 'text')
@@ -97,8 +92,8 @@ export const users: KosmicMigration = {
   },
   async down(db: Kysely<any>): Promise<void> {
     logger.debug('Dropping table users...');
-    await db.schema.dropTable('users').ifExists().cascade().execute();
-    await db.schema.dropIndex('users_email_idx').ifExists().cascade().execute();
+    await db.schema.dropTable('users').ifExists().execute(); // SQLite doesn't support CASCADE in DROP TABLE
+    await db.schema.dropIndex('users_email_idx').ifExists().execute();
     await dropTimestampTrigger(db, 'users');
     logger.info('Dropped table users');
   },
@@ -126,7 +121,7 @@ export const entities: KosmicMigration = {
   },
   async down(db: Kysely<any>): Promise<void> {
     logger.debug('Dropping table entity...');
-    await db.schema.dropTable('entities').ifExists().cascade().execute();
+    await db.schema.dropTable('entities').ifExists().execute();
     await dropTimestampTrigger(db, 'entities');
     logger.info('Dropped table entity');
   },
@@ -163,7 +158,7 @@ export const emails: KosmicMigration = {
   },
   async down(db: Kysely<any>): Promise<void> {
     logger.debug('Dropping table emails...');
-    await db.schema.dropTable('emails').ifExists().cascade().execute();
+    await db.schema.dropTable('emails').ifExists().execute();
     await dropTimestampTrigger(db, 'emails');
     logger.info('Dropped table emails');
   },
@@ -188,7 +183,7 @@ export const emails: KosmicMigration = {
 //       .addColumn('interval', 'text')
 //       .addColumn('ip', 'text')
 //       .addColumn('user_id', 'integer', (col) => col.references('users.id'))
-//       .addColumn('date_end', 'timestamp', (col) => col.notNull())
+//       .addColumn('date_end', 'datetime', (col) => col.notNull()) // SQLite uses datetime
 //       .$call(addTimestampsColumns)
 //       .execute();
 //     // Add a unique index on key and date_end columns
@@ -226,7 +221,7 @@ export const emails: KosmicMigration = {
 //       .ifNotExists()
 //       .addColumn('key', 'text', (col) => col.notNull().primaryKey())
 //       .addColumn('counter', 'integer', (col) => col.notNull().defaultTo(0))
-//       .addColumn('date_end', 'timestamp', (col) => col.notNull())
+//       .addColumn('date_end', 'datetime', (col) => col.notNull()) // SQLite uses datetime
 //       .$call(addTimestampsColumns)
 //       .execute();
 //     // Add indexes
@@ -255,13 +250,13 @@ export const sessions: KosmicMigration = {
     await db.schema
       .createTable('sessions')
       .ifNotExists()
-      .addColumn('key', 'uuid', (col) =>
-        col
-          .notNull()
-          .primaryKey()
-          .defaultTo(sql`gen_random_uuid()`),
+      .addColumn(
+        'key',
+        'text',
+        (col) => col.notNull().primaryKey(),
+        // SQLite doesn't have gen_random_uuid(), would need to generate UUIDs in application code
       )
-      .addColumn('value', 'json')
+      .addColumn('value', 'text') // SQLite doesn't have json type, store as text
       .execute();
 
     logger.info('Created table sessions');

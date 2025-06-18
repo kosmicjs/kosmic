@@ -24,10 +24,10 @@ export class KyselySessionStore implements SessionStore {
     logger.trace({key, value}, 'KyselySessionStore.set');
     await db
       .insertInto('sessions')
-      .values({key, value})
+      .values({key, value: JSON.stringify(value)})
       .onConflict((oc) =>
         oc.column('key').doUpdateSet({
-          value,
+          value: JSON.stringify(value),
         }),
       )
       .execute();

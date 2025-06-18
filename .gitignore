@@ -18,3 +18,4 @@ src/public/.vite
 .vite-node
 data
 scripts/archive
+*.db

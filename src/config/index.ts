@@ -161,7 +161,7 @@ const configByEnv = {
     },
   },
   test: {
-    logLevel: 'silent',
+    logLevel: env.LOG_LEVEL ?? 'silent',
   },
 };
 
