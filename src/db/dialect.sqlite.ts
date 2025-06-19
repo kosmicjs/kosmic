@@ -1,9 +1,8 @@
-import process from 'node:process';
 import Database from 'better-sqlite3';
 import {SqliteDialect} from 'kysely';
-import logger from '#utils/logger.js';
+import {config} from '#config/index.js';
 
-const databasePath = process.env.SQLITE_DATABASE ?? ':memory:';
+const databasePath = config.db.sqlite.filename;
 
 const database = new Database(databasePath);
 
@@ -15,8 +14,6 @@ database.pragma('foreign_keys = 1');
 
 // Set busy timeout
 database.pragma('busy_timeout = 5000');
-
-logger.trace(`SQLite database initialized at: ${databasePath}`);
 
 export const dialect = new SqliteDialect({
   database,

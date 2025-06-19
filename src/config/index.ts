@@ -49,6 +49,7 @@ export const envSchema = z
     DB_USER: z.string(),
     DB_PASSWORD: z.string(),
     DB_CONNECTION_STRING: z.string(),
+    DB_CONNECTION_STRING_SQLITE: z.string().optional(),
     SESSION_KEYS: z.string(),
     LOG_LEVEL: z.string(),
     OPENAI_API_KEY: z.string(),
@@ -75,25 +76,30 @@ export const configSchema = z.object({
   host: z.string().default('127.0.0.1'),
   /** logger */
   logLevel: z.string().default('info'),
-  /** Passed directly to the postgres pool */
-  pg: z.intersection(
-    z.object({
-      max: z.number().optional(),
-      idleTimeoutMillis: z.number().optional(),
-      connectionTimeoutMillis: z.number().optional(),
+  db: z.object({
+    /** Passed directly to the postgres pool */
+    pg: z.intersection(
+      z.object({
+        max: z.number().optional(),
+        idleTimeoutMillis: z.number().optional(),
+        connectionTimeoutMillis: z.number().optional(),
+      }),
+      z.union([
+        z.object({
+          host: z.string().optional(),
+          user: z.string().optional(),
+          database: z.string().optional(),
+          password: z.string().optional(),
+        }),
+        z.object({
+          connectionString: z.string().default(':memory:'),
+        }),
+      ]),
+    ),
+    sqlite: z.object({
+      filename: z.string().default(':memory:'),
     }),
-    z.union([
-      z.object({
-        host: z.string().optional(),
-        user: z.string().optional(),
-        database: z.string().optional(),
-        password: z.string().optional(),
-      }),
-      z.object({
-        connectionString: z.string().default('postgresql://localhost'),
-      }),
-    ]),
-  ),
+  }),
   stripe: z
     .object({
       secretKey: z.string(),
@@ -131,12 +137,17 @@ const configByEnv = {
     host: env.SERVER_HOST,
     sessionKeys: env.SESSION_KEYS?.split(','),
     logLevel: env.LOG_LEVEL,
-    pg: {
-      connectionString: env.DB_CONNECTION_STRING,
-      user: env.DB_USER,
-      database: env.DB_DATABASE,
-      password: env.DB_PASSWORD,
-      host: env.DB_HOST,
+    db: {
+      pg: {
+        connectionString: env.DB_CONNECTION_STRING,
+        user: env.DB_USER,
+        database: env.DB_DATABASE,
+        password: env.DB_PASSWORD,
+        host: env.DB_HOST,
+      },
+      sqlite: {
+        filename: env.DB_CONNECTION_STRING_SQLITE,
+      },
     },
     openAi: {
       apiKey: env.OPENAI_API_KEY,

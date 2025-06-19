@@ -6,7 +6,7 @@ import {config} from '#config/index.js';
 const {Pool} = pkg;
 
 export const pool = new Pool({
-  ...config.pg,
+  ...config.db.pg,
 });
 
 pool.on('connect', () => {
