@@ -1,4 +1,4 @@
-import htmx from 'htmx.org';
+import _htmx from 'htmx.org';
 import {Toast} from 'bootstrap';
 import {initializeTooltips} from './tooltips.js';
 import {initializeCodeCopy} from './copy.js';
@@ -7,7 +7,10 @@ import {initializeProgressBar} from './progress-bar.js';
 import {initializeOffcanvas} from './off-canvas.js';
 import {$} from './query.js';
 
+const htmx = _htmx.default; // fix ts types hack
+
 htmx.onLoad(function ($content) {
+  if (!($content instanceof Element)) return;
   initializeTooltips($content);
   initializeCodeCopy($content);
   initializeIslands($content);
