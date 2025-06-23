@@ -1,7 +1,7 @@
 import {Kysely} from 'kysely';
 import type {Database} from '#models/index.js';
 import logger from '#utils/logger.js';
-import {dialect} from '#db/dialect.sqlite.js';
+import {dialect} from '#db/dialect.postgres.js';
 
 export const db = new Kysely<Database>({
   dialect,

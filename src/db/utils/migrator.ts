@@ -76,7 +76,7 @@ export class ESMFileMigrationProvider implements MigrationProvider {
 export const migrator = new Migrator({
   db,
   provider: new ESMFileMigrationProvider(
-    path.join(import.meta.dirname, '..', 'migrations.sqlite'),
+    path.join(import.meta.dirname, '..', 'migrations.postgres'),
   ),
   allowUnorderedMigrations: true,
 });

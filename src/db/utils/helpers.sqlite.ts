@@ -24,10 +24,10 @@ export async function dropTimestampTrigger(db: Kysely<any>, tableName: string) {
 
 export function addTimestampsColumns(ctb: CreateTableBuilder<any, any>) {
   return ctb
-    .addColumn('created_at', 'datetime', (col) =>
+    .addColumn('created_at', 'text', (col) =>
       col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`),
     )
-    .addColumn('updated_at', 'datetime', (col) =>
+    .addColumn('updated_at', 'text', (col) =>
       col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`),
     );
 }
