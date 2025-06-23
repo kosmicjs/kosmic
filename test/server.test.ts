@@ -3,6 +3,7 @@ import {describe, test, before, after} from 'node:test';
 import {strictEqual} from 'node:assert';
 import got from 'got';
 import * as cheerio from 'cheerio';
+import {NO_MIGRATIONS} from 'kysely';
 import {createServer} from '../src/server.js';
 import {migrator} from '#db/utils/migrator.js';
 
@@ -50,7 +51,8 @@ await describe('server integration', async () => {
     strictEqual(response.statusCode, 302);
   });
 
-  after(() => {
+  after(async () => {
+    await migrator.migrateTo(NO_MIGRATIONS);
     server.closeAllConnections();
     server.close();
   });

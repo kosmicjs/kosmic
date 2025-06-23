@@ -12,11 +12,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [20, 22, 23]
     name: Node ${{ matrix.node-version }}
+    env:
+      DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION_STRING }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node
