@@ -4,7 +4,7 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import {type Migration, type MigrationProvider, Migrator} from 'kysely';
-import {type KosmicMigration} from '#db/migrations.sqlite.js';
+import {type KosmicMigration} from '#db/migrations.js';
 import {db} from '#db/index.js';
 import logger from '#utils/logger.js';
 
@@ -76,7 +76,7 @@ export class ESMFileMigrationProvider implements MigrationProvider {
 export const migrator = new Migrator({
   db,
   provider: new ESMFileMigrationProvider(
-    path.join(import.meta.dirname, '..', 'migrations.postgres'),
+    path.join(import.meta.dirname, '..', 'migrations'),
   ),
   allowUnorderedMigrations: true,
 });

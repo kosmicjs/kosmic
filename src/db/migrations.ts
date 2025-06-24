@@ -5,7 +5,7 @@ import {
   dropTimestampTrigger,
   addTimestampsColumns,
   addIdColumn,
-} from './utils/helpers.postgres.js';
+} from './utils/helpers.js';
 import logger from '#utils/logger.js';
 
 export type KosmicMigration = Migration & {

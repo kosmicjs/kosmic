@@ -25,26 +25,6 @@ const emailsJob = new CronJob(
 
 emailsJob.start();
 
-// logger.debug('emailsJob started');
-
-// const rateLimitJob = new CronJob(
-//   '*/30 * * * * *', // => every 30s
-//   async function () {
-//     try {
-//       await $`node ./dist/src/jobs/rate-limit-cleanup.js`;
-//     } catch (error) {
-//       logger.error(error, 'Error running cron job');
-//     }
-//   },
-//   null,
-//   false,
-//   'America/New_York',
-// );
-
-// rateLimitJob.start();
-
-// logger.debug('rateLimitJob started');
-
 logger.info('Cron jobs started');
 
 // throw to bubble up to uncaughtException
