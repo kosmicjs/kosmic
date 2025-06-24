@@ -92,7 +92,7 @@ export async function createServer(): Promise<Server> {
   app.use(
     session(
       {
-        secure: config.nodeEnv === 'production',
+        secure: config.kosmicEnv === 'production',
         sameSite: 'lax',
         store: new KyselySessionStore(),
       },
