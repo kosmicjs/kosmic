@@ -84,17 +84,13 @@ export const configSchema = z.object({
         idleTimeoutMillis: z.number().optional(),
         connectionTimeoutMillis: z.number().optional(),
       }),
-      z.union([
-        z.object({
-          host: z.string().optional(),
-          user: z.string().optional(),
-          database: z.string().optional(),
-          password: z.string().optional(),
-        }),
-        z.object({
-          connectionString: z.string().default(':memory:'),
-        }),
-      ]),
+      z.object({
+        host: z.string().optional(),
+        user: z.string().optional(),
+        database: z.string().optional(),
+        password: z.string().optional(),
+        connectionString: z.string().optional(),
+      }),
     ),
     sqlite: z.object({
       filename: z.string().default(':memory:'),
