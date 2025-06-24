@@ -7,10 +7,13 @@ import {initializeProgressBar} from './progress-bar.js';
 import {initializeOffcanvas} from './off-canvas.js';
 import {$} from './query.js';
 
-const htmx = _htmx.default; // fix ts types hack
+const htmx = _htmx as unknown as typeof _htmx.default; // fix ts types hack
 
 htmx.onLoad(function ($content) {
-  if (!($content instanceof Element)) return;
+  if (!($content instanceof Element)) {
+    return;
+  }
+
   initializeTooltips($content);
   initializeCodeCopy($content);
   initializeIslands($content);
