@@ -39,7 +39,20 @@ if (config.kosmicEnv === 'production') {
 }
 
 export async function post(ctx: Context, next: Next) {
-  const userData = await User.insertSchema.parseAsync(ctx.request.body);
+  let userData;
+
+  try {
+    userData = await User.insertSchema.parseAsync(ctx.request.body);
+  } catch (error) {
+    if (!(error instanceof z.ZodError)) throw error;
+    ctx.req.log.error(error);
+    if (ctx.session) {
+      ctx.session.messages = error.errors.map((e) => e.message);
+    }
+
+    ctx.redirect('/signup');
+    return;
+  }
 
   const passwords = await z
     .object({
@@ -60,7 +73,9 @@ export async function post(ctx: Context, next: Next) {
       ];
     }
 
-    ctx.redirect('/');
+    ctx.redirect('/signup');
+
+    return;
   }
 
   const hash = await argon2.hash(passwords.password);

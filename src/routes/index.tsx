@@ -1,5 +1,4 @@
 import {type Middleware} from 'koa';
-import clsx from 'clsx';
 import {CounterIsland} from '#components/islands/counter.js';
 import Layout from '#components/layout.js';
 
@@ -10,35 +9,8 @@ declare module 'koa-session' {
 }
 
 export const get: Middleware = async function (ctx) {
-  const messages = ctx.session?.messages ?? [];
-
   await ctx.render(
     <Layout>
-      <div class="toast-container text-center d-flex align-items-center justify-content-center margin-bottom-5 w-100 pt-5 px-5 position-relative">
-        <div
-          role="alert"
-          aria-live="assertive"
-          aria-atomic="true"
-          class={clsx(`toast border-danger w-100 w-md-75 position-absolute`, {
-            show: messages.length > 0,
-          })}
-        >
-          <div class="toast-header border-danger-subtle bg-dark-subtle">
-            <strong class="m-auto">Oops!:</strong>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="toast"
-            ></button>
-          </div>
-          <div class="toast-body bg-dark">
-            {messages.map((message: string) => (
-              <p>{message}</p>
-            ))}
-          </div>
-        </div>
-      </div>
-
       <div class="d-flex flex-column align-items-center mb-5">
         {['Koa', 'HTMX', 'Postgres'].map((tech, idx) => (
           <>
