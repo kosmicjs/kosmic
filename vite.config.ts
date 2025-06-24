@@ -32,7 +32,6 @@ const config: UserConfig = {
   css: {
     preprocessorOptions: {
       scss: {
-        api: 'modern',
         silenceDeprecations: [
           'mixed-decls',
           'color-functions',

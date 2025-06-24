@@ -1,6 +1,5 @@
 import http, {type Server} from 'node:http';
 import fs from 'node:fs/promises';
-import process from 'node:process';
 import path from 'node:path';
 import bodyParser from 'koa-bodyparser';
 import responseTime from 'koa-response-time';
@@ -59,7 +58,7 @@ export async function createServer(): Promise<Server> {
   app.use(serve(path.join(import.meta.dirname, 'public')));
 
   // add manifest to state for prod
-  if (process.env.NODE_ENV === 'production') {
+  if (config.kosmicEnv === 'production') {
     app.use(async (ctx, next) => {
       const manifest = JSON.parse(
         await fs.readFile(
@@ -87,6 +86,8 @@ export async function createServer(): Promise<Server> {
   app.use(errorHandler());
 
   app.keys = config.sessionKeys;
+
+  app.proxy = config.kosmicEnv === 'production';
 
   app.use(
     session(

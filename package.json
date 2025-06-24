@@ -58,12 +58,11 @@
     "@google/genai": "^1.6.0",
     "@koa/etag": "^5.0.1",
     "@popperjs/core": "^2.11.8",
-    "@stripe/stripe-js": "^7.3.1",
+    "@stripe/stripe-js": "^7.4.0",
     "@types/koa-session": "^6.4.5",
     "@types/nodemailer": "^6.4.17",
     "@types/preview-email": "^3.1.0",
     "argon2": "^0.43.0",
-    "better-sqlite3": "^12.0.0",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
     "camelcase": "^8.0.0",
@@ -99,7 +98,7 @@
     "kysely": "^0.28.2",
     "nodemailer": "^7.0.3",
     "npm-check-updates": "^18.0.1",
-    "openai": "^5.6.0",
+    "openai": "^5.7.0",
     "p-debounce": "^4.0.0",
     "p-queue": "^8.1.0",
     "p-wait-for": "^5.0.2",
@@ -125,7 +124,6 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@types/better-sqlite3": "^7.6.13",
     "@types/bootstrap": "^5.2.10",
     "@types/kcors": "^2",
     "@types/koa": "^2.15.0",
@@ -137,7 +135,7 @@
     "@types/koa-response-time": "^2",
     "@types/koa-static": "^4.0.4",
     "@types/koa2-ratelimit": "^0.9.6",
-    "@types/node": "~24.0.3",
+    "@types/node": "~24.0.4",
     "@types/passport-github2": "^1.2.9",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-local": "^1.0.38",
@@ -161,10 +159,10 @@
     "type-fest": "^4.41.0",
     "typed-htmx": "^0.3.1",
     "typescript": "~5.8.3",
-    "vite": "^6.3.5",
+    "vite": "^7.0.0",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-tsc-watch": "^3.1.0",
     "wait-on": "^8.0.3",
-    "xo": "^1.1.0"
+    "xo": "^1.1.1"
   }
 }

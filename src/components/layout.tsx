@@ -44,8 +44,6 @@ export function Layout({
 
   const sessionMessages = ctx.session?.messages ?? [];
 
-  ctx.log.info({sessionMessages}, 'Session messages');
-
   scripts ??= [];
 
   if (ctx.session && sessionMessages.length > 0) {
