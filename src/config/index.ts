@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import z from 'zod';
 import defaults from 'defaults';
 import {fromError} from 'zod-validation-error';
+import {type PoolConfig} from 'pg';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -78,20 +79,16 @@ export const configSchema = z.object({
   logLevel: z.string().default('info'),
   db: z.object({
     /** Passed directly to the postgres pool */
-    pg: z.intersection(
-      z.object({
-        max: z.number().optional(),
-        idleTimeoutMillis: z.number().optional(),
-        connectionTimeoutMillis: z.number().optional(),
-      }),
-      z.object({
-        host: z.string().optional(),
-        user: z.string().optional(),
-        database: z.string().optional(),
-        password: z.string().optional(),
-        connectionString: z.string().optional(),
-      }),
-    ),
+    pg: z.object({
+      max: z.number().optional(),
+      idleTimeoutMillis: z.number().optional(),
+      connectionTimeoutMillis: z.number().optional(),
+      host: z.string().optional(),
+      user: z.string().optional(),
+      database: z.string().optional(),
+      password: z.string().optional(),
+      connectionString: z.string().optional(),
+    }) satisfies z.ZodType<PoolConfig>,
     sqlite: z.object({
       filename: z.string().default(':memory:'),
     }),
