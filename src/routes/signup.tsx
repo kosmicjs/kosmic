@@ -50,7 +50,9 @@ export async function post(ctx: Context, next: Next) {
       ctx.session.messages = error.errors.map((e) => e.message);
     }
 
-    ctx.redirect('/signup');
+    ctx.set('Location', '/signup');
+    ctx.status = 400; // Bad Request
+    ctx.body = 'Password and password confirmation do not match';
     return;
   }
 
@@ -73,7 +75,9 @@ export async function post(ctx: Context, next: Next) {
       ];
     }
 
-    ctx.redirect('/signup');
+    ctx.set('Location', '/signup');
+    ctx.status = 400; // Bad Request
+    ctx.body = 'Password and password confirmation do not match';
 
     return;
   }
