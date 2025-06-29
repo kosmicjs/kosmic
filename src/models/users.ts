@@ -20,6 +20,23 @@ export const schema = zod.object({
   github_refresh_token: zod.string().max(255).nullable(),
 });
 
+export const passwordSchema = zod
+  .string()
+  .min(8)
+  .max(255)
+  .refine((password) => /[A-Z]/.test(password), {
+    message: 'Password must contain an uppercase letter',
+  })
+  .refine((password) => /[a-z]/.test(password), {
+    message: 'Password must contain a lowercase letter',
+  })
+  .refine((password) => /\d/.test(password), {
+    message: 'Password must contain a digit',
+  })
+  .refine((password) => /[!@#$%^&*]/.test(password), {
+    message: 'Password must contain a special character',
+  });
+
 export type User = GeneratedId<zod.infer<typeof schema>>;
 
 export type SelectableUser = Selectable<User>;

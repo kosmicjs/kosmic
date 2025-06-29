@@ -7,7 +7,7 @@ export async function post(ctx: Context, next: Next) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return passport.authenticate('local', {
     successRedirect: '/account',
-    failureRedirect: '/',
+    failWithError: true,
     failureMessage: 'Invalid email or password',
     successMessage: 'Logged in',
   })(ctx, next);

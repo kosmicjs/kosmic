@@ -9,8 +9,7 @@ export function LoginForm() {
 
   return (
     <form
-      action={`/login${typeof ctx.query.redirect === 'string' ? `?redirect=${ctx.query.redirect}` : ''}`}
-      method="post"
+      hx-post={`/login${typeof ctx.query.redirect === 'string' ? `?redirect=${ctx.query.redirect}` : ''}`}
     >
       <div class="modal-body">
         <div class="mb-3">
@@ -25,7 +24,7 @@ export function LoginForm() {
             aria-describedby="emailHelp"
           />
           <div id="emailHelp" class="form-text">
-            {`We'll never share your email with anyone else.`}
+            We&apos;ll never share your email with anyone else.
           </div>
         </div>
         <div class="mb-3">
