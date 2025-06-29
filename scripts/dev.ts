@@ -41,7 +41,7 @@ await fs.cp(path.resolve(cwd, 'src', 'public'), publicFolder, {
 const server = await createServer();
 
 async function runKosmicDevServer() {
-  const cp = $$`node --watch --watch-preserve-output --enable-source-maps --inspect ${path.join('dist', 'src', 'index.js')}`;
+  const cp = $$`node --watch --watch-preserve-output --enable-source-maps ${path.join('dist', 'src', 'index.js')}`;
 
   cp.on('message', (msg: unknown) => {
     if (
