@@ -60,7 +60,7 @@ await describe('server integration', async () => {
     strictEqual(response.statusCode, 302);
   });
 
-  await test.only('POST /signup success - 302 redirect', async () => {
+  await test('POST /signup - 200 success', async () => {
     const email = `test-${Date.now()}@test.com`;
 
     const response = await got.post('signup', {
@@ -115,6 +115,7 @@ await describe('server integration', async () => {
     });
 
     strictEqual(response.statusCode, 400);
+
     await rejects(
       db.selectFrom('users').selectAll().where('email', '=', email)
         .executeTakeFirstOrThrow,
@@ -155,7 +156,7 @@ await describe('server integration', async () => {
     );
   });
 
-  await test('POST /login - success - 302 redirect', async () => {
+  await test('POST /login - success - 200', async () => {
     const response = await got.post('login', {
       form: {
         email: 'superuser@kosmic.com',
@@ -163,7 +164,8 @@ await describe('server integration', async () => {
       },
     });
 
-    strictEqual(response.statusCode, 302);
+    strictEqual(response.statusCode, 200);
+    strictEqual(response.headers['hx-redirect'], '/account');
   });
 
   await test('POST /login - invalid email - 400 response', async () => {
@@ -175,6 +177,7 @@ await describe('server integration', async () => {
     });
 
     strictEqual(response.statusCode, 401);
+    strictEqual(response.headers['hx-redirect'], '/login');
   });
 
   after(async () => {

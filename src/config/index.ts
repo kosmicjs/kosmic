@@ -29,6 +29,7 @@ const parsedEnv: Record<string, string> = {};
 dotenv.config({
   path: path.resolve(import.meta.dirname, process.cwd(), `.env`),
   processEnv: parsedEnv,
+  quiet: true,
 });
 
 // then override with specific env
@@ -37,6 +38,7 @@ dotenv.config({
   path: path.resolve(import.meta.dirname, process.cwd(), `.env.${nodeEnv}`),
   processEnv: parsedEnv,
   override: true,
+  quiet: true,
 });
 
 export const envSchema = z
