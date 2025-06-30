@@ -75,7 +75,7 @@ export const get = async (ctx: Context, next: Next) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            GitHub Repository
+            <i class="bi bi-github" /> GitHub Repository
           </a>
         </div>
       </section>
