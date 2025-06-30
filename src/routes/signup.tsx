@@ -45,7 +45,7 @@ export async function post(ctx: Context, next: Next) {
         password_confirm: User.passwordSchema,
       })
       .superRefine((data, ctx) => {
-        if (data.password !== data.password_confirm) {
+        if (data.password.trim() !== data.password_confirm.trim()) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: 'Password and password confirmation do not match',
@@ -84,18 +84,22 @@ export async function post(ctx: Context, next: Next) {
 
   const hash = await argon2.hash(passwords.password);
 
-  const user = await db
-    .insertInto('users')
-    .values({
-      ...userData,
-      hash,
-    })
-    .returning(['email', 'id', 'first_name'])
-    .executeTakeFirstOrThrow();
+  try {
+    const user = await db
+      .insertInto('users')
+      .values({
+        ...userData,
+        hash,
+      })
+      .returning(['email', 'id', 'first_name'])
+      .executeTakeFirstOrThrow();
 
-  await Emails.queueWelcomeEmail(user.id, user.email, user.first_name ?? '');
-
-  await ctx.login(user);
+    await Emails.queueWelcomeEmail(user.id, user.email, user.first_name ?? '');
+    ctx.set('Hx-Redirect', '/account');
+    await ctx.login(user);
+  } catch (error) {
+    ctx.log.error(error, 'Error creating user');
+  }
 
   ctx.redirect('/account');
 }

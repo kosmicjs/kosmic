@@ -1,10 +1,10 @@
-import process from 'node:process';
 import {type ComponentChildren} from 'preact';
 import Footer from './footer.js';
 import Header from './header.js';
 import Modal from './modal.js';
 import Toast from './toast.js';
 import {getCtx} from '#server';
+import {config} from '#config/index.js';
 
 export type Props = {
   readonly children: ComponentChildren;
@@ -37,7 +37,7 @@ export function Layout({
   children,
   title,
   scripts,
-  env = process.env.NODE_ENV ?? 'development',
+  env = config.nodeEnv ?? 'development',
   ctx = getCtx(),
 }: Props) {
   const foundManifest = ctx.state.manifest?.['scripts/index.ts'];
@@ -97,6 +97,7 @@ export function Layout({
       <body
         data-bs-theme={ctx.cookies?.get('kosmic-color-mode') ?? 'dark'}
         hx-boost="true"
+        id="body"
       >
         <div
           class="progress nav-progress w-100"

@@ -35,6 +35,7 @@ export function SignupForm({
             })}
             name="email"
             value={email}
+            autocomplete="email"
             aria-describedby="emailHelp"
           />
           <div class="valid-feedback">Looks good!</div>
@@ -56,6 +57,7 @@ export function SignupForm({
             type="password"
             name="password"
             value={password}
+            autocomplete="new-password"
             class={clsx('form-control', {
               'is-invalid': Number(passwordErrors?.length) > 0,
               'is-valid': Array.isArray(errors) && passwordErrors?.length === 0,
@@ -76,6 +78,7 @@ export function SignupForm({
             type="password"
             name="password_confirm"
             value={password_confirm}
+            autocomplete="new-password"
             class={clsx('form-control', {
               'is-invalid': Number(passwordConfirmErrors?.length) > 0,
               'is-valid':

@@ -4,13 +4,17 @@ import {Layout} from '#components/layout.js';
 import {LoginForm} from '#components/login-form.js';
 
 export async function post(ctx: Context, next: Next) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return passport.authenticate('local', {
-    successRedirect: '/account',
+  ctx.set('HX-Redirect', '/login');
+
+  await passport.authenticate('local', {
     failWithError: true,
     failureMessage: 'Invalid email or password',
     successMessage: 'Logged in',
   })(ctx, next);
+
+  // successful login
+  ctx.set('HX-Redirect', '/account');
+  ctx.status = 200;
 }
 
 export async function get(ctx: Context, next: Next) {

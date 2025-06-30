@@ -10,6 +10,7 @@ export function LoginForm() {
   return (
     <form
       hx-post={`/login${typeof ctx.query.redirect === 'string' ? `?redirect=${ctx.query.redirect}` : ''}`}
+      hx-swap="outerHTML"
     >
       <div class="modal-body">
         <div class="mb-3">
@@ -21,6 +22,7 @@ export function LoginForm() {
             name="email"
             id="modal-email"
             class="form-control"
+            autocomplete="email"
             aria-describedby="emailHelp"
           />
           <div id="emailHelp" class="form-text">
@@ -34,6 +36,7 @@ export function LoginForm() {
           <input
             type="password"
             name="password"
+            autocomplete="current-password"
             class="form-control"
             id="modal-password"
           />
