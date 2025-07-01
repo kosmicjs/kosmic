@@ -3,13 +3,32 @@ $enable-shadows: true;
 $enable-dark-mode: true;
 
 // Configuration
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
 @import "bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/variables-dark";
+
+$body-bg-dark: mix($gray-900, $black);
+
+// 4. Include any default map overrides here
+$theme-colors: (
+  "primary": $warning,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $primary,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
+);
+
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/mixins";
 @import "bootstrap/scss/utilities";
 
+// 5. Include remainder of required parts
 // Layout & components
 @import "bootstrap/scss/root";
 @import "bootstrap/scss/reboot";

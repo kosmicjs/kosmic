@@ -8,7 +8,7 @@ export function ModalButton({
 }) {
   return (
     <button
-      class="btn btn-outline-warning mx-2"
+      class="btn btn-outline-primary mx-2"
       type="button"
       {...props}
       hx-get={`/modals/${name}`}

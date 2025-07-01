@@ -13,14 +13,14 @@ import type {Middleware} from 'koa';
 // }) {
 //   return (
 //     <div
-//       class={clsx('card m-2 text-center border-warning rounded-0')}
+//       class={clsx('card m-2 text-center border-primary rounded-0')}
 //       style="width: 18rem;height:30rem;"
 //     >
 //       <img src="/favicon-32x32.png" class="card-img-top" alt="..." />
 //       <div class="card-body">
 //         <h5 class="card-title text-center">{title}</h5>
 //         <p class="card-text h1">{text}</p>
-//         <a hx-boost="false" href="/checkout/standard" class="btn btn-warning">
+//         <a hx-boost="false" href="/checkout/standard" class="btn btn-primary">
 //           {linkText}
 //         </a>
 //       </div>

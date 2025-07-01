@@ -102,13 +102,13 @@ export default function Nav() {
           </div>
           <div>
             {ctx.state.user?.email ? (
-              <a class="btn btn-outline-warning" type="button" href="/logout">
+              <a class="btn btn-outline-primary" type="button" href="/logout">
                 Logout
               </a>
             ) : (
               <>
                 {/* <button
-                  class="btn btn-outline-warning mx-2"
+                  class="btn btn-outline-primary mx-2"
                   type="button"
                   hx-get="/modals/login"
                   hx-target="#modal-content"
@@ -119,7 +119,7 @@ export default function Nav() {
                   Login
                 </button> */}
                 {/* <button
-                  class="btn btn-outline-warning"
+                  class="btn btn-outline-primary"
                   type="button"
                   hx-get="/modals/signup"
                   hx-target="#modal-content"
@@ -130,14 +130,14 @@ export default function Nav() {
                   Signup
                 </button> */}
                 <a
-                  class="btn btn-outline-warning mx-2"
+                  class="btn btn-outline-primary mx-2"
                   type="button"
                   href="/login"
                 >
                   Login
                 </a>
                 <a
-                  class="btn btn-outline-warning mx-2"
+                  class="btn btn-outline-primary mx-2"
                   type="button"
                   href="/signup"
                 >

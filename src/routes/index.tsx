@@ -22,7 +22,7 @@ export const get: Middleware = async function (ctx) {
 
       <div class="d-flex flex-column align-items-center mb-5">
         <h1>Kosmic</h1>
-        <p class="text-secondary text-bg-warning text-center p-2 text-center">
+        <p class="text-secondary text-bg-primary text-center p-2 text-center">
           Simple abstractions, deep code insight, fast development!!!!!
         </p>
       </div>
@@ -36,7 +36,7 @@ export const get: Middleware = async function (ctx) {
         ))}
       </div>
 
-      <div class="border rounded border-warning p-2 mt-2">
+      <div class="border rounded border-primary p-2 mt-2">
         <div class="p-2">
           Hello from Preact! This is a small island of Preact that is hydrated
           and given interactivity on the client side.

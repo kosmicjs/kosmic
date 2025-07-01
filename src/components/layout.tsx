@@ -97,7 +97,6 @@ export function Layout({
       <body
         data-bs-theme={ctx.cookies?.get('kosmic-color-mode') ?? 'dark'}
         hx-boost="true"
-        id="body"
       >
         <div
           class="progress nav-progress w-100"
@@ -107,7 +106,7 @@ export function Layout({
           aria-valuemin={0}
           aria-valuemax={100}
         >
-          <div class="progress-bar progress-bar-animated bg-warning" />
+          <div class="progress-bar progress-bar-animated bg-primary" />
         </div>
         <div class="container-fluid">
           <Header />

@@ -29,7 +29,7 @@ export default function DocsLayout({pageName, children}: Props) {
         <div class="col-12 pb-5 pb-md-0">
           <button
             type="button"
-            class="btn btn-warning border-0"
+            class="btn btn-primary border-0"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvas"
           >
