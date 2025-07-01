@@ -5,6 +5,7 @@
  *
  * Note: order does matter here if you set some type of global functionallity
  */
+import 'vite/modulepreload-polyfill';
 import '@popperjs/core';
 // Import all of Bootstrap's JS
 import '../styles/styles.scss';

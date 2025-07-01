@@ -1,6 +1,6 @@
 import {type Server} from 'node:http';
 import {describe, test, before, after} from 'node:test';
-import {strictEqual, rejects} from 'node:assert';
+import assert from 'node:assert';
 import _got from 'got';
 import * as cheerio from 'cheerio';
 import {NO_MIGRATIONS} from 'kysely';
@@ -28,20 +28,20 @@ await describe('server integration', async () => {
   await test('GET / 200 ok', async () => {
     const response = await got('');
 
-    strictEqual(response.statusCode, 200);
+    assert.strictEqual(response.statusCode, 200);
 
     const $ = cheerio.load(response.body);
     const $h1 = $('h1');
-    strictEqual($h1.length, 1);
-    strictEqual($h1.text(), 'Kosmic');
+    assert.strictEqual($h1.length, 1);
+    assert.strictEqual($h1.text(), 'Kosmic');
   });
 
   await test('Get / 404 not found returns expected response', async () => {
     const response = await got('404', {
       throwHttpErrors: false,
     });
-    strictEqual(response.statusCode, 404);
-    strictEqual(response.body, 'Not Found');
+    assert.strictEqual(response.statusCode, 404);
+    assert.strictEqual(response.body, 'Not Found');
   });
 
   await test('Get /docs 302 redirects to /docs/installation', async () => {
@@ -49,7 +49,7 @@ await describe('server integration', async () => {
       throwHttpErrors: false,
       followRedirect: false,
     });
-    strictEqual(response.statusCode, 302);
+    assert.strictEqual(response.statusCode, 302);
   });
 
   await test('Get /account - no auth - 401 response', async () => {
@@ -57,10 +57,10 @@ await describe('server integration', async () => {
       throwHttpErrors: false,
       followRedirect: false,
     });
-    strictEqual(response.statusCode, 302);
+    assert.strictEqual(response.statusCode, 302);
   });
 
-  await test('POST /signup - 200 success', async () => {
+  await test('POST /signup - 201 success', async () => {
     const email = `test-${Date.now()}@test.com`;
 
     const response = await got.post('signup', {
@@ -71,7 +71,8 @@ await describe('server integration', async () => {
       },
     });
 
-    strictEqual(response.statusCode, 302);
+    assert.strictEqual(response.statusCode, 201);
+    assert.strictEqual(response.headers['hx-redirect'], '/account');
 
     const user = await db
       .selectFrom('users')
@@ -79,9 +80,9 @@ await describe('server integration', async () => {
       .where('email', '=', email)
       .executeTakeFirstOrThrow();
 
-    strictEqual(user.email, email);
-    strictEqual(user.first_name, null);
-    strictEqual(user.last_name, null);
+    assert.strictEqual(user.email, email);
+    assert.strictEqual(user.first_name, null);
+    assert.strictEqual(user.last_name, null);
 
     const welcomeEmail = await db
       .selectFrom('emails')
@@ -89,47 +90,66 @@ await describe('server integration', async () => {
       .where('to', '=', email)
       .executeTakeFirst();
 
-    strictEqual(welcomeEmail?.to, email);
-    strictEqual(welcomeEmail?.status, 'pending');
+    assert.strictEqual(welcomeEmail?.to, email);
+    assert.strictEqual(welcomeEmail?.status, 'pending');
   });
 
-  await test('GET /account - after signup - 200 response', async () => {
+  await test('GET /account - 200 response', async () => {
     const response = await got('account');
-    strictEqual(response.statusCode, 200);
+    assert.strictEqual(response.statusCode, 200);
   });
 
-  await test('GET /logout - after signup - 302 response', async () => {
+  await test('GET /logout - 302 response', async () => {
     const response = await got('logout');
-    strictEqual(response.statusCode, 302);
+    assert.strictEqual(response.statusCode, 302);
   });
 
-  await test('POST /signup - invalid email 400 response', async () => {
+  await test('POST /signup - invalid email - 400 response', async () => {
     const email = `test-${Date.now()}@test`;
 
     const response = await got.post('signup', {
       json: {
         email,
-        password: 'test1234',
-        password_confirm: 'test1234',
+        password: 'Test1234',
+        password_confirm: 'Test1234',
       },
     });
 
-    strictEqual(response.statusCode, 400);
+    assert.strictEqual(response.statusCode, 400);
 
-    await rejects(
+    // Check that the response contains the expected error messages in the HTML
+    const $ = cheerio.load(response.body);
+    const errorInput = $('input.is-invalid');
+    assert.strictEqual(
+      errorInput.length,
+      1,
+      'There should be one invalid input field for email',
+    );
+    assert.strictEqual(
+      $(errorInput).attr('name'),
+      'email',
+      'Invalid input should be for email',
+    );
+    assert.strictEqual(
+      $(errorInput).siblings('.invalid-feedback').text(),
+      'Invalid email',
+      'Invalid email error message should be displayed',
+    );
+
+    await assert.rejects(
       db.selectFrom('users').selectAll().where('email', '=', email)
         .executeTakeFirstOrThrow,
       'User should not be created with invalid email format',
     );
 
-    await rejects(
+    await assert.rejects(
       db.selectFrom('emails').selectAll().where('to', '=', email)
         .executeTakeFirstOrThrow,
       'Email should not be queued with invalid email format',
     );
   });
 
-  await test('POST /signup - password mismatch - 400 response code', async () => {
+  await test('POST /signup - password mismatch - 400 response', async () => {
     const email = `test-${Date.now()}@test.com`;
 
     const response = await got.post('signup', {
@@ -140,16 +160,37 @@ await describe('server integration', async () => {
       },
     });
 
-    strictEqual(response.statusCode, 400);
+    assert.strictEqual(response.statusCode, 400);
+
+    const $ = cheerio.load(response.body);
+
+    const errorInput = $('input.is-invalid');
+
+    assert.strictEqual(
+      errorInput.length,
+      1,
+      'There should be one invalid input field for password confirmation',
+    );
+    assert.strictEqual(
+      $(errorInput).attr('name'),
+      'password_confirm',
+      'Invalid input should be for password confirmation',
+    );
+
+    assert.strictEqual(
+      $(errorInput).siblings('.invalid-feedback').text(),
+      'Password and password confirmation do not match',
+      'Password mismatch error message should be displayed',
+    );
 
     // Check that user and email were not created
-    await rejects(
+    await assert.rejects(
       db.selectFrom('users').selectAll().where('email', '=', email)
         .executeTakeFirstOrThrow,
       'User should not be created with mismatched passwords',
     );
 
-    await rejects(
+    await assert.rejects(
       db.selectFrom('emails').selectAll().where('to', '=', email)
         .executeTakeFirstOrThrow,
       'Email should not be queued with mismatched passwords',
@@ -164,8 +205,8 @@ await describe('server integration', async () => {
       },
     });
 
-    strictEqual(response.statusCode, 200);
-    strictEqual(response.headers['hx-redirect'], '/account');
+    assert.strictEqual(response.statusCode, 200);
+    assert.strictEqual(response.headers['hx-redirect'], '/account');
   });
 
   await test('POST /login - invalid email - 400 response', async () => {
@@ -176,8 +217,8 @@ await describe('server integration', async () => {
       },
     });
 
-    strictEqual(response.statusCode, 401);
-    strictEqual(response.headers['hx-redirect'], '/login');
+    assert.strictEqual(response.statusCode, 401);
+    assert.strictEqual(response.headers['hx-redirect'], '/login');
   });
 
   after(async () => {

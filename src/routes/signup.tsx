@@ -94,13 +94,23 @@ export async function post(ctx: Context, next: Next) {
       .returning(['email', 'id', 'first_name'])
       .executeTakeFirstOrThrow();
 
-    await Emails.queueWelcomeEmail(user.id, user.email, user.first_name ?? '');
-    ctx.set('Hx-Redirect', '/account');
-    ctx.status = 200;
     await ctx.login(user);
+
+    await Emails.queueWelcomeEmail(user.id, user.email, user.first_name ?? '');
+
+    ctx.set('Hx-Redirect', '/account');
   } catch (error) {
     ctx.log.error(error, 'Error creating user');
+    if (ctx.session) {
+      ctx.session.messages = [
+        "An error occurred while creating your account. We're sending you an email with further instructions.",
+      ];
+    }
+
+    ctx.set('Hx-Redirect', '/signup');
+    return;
   }
 
-  ctx.redirect('/account');
+  ctx.status = 201;
+  ctx.body = 'ok';
 }

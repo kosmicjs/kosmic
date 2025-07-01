@@ -91,9 +91,6 @@ export const configSchema = z.object({
       password: z.string().optional(),
       connectionString: z.string().optional(),
     }) satisfies z.ZodType<PoolConfig>,
-    sqlite: z.object({
-      filename: z.string().default(':memory:'),
-    }),
   }),
   stripe: z
     .object({
