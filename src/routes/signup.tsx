@@ -96,6 +96,7 @@ export async function post(ctx: Context, next: Next) {
 
     await Emails.queueWelcomeEmail(user.id, user.email, user.first_name ?? '');
     ctx.set('Hx-Redirect', '/account');
+    ctx.status = 200;
     await ctx.login(user);
   } catch (error) {
     ctx.log.error(error, 'Error creating user');

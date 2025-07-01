@@ -22,7 +22,7 @@ export const use: Use = [
           line_items: [
             {
               // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-              price: 'price_1NYuYcJJzeeflZ62zQNVGKop',
+              price: config.stripe?.priceId ?? '',
               quantity: 1,
             },
           ],

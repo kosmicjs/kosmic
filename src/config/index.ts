@@ -99,6 +99,7 @@ export const configSchema = z.object({
     .object({
       secretKey: z.string(),
       endpointSecret: z.string(),
+      priceId: z.string(),
     })
     .partial()
     .optional(),
