@@ -136,20 +136,18 @@ export const configSchema = z.object({
     .optional(),
   sessionKeys: z.array(z.string()).default(['kosmic-secret-keys']),
   nodeMailer: (
-    z.union([
-      z.object({
-        jsonTransport: z.literal(true),
-      }),
-      z.object({
-        host: z.string().optional().default(env.SMTP_HOST),
-        port: z.coerce.number().optional().prefault(env.SMTP_PORT),
-        auth: z.object({
+    z.object({
+      host: z.string().optional().default(env.SMTP_HOST),
+      port: z.coerce.number().optional().prefault(env.SMTP_PORT),
+      auth: z
+        .object({
           user: z.string().optional().default(env.SMTP_USER),
           pass: z.string().optional().default(env.SMTP_PASS),
-        }),
-      }),
-    ]) satisfies z.ZodType<SMTPTransport.Options | JSONTransport.Options>
-  ).default({jsonTransport: true}),
+        })
+        .prefault({}),
+      jsonTransport: z.boolean().optional().default(!env.SMTP_HOST),
+    }) satisfies z.ZodType<SMTPTransport.Options | JSONTransport.Options>
+  ).prefault({}),
 });
 
 const configByEnv = {
