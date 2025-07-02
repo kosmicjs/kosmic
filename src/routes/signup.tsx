@@ -1,6 +1,6 @@
 import type {Context, Next} from 'koa';
 import argon2 from 'argon2';
-import z, {string} from 'zod';
+import z, {string} from 'zod/v4';
 import * as User from '#models/users.js';
 import {SignupForm} from '#components/signup-form.js';
 import Layout from '#components/layout.js';
@@ -29,13 +29,13 @@ export async function post(ctx: Context, next: Next) {
       }
     | undefined;
 
-  const errors: z.ZodIssue[] = [];
+  const errors: z.core.$ZodIssue[] = [];
 
   try {
     userData = await User.insertSchema.parseAsync(ctx.request.body);
   } catch (error) {
     if (!(error instanceof z.ZodError)) throw error;
-    errors.push(...error.errors);
+    errors.push(...error.issues);
   }
 
   try {
@@ -44,19 +44,14 @@ export async function post(ctx: Context, next: Next) {
         password: User.passwordSchema,
         password_confirm: User.passwordSchema,
       })
-      .superRefine((data, ctx) => {
-        if (data.password.trim() !== data.password_confirm.trim()) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'Password and password confirmation do not match',
-            path: ['password_confirm'],
-          });
-        }
+      .refine((data) => data.password.trim() === data.password_confirm.trim(), {
+        message: 'Password and password confirmation do not match',
+        path: ['password_confirm'],
       })
       .parseAsync(ctx.request.body);
   } catch (error) {
     if (!(error instanceof z.ZodError)) throw error;
-    errors.push(...error.errors);
+    errors.push(...error.issues);
   }
 
   if (errors.length > 0) {
@@ -67,6 +62,8 @@ export async function post(ctx: Context, next: Next) {
       password: string().optional(),
       password_confirm: string().optional(),
     });
+
+    ctx.log.error({errors});
 
     await ctx.render(
       <SignupForm errors={errors} {...formValues.parse(ctx.request.body)} />,

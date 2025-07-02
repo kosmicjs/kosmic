@@ -1,10 +1,10 @@
 import process from 'node:process';
 import path from 'node:path';
 import dotenv from 'dotenv';
-import z from 'zod';
-import defaults from 'defaults';
-import {fromError} from 'zod-validation-error';
+import z from 'zod/v4';
 import {type PoolConfig} from 'pg';
+import type JSONTransport from 'nodemailer/lib/json-transport/index.js';
+import type SMTPTransport from 'nodemailer/lib/smtp-transport/index.js';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -43,24 +43,32 @@ dotenv.config({
   quiet: true,
 });
 
-export const envSchema = z
-  .object({
-    PORT: z.string(),
-    SERVER_HOST: z.string(),
-    STRIPE_SECRET_KEY: z.string(),
-    STRIPE_ENDPOINT_SECRET: z.string(),
-    DB_HOST: z.string(),
-    DB_DATABASE: z.string(),
-    DB_USER: z.string(),
-    DB_PASSWORD: z.string(),
-    DB_CONNECTION_STRING: z.string(),
-    DB_CONNECTION_STRING_SQLITE: z.string().optional(),
-    SESSION_KEYS: z.string(),
-    LOG_LEVEL: z.string(),
-    OPENAI_API_KEY: z.string(),
-    GEMINI_API_KEY: z.string(),
-  })
-  .partial();
+export const envSchema = z.object({
+  PORT: z.string().default('3000'),
+  SERVER_HOST: z.string().default('127.0.0.1'),
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_ENDPOINT_SECRET: z.string().optional(),
+  STRIPE_PRICE_ID: z.string().optional(),
+  DB_HOST: z.string().optional(),
+  DB_DATABASE: z.string().optional(),
+  DB_USER: z.string().optional(),
+  DB_PASSWORD: z.string().optional(),
+  DB_CONNECTION_STRING: z.string().optional(),
+  SESSION_KEYS: z.string().optional(),
+  LOG_LEVEL: z.string().default('info'),
+  OPENAI_API_KEY: z.string().optional(),
+  GEMINI_API_KEY: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  GOOGLE_CALLBACK_URL: z.string().optional(),
+  GITHUB_CLIENT_ID: z.string().optional(),
+  GITHUB_CLIENT_SECRET: z.string().optional(),
+  GITHUB_CALLBACK_URL: z.string().optional(),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.string().optional(),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+});
 
 // Variables set outside of the env files override the env files
 const env = envSchema.parse({
@@ -72,116 +80,97 @@ const env = envSchema.parse({
  * The configuration schema for the application
  */
 export const configSchema = z.object({
-  kosmicEnv: z.literal(kosmicEnv),
+  kosmicEnv: z.literal(kosmicEnv).default(kosmicEnv),
   /** The validated value of the NODE_ENV env var */
-  nodeEnv: z.literal(nodeEnv),
+  nodeEnv: z.literal(nodeEnv).default(nodeEnv),
   /** The port the server is started on, defaults to 3000 */
-  port: z.coerce.number().default(3000),
+  port: z.coerce.number().prefault(env.PORT),
   /** The host the server is started on, defaults to 127.0.0.1 */
-  host: z.string().default('127.0.0.1'),
+  host: z.string().default(env.SERVER_HOST),
   /** logger */
-  logLevel: z.string().default('info'),
-  db: z.object({
-    /** Passed directly to the postgres pool */
-    pg: z.object({
-      max: z.number().optional(),
-      idleTimeoutMillis: z.number().optional(),
-      connectionTimeoutMillis: z.number().optional(),
-      host: z.string().optional(),
-      user: z.string().optional(),
-      database: z.string().optional(),
-      password: z.string().optional(),
-      connectionString: z.string().optional(),
-    }) satisfies z.ZodType<PoolConfig>,
-  }),
+  logLevel: z.string().default(env.LOG_LEVEL),
+  db: z
+    .object({
+      /** Passed directly to the postgres pool */
+      pg: z.object({
+        max: z.number().optional().default(10),
+        idleTimeoutMillis: z.number().optional().default(30_000),
+        connectionTimeoutMillis: z.number().optional().default(2000),
+        host: z.string().optional().default(env.DB_HOST),
+        user: z.string().optional().default(env.DB_USER),
+        database: z.string().optional().default(env.DB_DATABASE),
+        password: z.string().optional().default(env.DB_PASSWORD),
+        connectionString: z
+          .string()
+          .optional()
+          .default(env.DB_CONNECTION_STRING),
+      }) satisfies z.ZodType<PoolConfig>,
+    })
+    .prefault({pg: {}}),
   stripe: z
     .object({
-      secretKey: z.string(),
-      endpointSecret: z.string(),
-      priceId: z.string(),
+      secretKey: z.string().optional().default(env.STRIPE_SECRET_KEY),
+      endpointSecret: z.string().optional().default(env.STRIPE_ENDPOINT_SECRET),
+      priceId: z.string().optional().default(env.STRIPE_PRICE_ID),
     })
-    .partial()
     .optional(),
   github: z
     .object({
-      clientID: z.string(),
-      clientSecret: z.string(),
-      callbackURL: z.string(),
+      clientID: z.string().optional().default(env.GITHUB_CLIENT_ID),
+      clientSecret: z.string().optional().default(env.GITHUB_CLIENT_SECRET),
+      callbackURL: z.string().optional().default(env.GITHUB_CALLBACK_URL),
     })
     .optional(),
-  google: z.object({
-    clientID: z.string().optional(),
-    clientSecret: z.string().optional(),
-    callbackURL: z.string().optional(),
-    geminyApiKey: z.string().optional(),
-  }),
+  google: z
+    .object({
+      clientID: z.string().optional().default(env.GOOGLE_CLIENT_ID),
+      clientSecret: z.string().optional().default(env.GOOGLE_CLIENT_SECRET),
+      callbackURL: z.string().optional().default(env.GOOGLE_CALLBACK_URL),
+      geminiApiKey: z.string().optional().default(env.GEMINI_API_KEY),
+    })
+    .optional(),
   openAi: z
     .object({
-      apiKey: z.string().optional(),
+      apiKey: z.string().optional().default(env.OPENAI_API_KEY),
     })
     .optional(),
   sessionKeys: z.array(z.string()).default(['kosmic-secret-keys']),
+  nodeMailer: (
+    z.union([
+      z.object({
+        jsonTransport: z.literal(true),
+      }),
+      z.object({
+        host: z.string().optional().default(env.SMTP_HOST),
+        port: z.coerce.number().optional().prefault(env.SMTP_PORT),
+        auth: z.object({
+          user: z.string().optional().default(env.SMTP_USER),
+          pass: z.string().optional().default(env.SMTP_PASS),
+        }),
+      }),
+    ]) satisfies z.ZodType<SMTPTransport.Options | JSONTransport.Options>
+  ).default({jsonTransport: true}),
 });
 
 const configByEnv = {
-  default: {
-    ...env,
-    kosmicEnv,
-    nodeEnv,
-    port: env.PORT,
-    host: env.SERVER_HOST,
-    sessionKeys: env.SESSION_KEYS?.split(','),
-    logLevel: env.LOG_LEVEL,
-    db: {
-      pg: {
-        connectionString: env.DB_CONNECTION_STRING,
-        user: env.DB_USER,
-        database: env.DB_DATABASE,
-        password: env.DB_PASSWORD,
-        host: env.DB_HOST,
-      },
-      sqlite: {
-        filename: env.DB_CONNECTION_STRING_SQLITE,
-      },
-    },
-    openAi: {
-      apiKey: env.OPENAI_API_KEY,
-    },
-    google: {
-      geminyApiKey: env.GEMINI_API_KEY,
-    },
-    max: 10,
-    idleTimeoutMillis: 30_000,
-    connectionTimeoutMillis: 2000,
-  },
-  development: {
-    stripe: {
-      secretKey: env.STRIPE_SECRET_KEY,
-      endpointSecret: env.STRIPE_ENDPOINT_SECRET,
-    },
-  },
-  production: {
-    stripe: {
-      secretKey: env.STRIPE_SECRET_KEY,
-      endpointSecret: env.STRIPE_ENDPOINT_SECRET,
-    },
-  },
-  test: {
-    logLevel: env.LOG_LEVEL ?? 'error',
-  },
+  development: {},
+  production: {},
+  test: {},
 };
 
-export const config = (() => {
-  try {
-    const parsedConfig = configSchema.parse(
-      defaults(configByEnv[nodeEnv], configByEnv.default),
-    );
+/** The configuration type with library specific overrides for types */
+type Config = Omit<z.infer<typeof configSchema>, 'db' | 'nodeMailer'> & {
+  db: {
+    pg: PoolConfig;
+  };
+} & {
+  nodeMailer: SMTPTransport.Options | JSONTransport.Options;
+};
 
-    return parsedConfig;
-  } catch (error) {
-    // too early to use logger
-    // eslint-disable-next-line no-console
-    console.error(fromError(error).toString());
-    throw error;
-  }
+export const config: Config = (() => {
+  const parsedConfig: z.infer<typeof configSchema> = configSchema.parse(
+    configByEnv[nodeEnv],
+  );
+
+  return parsedConfig;
 })();

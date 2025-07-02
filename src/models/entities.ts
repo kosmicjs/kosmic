@@ -1,5 +1,5 @@
 import type {Insertable, Selectable, Updateable} from 'kysely';
-import zod from 'zod';
+import zod from 'zod/v4';
 import {type GeneratedId} from './types.js';
 
 export const schema = zod.object({

@@ -1,5 +1,5 @@
 import type {Middleware, Next, Context} from 'koa';
-import {fromZodError, isZodErrorLike} from 'zod-validation-error';
+import z from 'zod/v4';
 import logger from '#utils/logger.js';
 
 export function errorHandler(): Middleware {
@@ -11,12 +11,12 @@ export function errorHandler(): Middleware {
       ctx.status = ctx.status.toString().startsWith('4') ? ctx.status : 500;
       ctx.set('HX-Reswap', 'innerHTML');
       ctx.set('HX-Retarget', '#error-display-swap-el');
-      if (isZodErrorLike(error)) {
+      if (error) {
         ctx.status = 400;
         await ctx.render(
           <div class="toast-body bg-dark">
-            {fromZodError(error)
-              .toString()
+            {z
+              .prettifyError(error as z.ZodError)
               .replaceAll(String.raw`\"`, '"')}
           </div>,
         );

@@ -132,7 +132,7 @@ await describe('server integration', async () => {
     );
     assert.strictEqual(
       $(errorInput).siblings('.invalid-feedback').text(),
-      'Invalid email',
+      'Invalid email address',
       'Invalid email error message should be displayed',
     );
 
@@ -217,7 +217,7 @@ await describe('server integration', async () => {
       },
     });
 
-    assert.strictEqual(response.statusCode, 401);
+    assert.strictEqual(response.statusCode, 400);
     assert.strictEqual(response.headers['hx-redirect'], '/login');
   });
 

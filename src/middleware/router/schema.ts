@@ -1,6 +1,10 @@
-import {z} from 'zod';
+import {z} from 'zod/v4';
 
-export const middlewareSchema = z.function().optional();
+export const middlewareSchema = z
+  .custom<(...args: unknown[]) => unknown>((val) => typeof val === 'function', {
+    message: 'Middleware must be a function',
+  })
+  .optional();
 
 export const middlewareArraySchema = z
   .union([z.array(middlewareSchema).optional(), middlewareSchema.optional()])

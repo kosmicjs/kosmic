@@ -1,10 +1,10 @@
 import {type Middleware} from 'koa';
-import {z} from 'zod';
+import {z} from 'zod/v4';
 import {GoogleGenAI} from '@google/genai';
 import Layout from '#components/layout.js';
 import {config} from '#config/index.js';
 
-const client = new GoogleGenAI({apiKey: config.google?.geminyApiKey ?? ''});
+const client = new GoogleGenAI({apiKey: config.google?.geminiApiKey ?? ''});
 
 declare module 'koa-session' {
   interface Session {

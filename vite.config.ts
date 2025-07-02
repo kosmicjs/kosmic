@@ -1,13 +1,12 @@
 /* eslint-disable unicorn/prefer-module */
+import process from 'node:process';
 import path from 'node:path';
 import {type UserConfig, createLogger} from 'vite';
 import {pino} from 'pino';
-// import kosmic from './scripts/vite-plugin.js';
-import {config as kosmicConfig} from './src/config/index.js';
 
 const viteLogger = pino({
   name: '~vite~',
-  ...(kosmicConfig.kosmicEnv === 'production'
+  ...(process.env.NODE_ENV === 'production'
     ? {}
     : {transport: {target: 'pino-princess'}}),
 });

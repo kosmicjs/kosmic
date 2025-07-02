@@ -5,12 +5,11 @@ import previewEmail from 'preview-email';
 import nodemailer from 'nodemailer';
 import {db} from '#db/index.js';
 import {jobsLogger as logger} from '#utils/logger.js';
+import {config} from '#config/index.js';
 
 logger.info('Starting emails job');
 
-const transport = nodemailer.createTransport({
-  jsonTransport: true,
-});
+const transport = nodemailer.createTransport(config.nodeMailer);
 
 const unsentEmails = await db
   .selectFrom('emails')

@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type z from 'zod';
+import type z from 'zod/v4';
 
 export function SignupForm({
   errors,
@@ -10,7 +10,7 @@ export function SignupForm({
   readonly email?: string;
   readonly password?: string;
   readonly password_confirm?: string;
-  readonly errors?: z.ZodIssue[];
+  readonly errors?: z.core.$ZodIssue[];
 }) {
   const emailErrors = errors?.filter((error) => error.path.includes('email'));
   const passwordErrors = errors?.filter((error) =>

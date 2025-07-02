@@ -1,4 +1,4 @@
-import EmailLayout from '../layout.js';
+import EmailLayout from './layout/layout.js';
 
 export type WelcomeEmailProps = {
   readonly userName: string;
