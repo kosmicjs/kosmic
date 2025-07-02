@@ -11,13 +11,11 @@ export function errorHandler(): Middleware {
       ctx.status = ctx.status.toString().startsWith('4') ? ctx.status : 500;
       ctx.set('HX-Reswap', 'innerHTML');
       ctx.set('HX-Retarget', '#error-display-swap-el');
-      if (error) {
+      if (error instanceof z.ZodError) {
         ctx.status = 400;
         await ctx.render(
           <div class="toast-body bg-dark">
-            {z
-              .prettifyError(error as z.ZodError)
-              .replaceAll(String.raw`\"`, '"')}
+            {z.prettifyError(error).replaceAll(String.raw`\"`, '"')}
           </div>,
         );
       } else if (error instanceof Error) {
