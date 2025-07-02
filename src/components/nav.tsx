@@ -2,7 +2,14 @@ import clsx from 'clsx';
 import {ThemeSwitchIsland} from './islands/theme-switch.js';
 import {getCtx} from '#server';
 
-const NavItems = [
+type NavItem = {
+  name: string;
+  href: string;
+  matchType: 'exact' | 'startsWith' | 'endsWith';
+  protected?: boolean;
+};
+
+const NavItems: NavItem[] = [
   {
     name: 'Home',
     href: '/',
@@ -21,16 +28,16 @@ const NavItems = [
   {
     name: 'Account',
     href: '/account',
-    matchType: 'startsWith',
+    matchType: 'exact',
     protected: true,
   },
   {
     name: 'Entities',
     href: '/account/entities',
-    matchType: 'startsWith',
+    matchType: 'exact',
     protected: true,
   },
-];
+] as const;
 
 export default function Nav() {
   const ctx = getCtx();
@@ -68,7 +75,7 @@ export default function Nav() {
                         active:
                           item.matchType === 'exact'
                             ? ctx?.path === item.href
-                            : ctx?.path?.startsWith(item.href),
+                            : ctx?.path?.[item.matchType](item.href),
                       })}
                       aria-current="page"
                       href={item.href}
@@ -84,7 +91,7 @@ export default function Nav() {
                       active:
                         item.matchType === 'exact'
                           ? ctx?.path === item.href
-                          : ctx?.path?.startsWith(item.href),
+                          : ctx?.path?.[item.matchType](item.href),
                     })}
                     aria-current="page"
                     href={item.href}
