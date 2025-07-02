@@ -41,7 +41,7 @@
     "compile:vite": "vite build",
     "dev": "node --no-warnings --experimental-strip-types --enable-source-maps scripts/dev.ts",
     "lint": "xo",
-    "migrate": "npm run clean && npm run compile:tsc && node --enable-source-maps ./dist/src/db/utils/cli.js",
+    "migrate": "npm run clean && npm run compile:tsc && KOSMIC_ENV=migration node --enable-source-maps ./dist/src/db/utils/cli.js",
     "prepare": "husky || true",
     "prepublishOnly": "npm run build",
     "start": "NODE_ENV=production KOSMIC_ENV=production node dist/src/index.js | pino-princess",

@@ -9,10 +9,13 @@ import {type PoolConfig} from 'pg';
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    interface ProcessEnv extends z.infer<typeof envSchema> {}
+    interface ProcessEnv extends z.infer<typeof envSchema> {
+      NODE_ENV: 'development' | 'production' | 'test';
+      KOSMIC_ENV: 'development' | 'production' | 'migration' | 'test';
+    }
   }
 }
+
 const nodeEnv = z
   .enum(['development', 'production', 'test'])
   .default('development')
@@ -34,8 +37,7 @@ dotenv.config({
 
 // then override with specific env
 dotenv.config({
-  // TODO: should this use KOSMIC_ENV instead of NODE_ENV?
-  path: path.resolve(import.meta.dirname, process.cwd(), `.env.${nodeEnv}`),
+  path: path.resolve(import.meta.dirname, process.cwd(), `.env.${kosmicEnv}`),
   processEnv: parsedEnv,
   override: true,
   quiet: true,

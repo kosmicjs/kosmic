@@ -1,8 +1,8 @@
 import {type UUID, randomUUID} from 'node:crypto';
-import process from 'node:process';
 import {pinoHttp, type Options} from 'pino-http';
 import {type DestinationStream} from 'pino';
 import {type Middleware} from 'koa';
+import {config} from '#config/index.js';
 
 const XRID_HEADER = 'x-request-id';
 
@@ -16,7 +16,7 @@ export function createPinoMiddleware(
     const existingId = request.id ?? request.headers[XRID_HEADER];
     if (existingId) return existingId;
 
-    if (process.env.NODE_ENV === 'production') {
+    if (config.nodeEnv === 'production') {
       id = randomUUID();
     } else {
       id = Number(id);
