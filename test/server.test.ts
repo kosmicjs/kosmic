@@ -209,7 +209,7 @@ await describe('server integration', async () => {
     assert.strictEqual(response.headers['hx-redirect'], '/account');
   });
 
-  await test('POST /login - invalid email - 400 response', async () => {
+  await test('POST /login - invalid email - 401 response', async () => {
     const response = await got.post('login', {
       form: {
         email: 'invalid-email',
@@ -217,7 +217,7 @@ await describe('server integration', async () => {
       },
     });
 
-    assert.strictEqual(response.statusCode, 400);
+    assert.strictEqual(response.statusCode, 401);
     assert.strictEqual(response.headers['hx-redirect'], '/login');
   });
 
