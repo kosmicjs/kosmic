@@ -34,7 +34,6 @@ export function tsWatch(callback?: () => Promise<void>) {
     createWatchStatusChanged(origWatchStatusReporter, callback ?? noop),
   );
 
-  // `createWatchProgram` creates an initial program, watches files, and updates the program over time.
   return ts.createWatchProgram(host);
 }
 
@@ -49,11 +48,3 @@ function createWatchStatusChanged(
     );
   };
 }
-
-// function createDiagnosticReporter(
-//   diagnosticReporter: (diagnostic: ts.Diagnostic, ...args: any[]) => any,
-// ) {
-//   return function (this: any, diagnostic: ts.Diagnostic, ...args: any[]) {
-//     return diagnosticReporter.call(this, diagnostic, ...args);
-//   };
-// }

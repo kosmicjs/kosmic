@@ -1,22 +1,18 @@
 import EmailLayout from './layout/layout.js';
 
 export type WelcomeEmailProps = {
-  readonly userName: string;
+  readonly email: string;
   readonly verificationLink?: string;
 };
 
 export default function WelcomeEmail({
-  userName,
+  email,
   verificationLink,
 }: WelcomeEmailProps) {
   return (
-    <EmailLayout
-      title="Welcome to Kosmic"
-      previewText="Welcome to Kosmic! Verify your account to get started."
-      headerText="Welcome to Kosmic"
-    >
+    <EmailLayout title="Welcome to Kosmic" headerText="Welcome to Kosmic">
       <div className="mb-4">
-        <h2 className="text-primary">Hello, {userName}!</h2>
+        <h2 className="text-primary">Hello {email}!</h2>
         <p className="lead">
           Thank you for signing up for Kosmic. We&apos;re excited to have you on
           board!

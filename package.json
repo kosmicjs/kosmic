@@ -119,7 +119,7 @@
     "stripe": "^18.3.0",
     "titleize": "^4.0.0",
     "tough-cookie": "^5.1.2",
-    "zod": "^3.25.67"
+    "zod": "^3.25.69"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

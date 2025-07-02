@@ -4,21 +4,21 @@ import {type GeneratedId} from './types.js';
 import {config} from '#config/index.js';
 
 export const schema = zod.object({
-  id: zod.number().int().positive().optional(),
-  role: zod.enum(['admin', 'user']).optional().default('user'),
-  first_name: zod.string().max(255).nullable().optional(),
-  last_name: zod.string().max(255).nullable().optional(),
-  phone: zod.string().max(255).nullable().optional(),
+  id: zod.number().int().positive(),
+  role: zod.enum(['admin', 'user']).default('user'),
+  first_name: zod.string().max(255).nullable(),
+  last_name: zod.string().max(255).nullable(),
+  phone: zod.string().max(255).nullable(),
   email: zod.email().max(255),
-  hash: zod.string().max(255).nullable().optional(),
-  is_verified: zod.boolean().optional().default(false),
-  verification_token: zod.uuid().nullable().optional(),
-  verification_token_expires_at: zod.date().nullable().optional(),
-  is_active: zod.boolean().optional().default(true),
-  google_access_token: zod.string().max(255).nullable().optional(),
-  google_refresh_token: zod.string().max(255).nullable().optional(),
-  github_access_token: zod.string().max(255).nullable().optional(),
-  github_refresh_token: zod.string().max(255).nullable().optional(),
+  hash: zod.string().max(255).nullable(),
+  is_verified: zod.boolean().default(false),
+  verification_token: zod.uuid().nullable(),
+  verification_token_expires_at: zod.date().nullable(),
+  is_active: zod.boolean().default(true),
+  google_access_token: zod.string().max(255).nullable(),
+  google_refresh_token: zod.string().max(255).nullable(),
+  github_access_token: zod.string().max(255).nullable(),
+  github_refresh_token: zod.string().max(255).nullable(),
 });
 
 export const passwordSchema = zod.string().min(8).max(255);
@@ -46,7 +46,7 @@ export type SelectableUser = Selectable<User>;
 
 export type InsertableUser = Insertable<User>;
 
-export const insertSchema = schema.required({
+export const insertSchema = schema.partial().required({
   role: true,
   email: true,
   is_verified: true,

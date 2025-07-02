@@ -30,9 +30,9 @@ export async function queueWelcomeEmail(
   email: string,
   name: string,
 ) {
-  const emailComponent = <WelcomeEmail userName={name} />;
+  const emailComponent = <WelcomeEmail email={name} />;
 
-  const html = emailRenderToString(emailComponent);
+  const html = await emailRenderToString(emailComponent);
 
   await db
     .insertInto('emails')
