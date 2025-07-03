@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import {ThemeSwitchIsland} from './islands/theme-switch.js';
+import {ThemeSwitchIsland} from '#islands/theme-switch.js';
 import {getCtx} from '#server';
 
 type NavItem = {

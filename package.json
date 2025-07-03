@@ -23,6 +23,7 @@
     "#db/*": "./dist/src/db/*",
     "#emails/*": "./dist/src/emails/*",
     "#utils/*": "./dist/src/utils/*",
+    "#islands/*": "./dist/src/client/islands/*",
     "#server": "./dist/src/server.js"
   },
   "main": "dist/src/index.js",

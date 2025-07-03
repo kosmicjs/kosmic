@@ -1,5 +1,5 @@
 import {type Middleware} from 'koa';
-import {CounterIsland} from '#components/islands/counter.js';
+import {CounterIsland} from '#islands/counter.js';
 import Layout from '#components/layout.js';
 
 declare module 'koa-session' {

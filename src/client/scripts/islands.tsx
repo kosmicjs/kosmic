@@ -1,7 +1,7 @@
 import {hydrate} from 'preact';
 import camelcase from 'camelcase';
 import {$$} from './query.js';
-import * as Islands from '#components/islands/index.js';
+import * as Islands from '#islands/index.js';
 
 declare global {
   interface DOMStringMap {
