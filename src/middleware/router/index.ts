@@ -7,6 +7,7 @@ import {type Middleware, type Context} from 'koa';
 import {globby} from 'globby';
 import {match as createMatchFn} from 'path-to-regexp';
 import compose from 'koa-compose';
+import type Koa from 'koa';
 import {routeModuleSchema} from './schema.js';
 import {
   type HttpVerb,
@@ -14,7 +15,6 @@ import {
   type RouteModule,
   type RouteDefinition,
 } from './types.js';
-import {logger} from '#utils/logger.js';
 
 declare module 'koa' {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -34,6 +34,7 @@ const verbsWithAll: HttpVerbsAll[] = [...verbs, 'all'];
 
 export async function createFsRouter(
   routesDir = path.join(process.cwd(), 'routes'),
+  app?: Koa,
 ): Promise<{middleware: Middleware; routes: RouteDefinition[]}> {
   /**
    * create a function on start up that transforms filePaths
@@ -175,16 +176,13 @@ export async function createFsRouter(
     route.collectedMiddleware = collectedMiddleware;
   }
 
-  logger.debug(
-    {
-      routes: routes.flatMap((r) =>
-        Object.keys(r.module)
-          .filter((v) => METHODS.includes(v.toUpperCase()))
-          .map((v) => ({method: v.toUpperCase(), path: r.uriPath || '/'})),
-      ),
-    },
-    'loaded routes',
-  );
+  app?.emit('router:loaded', {
+    routes: routes.flatMap((r) =>
+      Object.keys(r.module)
+        .filter((v) => METHODS.includes(v.toUpperCase()))
+        .map((v) => ({method: v.toUpperCase(), path: r.uriPath || '/'})),
+    ),
+  });
 
   const middleware: Middleware = async function (ctx: Context, next) {
     const matchedRoute = routes.find((route) => {

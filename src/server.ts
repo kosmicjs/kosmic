@@ -17,6 +17,7 @@ import createFsRouter from '#middleware/router/index.js';
 import logger from '#utils/logger.js';
 import {config} from '#config/index.js';
 import {passport} from '#middleware/passport.js';
+import {type RouteDefinition} from '#middleware/router/types.js';
 
 type Logger = typeof logger;
 
@@ -105,7 +106,7 @@ export async function createServer(): Promise<Server> {
 
   // add fs routes
   const routesDir = path.join(import.meta.dirname, 'routes');
-  const {middleware: fsRouterMiddleware} = await createFsRouter(routesDir);
+  const {middleware: fsRouterMiddleware} = await createFsRouter(routesDir, app);
   app.use(fsRouterMiddleware);
 
   // security headers
@@ -132,4 +133,8 @@ app.on('session:invalid', (...ev) => {
 
 app.on('session:expired', (...ev) => {
   logger.warn({...ev}, 'session:expired');
+});
+
+app.on('router:loaded', (ev: {routes: RouteDefinition[]}) => {
+  logger.debug({routes: ev.routes}, 'router:loaded');
 });
