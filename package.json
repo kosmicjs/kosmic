@@ -56,6 +56,7 @@
     ]
   },
   "dependencies": {
+    "@fullhuman/postcss-purgecss": "^7.0.2",
     "@google/genai": "^1.8.0",
     "@koa/etag": "^5.0.1",
     "@popperjs/core": "^2.11.8",
@@ -112,15 +113,18 @@
     "pino": "9.7.0",
     "pino-http": "^10.5.0",
     "pino-princess": "^1.2.0",
+    "postcss": "^8.5.6",
+    "postcss-css-variables": "^0.19.0",
     "preact": "^10.26.9",
     "preact-render-to-string": "^6.5.13",
+    "pretty": "^2.0.0",
     "preview-email": "^3.1.0",
     "queue": "^7.0.0",
     "short-uuid": "^5.2.0",
     "stripe": "^18.3.0",
     "titleize": "^4.0.0",
     "tough-cookie": "^5.1.2",
-    "zod": "^3.25.71"
+    "zod": "^3.25.74"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
@@ -142,6 +146,8 @@
     "@types/passport-local": "^1.0.38",
     "@types/pg": "^8.15.4",
     "@types/picomatch": "^4.0.0",
+    "@types/postcss-css-variables": "^0.18.3",
+    "@types/pretty": "^2.0.3",
     "@types/swagger-ui-dist": "^3.30.6",
     "@types/wait-on": "^5.3.4",
     "chokidar": "^4.0.3",
@@ -153,14 +159,13 @@
     "prettier": "^3.6.2",
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-packagejson": "^2.5.18",
-    "purgecss": "^7.0.2",
     "rimraf": "^6.0.1",
     "sass": "1.89.2",
     "swagger-ui-dist": "^5.26.0",
     "type-fest": "^4.41.0",
     "typed-htmx": "^0.3.1",
     "typescript": "~5.8.3",
-    "vite": "^7.0.1",
+    "vite": "^7.0.2",
     "vite-bundle-visualizer": "^1.2.1",
     "wait-on": "^8.0.3",
     "xo": "^1.1.1"

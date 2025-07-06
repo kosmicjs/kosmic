@@ -12,9 +12,9 @@ htmx.onLoad(function ($content) {
     return;
   }
 
+  initializeIslands($content);
   initializeTooltips($content);
   initializeCodeCopy($content);
-  initializeIslands($content);
   initializeProgressBar($content);
   initializeOffcanvas($content);
 });

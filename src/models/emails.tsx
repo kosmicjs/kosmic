@@ -25,12 +25,8 @@ export type InsertableEmail = Insertable<Email>;
 export type UpdatedableEmail = Updateable<Email>;
 
 // Example function to queue a welcome email
-export async function queueWelcomeEmail(
-  userId: number,
-  email: string,
-  name: string,
-) {
-  const emailComponent = <WelcomeEmail email={name} />;
+export async function queueWelcomeEmail(userId: number, email: string) {
+  const emailComponent = <WelcomeEmail />;
 
   const html = await emailRenderToString(emailComponent);
 

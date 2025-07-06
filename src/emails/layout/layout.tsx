@@ -3,15 +3,11 @@ import {type ComponentChildren} from 'preact';
 export type EmailLayoutProps = {
   readonly children: ComponentChildren;
   readonly title?: string;
-  readonly headerText?: string;
-  readonly footerText?: string;
 };
 
 export default function Layout({
   children,
   title = 'Kosmic Notification',
-  headerText = 'Kosmic',
-  footerText = '© Kosmic Team',
 }: EmailLayoutProps) {
   // Create the email component
   return (
@@ -22,15 +18,20 @@ export default function Layout({
         <title>{title}</title>
       </head>
       <body>
-        <table class="table">
+        <table class="table-light" width="100%">
           <tr>
-            <td class="header">{headerText}</td>
+            <td align="center">
+              <h1>Kosmic</h1>
+              <p class="text-secondary text-bg-primary text-center p-2">
+                Simple abstractions, deep code insight, fast development
+              </p>
+            </td>
           </tr>
           <tr>
-            <td class="content">{children}</td>
+            <td align="center">{children}</td>
           </tr>
           <tr>
-            <td class="footer">{footerText}</td>
+            <td align="center">© Kosmic Team</td>
           </tr>
         </table>
       </body>

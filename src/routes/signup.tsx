@@ -93,7 +93,7 @@ export async function post(ctx: Context, next: Next) {
 
     await ctx.login(user);
 
-    await Emails.queueWelcomeEmail(user.id, user.email, user.first_name ?? '');
+    await Emails.queueWelcomeEmail(user.id, user.email);
 
     ctx.set('Hx-Redirect', '/account');
   } catch (error) {

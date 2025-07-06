@@ -101,6 +101,29 @@ export default function Nav() {
                 </li>
               ),
             )}
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Tools
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="/tools/email-preview">
+                    Email Previewer
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">
+                    Jobs Manager
+                  </a>
+                </li>
+              </ul>
+            </li>
           </ul>
           <div class="me-5">
             <ThemeSwitchIsland
@@ -114,28 +137,6 @@ export default function Nav() {
               </a>
             ) : (
               <>
-                {/* <button
-                  class="btn btn-outline-primary mx-2"
-                  type="button"
-                  hx-get="/modals/login"
-                  hx-target="#modal-content"
-                  hx-indicator="#modal-content"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modal"
-                >
-                  Login
-                </button> */}
-                {/* <button
-                  class="btn btn-outline-primary"
-                  type="button"
-                  hx-get="/modals/signup"
-                  hx-target="#modal-content"
-                  hx-indicator="#modal-content"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modal"
-                >
-                  Signup
-                </button> */}
                 <a
                   class="btn btn-outline-primary mx-2"
                   type="button"

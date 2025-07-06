@@ -1,22 +1,16 @@
 import EmailLayout from './layout/layout.js';
 
 export type WelcomeEmailProps = {
-  readonly email: string;
   readonly verificationLink?: string;
 };
 
-export default function WelcomeEmail({
-  email,
-  verificationLink,
-}: WelcomeEmailProps) {
+export default function WelcomeEmail({verificationLink}: WelcomeEmailProps) {
   return (
-    <EmailLayout title="Welcome to Kosmic" headerText="Welcome to Kosmic">
+    <EmailLayout title="Welcome to Kosmic">
       <div className="mb-4">
-        <h2 className="text-primary">Hello {email}!</h2>
-        <p className="lead">
-          Thank you for signing up for Kosmic. We&apos;re excited to have you on
-          board!
-        </p>
+        <h2 className="text-info align-center">Welcome to Kosmic</h2>
+        <p className="lead">Thank you for signing up for Kosmic.</p>
+        <p>We&apos;re excited to have you on board!</p>
       </div>
 
       {verificationLink ? (

@@ -1,4 +1,4 @@
-import {hydrate} from 'preact';
+import {hydrate, type VNode} from 'preact';
 import camelcase from 'camelcase';
 import {$$} from './query.js';
 import * as Islands from '#islands/index.js';
@@ -33,7 +33,8 @@ export function initializeIslands($content: Element) {
       pascalCase: true,
     });
 
-    const Component = Islands[islandName as keyof typeof Islands];
+    const Component: (props: any) => VNode | Promise<VNode> =
+      Islands[islandName as keyof typeof Islands];
 
     if (Component) {
       $island.setAttribute('hx-boost', 'false');
