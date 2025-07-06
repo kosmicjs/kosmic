@@ -9,7 +9,7 @@ import postcss from 'postcss';
 import cssVariables from 'postcss-css-variables';
 import juice from 'juice';
 import Layout from '#components/layout.js';
-import {EmailEditorIsland} from '#islands/email-editor.js';
+import {EmailPreviewIsland} from '#islands/email-preview.js';
 import {config} from '#config/index.js';
 
 export const get: Middleware = async (ctx) => {
@@ -66,7 +66,7 @@ export const get: Middleware = async (ctx) => {
 
   await ctx.render(
     <Layout>
-      <EmailEditorIsland html={pretty($emailHtml.html())} />
+      <EmailPreviewIsland html={pretty($emailHtml.html())} />
     </Layout>,
   );
 };

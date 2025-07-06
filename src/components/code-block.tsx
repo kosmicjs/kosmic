@@ -7,6 +7,7 @@ type Props = {
   readonly filename?: string;
   readonly language?: string;
   readonly isMultiline?: boolean;
+  readonly class?: string;
 };
 
 export default function CodeBlock({
@@ -14,6 +15,7 @@ export default function CodeBlock({
   filename,
   isMultiline = false,
   language = 'javascript',
+  class: customClass = '',
 }: Props) {
   return (
     <>
@@ -28,10 +30,12 @@ export default function CodeBlock({
           dangerouslySetInnerHTML={{
             __html: dedent`${isMultiline ? '' : '$ '}${hljs.highlight(code.trim(), {language}).value.trim()}`,
           }}
-          class={clsx('p-2 mt-0 d-block cursor-pointer border', {
-            rounded: !isMultiline || !filename,
-            'rounded-bottom': isMultiline && filename,
-          })}
+          class={
+            clsx('p-2 mt-0 d-block cursor-pointer border', {
+              rounded: !isMultiline || !filename,
+              'rounded-bottom': isMultiline && filename,
+            }) + ` ${customClass}`
+          }
           data-bs-toggle="tooltip"
           data-bs-placement="right"
           title="Copy to clipboard"
