@@ -67,11 +67,16 @@ export const envSchema = z.object({
   SMTP_PASS: z.string().optional(),
 });
 
-// Variables set outside of the env files override the env files
-export const env = envSchema.parse({
+const result = envSchema.safeParse({
   ...parsedEnv,
   ...process.env,
 });
+
+if (result.error) {
+  throw new Error(z.prettifyError(result.error));
+}
+
+export const env = result.data;
 
 process.env = {
   ...env,

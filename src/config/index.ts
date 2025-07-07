@@ -98,4 +98,10 @@ type Config = Omit<z.infer<typeof configSchema>, 'db' | 'nodeMailer'> & {
   nodeMailer: SMTPTransport.Options | JSONTransport.Options;
 };
 
-export const config: Config = configSchema.parse(configByEnv[nodeEnv]);
+const results = configSchema.safeParse(configByEnv[nodeEnv]);
+
+if (results.error) {
+  throw new Error(z.prettifyError(results.error));
+}
+
+export const config: Config = results.data;
