@@ -15,6 +15,7 @@ const config: UserConfig = {
     manifest: true,
     rollupOptions: {
       input: path.join(__dirname, 'src', 'client', 'scripts', 'index.ts'),
+      external: 'highlight.js',
     },
     outDir: path.join(__dirname, 'dist', 'src', 'public'),
     emptyOutDir: true,

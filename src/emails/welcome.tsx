@@ -13,23 +13,21 @@ export default function WelcomeEmail({verificationLink}: WelcomeEmailProps) {
         <p>We&apos;re excited to have you on board!</p>
       </div>
 
-      {verificationLink ? (
-        <div className="mb-4">
-          <p>
-            To get started, please verify your email address by clicking the
-            button below:
-          </p>
-          <div className="text-center my-3">
-            <a href={verificationLink} className="btn btn-primary px-4 py-2">
-              Verify Email
-            </a>
-          </div>
-          <p className="text-muted small">
-            Or copy and paste this link into your browser:
-          </p>
-          <p className="text-break small">{verificationLink}</p>
+      <div className="mb-4">
+        <p>
+          To get started, please verify your email address by clicking the
+          button below:
+        </p>
+        <div className="text-center my-3">
+          <a href={verificationLink} className="btn btn-primary px-4 py-2">
+            Verify Email
+          </a>
         </div>
-      ) : null}
+        <p className="text-muted small">
+          Or copy and paste this link into your browser:
+        </p>
+        <p className="text-break small">{verificationLink}</p>
+      </div>
 
       <hr className="my-4" />
 
