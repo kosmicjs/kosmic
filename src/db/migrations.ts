@@ -60,16 +60,14 @@ export const users: KosmicMigration = {
           .defaultTo('user'),
       )
       .addColumn('is_active', 'boolean', (col) => col.notNull().defaultTo(true))
-      .addColumn('is_verified', 'boolean', (col) =>
-        col.notNull().defaultTo(false),
+      .addColumn('email_verified', 'boolean', (col) =>
+        col.defaultTo(sql`false`),
       )
-      .addColumn('verification_token', 'uuid')
-      .addColumn('verification_token_expires_at', 'timestamp')
+      .addColumn('name', 'text')
+      .addColumn('image', 'text')
       .addColumn('first_name', 'text')
       .addColumn('last_name', 'text')
       .addColumn('phone', 'text')
-      .addColumn('google_refresh_token', 'text')
-      .addColumn('google_access_token', 'text')
       .$call(addTimestampsColumns)
       .execute();
 
@@ -170,19 +168,23 @@ export const emails: KosmicMigration = {
 };
 
 export const sessions: KosmicMigration = {
-  sequence: '2025-01-07',
+  sequence: '2025-01-05',
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table sessions...');
     await db.schema
       .createTable('sessions')
       .ifNotExists()
-      .addColumn('key', 'uuid', (col) =>
-        col
-          .notNull()
-          .primaryKey()
-          .defaultTo(sql`gen_random_uuid()`),
+      .ifNotExists()
+      .$call(addIdColumn)
+      .$call(addTimestampsColumns)
+      .addColumn('user_id', 'integer', (col) =>
+        col.references('users.id').notNull(),
       )
-      .addColumn('value', 'json')
+      // token column
+      .addColumn('token', 'text', (col) => col.notNull().unique())
+      .addColumn('expires_at', 'timestamp', (col) => col.notNull())
+      .addColumn('ip_address', 'text')
+      .addColumn('user_agent', 'text')
       .execute();
 
     logger.info('Created table sessions');
@@ -191,5 +193,60 @@ export const sessions: KosmicMigration = {
     logger.debug('Dropping table sessions...');
     await db.schema.dropTable('sessions').ifExists().execute();
     logger.info('Dropped table sessions');
+  },
+};
+
+export const account: KosmicMigration = {
+  sequence: '2025-01-06',
+  async up(db: Kysely<any>): Promise<void> {
+    logger.debug('Creating table accounts...');
+    await db.schema
+      .createTable('accounts')
+      .ifNotExists()
+      .$call(addIdColumn)
+      .$call(addTimestampsColumns)
+      .addColumn('user_id', 'integer', (col) =>
+        col.references('users.id').notNull(),
+      )
+      .addColumn('account_id', 'text', (col) => col.notNull())
+      .addColumn('provider_id', 'text', (col) => col.notNull())
+      .addColumn('access_token', 'text')
+      .addColumn('refresh_token', 'text')
+      .addColumn('access_token_expires_at', 'timestamp')
+      .addColumn('refresh_token_expires_at', 'timestamp')
+      .addColumn('scope', 'text')
+      .addColumn('id_token', 'text')
+      .addColumn('password', 'text')
+      .execute();
+
+    logger.info('Created table accounts');
+  },
+  async down(db: Kysely<any>): Promise<void> {
+    logger.debug('Dropping table accounts...');
+    await db.schema.dropTable('accounts').ifExists().execute();
+    logger.info('Dropped table accounts');
+  },
+};
+
+export const verification: KosmicMigration = {
+  sequence: '2025-01-07',
+  async up(db: Kysely<any>): Promise<void> {
+    logger.debug('Creating table verification...');
+    await db.schema
+      .createTable('verification')
+      .ifNotExists()
+      .$call(addIdColumn)
+      .$call(addTimestampsColumns)
+      .addColumn('identifier', 'text', (col) => col.notNull())
+      .addColumn('value', 'text', (col) => col.notNull())
+      .addColumn('expires_at', 'timestamp', (col) => col.notNull())
+      .execute();
+
+    logger.info('Created table verification');
+  },
+  async down(db: Kysely<any>): Promise<void> {
+    logger.debug('Dropping table verification...');
+    await db.schema.dropTable('verification').ifExists().execute();
+    logger.info('Dropped table verification');
   },
 };

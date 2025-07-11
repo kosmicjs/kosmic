@@ -65,6 +65,8 @@ export const envSchema = z.object({
   SMTP_PORT: z.string().optional(),
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
+  BETTER_AUTH_SECRET: z.string().optional(),
+  BETTER_AUTH_URL: z.string().optional().default('http://127.0.0.1:3000'),
 });
 
 const result = envSchema.safeParse({

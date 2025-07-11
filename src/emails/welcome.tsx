@@ -1,7 +1,7 @@
 import EmailLayout from './layout/layout.js';
 
 export type WelcomeEmailProps = {
-  readonly verificationLink?: string;
+  readonly verificationLink: string;
 };
 
 export default function WelcomeEmail({verificationLink}: WelcomeEmailProps) {
@@ -19,7 +19,7 @@ export default function WelcomeEmail({verificationLink}: WelcomeEmailProps) {
           button below:
         </p>
         <div className="text-center my-3">
-          <a href={verificationLink} className="btn btn-primary px-4 py-2">
+          <a href={verificationLink} className="btn px-4 py-2 bg-primary">
             Verify Email
           </a>
         </div>

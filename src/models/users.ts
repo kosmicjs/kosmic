@@ -5,20 +5,16 @@ import {config} from '#config/index.js';
 
 export const schema = zod.object({
   id: zod.number().int().positive(),
+  email: zod.email().max(255),
+  hash: zod.string().max(255),
   role: zod.enum(['admin', 'user']).default('user'),
+  is_active: zod.boolean().default(true),
+  email_verified: zod.boolean().default(false),
+  name: zod.string().max(255).nullable(),
+  image: zod.string().max(255).nullable(),
   first_name: zod.string().max(255).nullable(),
   last_name: zod.string().max(255).nullable(),
   phone: zod.string().max(255).nullable(),
-  email: zod.email().max(255),
-  hash: zod.string().max(255).nullable(),
-  is_verified: zod.boolean().default(false),
-  verification_token: zod.uuid().nullable(),
-  verification_token_expires_at: zod.date().nullable(),
-  is_active: zod.boolean().default(true),
-  google_access_token: zod.string().max(255).nullable(),
-  google_refresh_token: zod.string().max(255).nullable(),
-  github_access_token: zod.string().max(255).nullable(),
-  github_refresh_token: zod.string().max(255).nullable(),
 });
 
 export const passwordSchema = zod.string().min(8).max(255);
@@ -46,12 +42,18 @@ export type SelectableUser = Selectable<User>;
 
 export type InsertableUser = Insertable<User>;
 
-export const insertSchema = schema.partial().required({
-  role: true,
-  email: true,
-  is_verified: true,
-  is_active: true,
-});
+export const insertSchema = schema
+  .partial()
+  .required({
+    email: true,
+    hash: true,
+    role: true,
+    is_active: true,
+    email_verified: true,
+  })
+  .omit({
+    id: true,
+  });
 
 export type UpdatedableUser = Updateable<User>;
 

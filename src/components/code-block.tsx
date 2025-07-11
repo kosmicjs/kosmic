@@ -31,7 +31,7 @@ export default function CodeBlock({
             __html: dedent`${isMultiline ? '' : '$ '}${hljs.highlight(code.trim(), {language}).value.trim()}`,
           }}
           class={
-            clsx('p-2 mt-0 d-block cursor-pointer border', {
+            clsx('p-2 mt-0 d-block cursor-pointer border overflow-x-scroll', {
               rounded: !isMultiline || !filename,
               'rounded-bottom': isMultiline && filename,
             }) + ` ${customClass}`

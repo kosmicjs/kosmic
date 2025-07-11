@@ -65,6 +65,7 @@
     "@types/nodemailer": "^6.4.17",
     "@types/preview-email": "^3.1.0",
     "argon2": "^0.43.0",
+    "better-auth": "^1.2.12",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
     "camelcase": "^8.0.0",

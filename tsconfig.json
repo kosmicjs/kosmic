@@ -16,6 +16,10 @@
     "target": "ES2022",
     "allowJs": true,
     "types": ["vite/client", "typed-htmx"],
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
     "noErrorTruncation": true
   },
   "exclude": ["node_modules", "dist", "scripts"]

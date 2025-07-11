@@ -77,6 +77,12 @@ export const configSchema = z.object({
       jsonTransport: z.boolean().optional().default(!env.SMTP_HOST),
     }) satisfies z.ZodType<SMTPTransport.Options | JSONTransport.Options>
   ).prefault({}),
+  betterAuth: z
+    .object({
+      secret: z.string().optional().default(env.BETTER_AUTH_SECRET),
+      baseURL: z.string().optional().default(env.BETTER_AUTH_URL),
+    })
+    .prefault({}),
 });
 
 /**

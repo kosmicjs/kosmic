@@ -20,11 +20,11 @@ declare module 'koa' {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface Params extends Record<string, string | undefined> {}
   interface Request {
-    params?: Params;
+    params?: Params | undefined;
   }
 
   interface DefaultContext {
-    params?: Params;
+    params?: Params | undefined;
   }
 }
 
@@ -187,7 +187,7 @@ export async function createFsRouter(
   const middleware: Middleware = async function (ctx: Context, next) {
     const matchedRoute = routes.find((route) => {
       const [url] = ctx.originalUrl?.split('?') ?? [];
-      const match = route.match(url);
+      const match = route.match(url ?? '');
 
       if (match) {
         route.params = match.params;
