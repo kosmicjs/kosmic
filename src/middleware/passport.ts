@@ -130,7 +130,7 @@ if (config.github) {
             .insertInto('users')
             .values(
               await User.schema.parseAsync({
-                first_name: profile.displayName?.split(' ')[0] || '',
+                first_name: profile.displayName?.split(' ')[0] ?? '',
                 role: 'user',
                 last_name:
                   profile.displayName?.split(' ').slice(1).join(' ') || '',

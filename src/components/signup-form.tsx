@@ -7,9 +7,9 @@ export function SignupForm({
   password,
   password_confirm,
 }: {
-  readonly email?: string;
-  readonly password?: string;
-  readonly password_confirm?: string;
+  readonly email?: string | undefined;
+  readonly password?: string | undefined;
+  readonly password_confirm?: string | undefined;
   readonly errors?: z.core.$ZodIssue[];
 }) {
   const emailErrors = errors?.filter((error) => error.path.includes('email'));

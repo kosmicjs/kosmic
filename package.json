@@ -55,23 +55,26 @@
       "prettier-plugin-organize-attributes"
     ]
   },
+  "overrides": {
+    "zod": "$zod"
+  },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^7.0.2",
-    "@google/genai": "^1.9.0",
+    "@google/genai": "^1.10.0",
     "@koa/etag": "^5.0.1",
     "@popperjs/core": "^2.11.8",
-    "@stripe/stripe-js": "^7.4.0",
+    "@stripe/stripe-js": "^7.5.0",
     "@types/koa-session": "^6.4.5",
     "@types/nodemailer": "^6.4.17",
     "@types/preview-email": "^3.1.0",
-    "argon2": "^0.43.0",
+    "argon2": "^0.43.1",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
     "camelcase": "^8.0.0",
     "cheerio": "^1.1.0",
     "clsx": "^2.1.1",
     "copy-to-clipboard": "^3.3.3",
-    "cron": "^4.3.1",
+    "cron": "^4.3.2",
     "dedent": "^1.6.0",
     "dotenv": "^17.2.0",
     "execa": "^9.6.0",
@@ -96,10 +99,10 @@
     "koa-response-time": "^2.1.0",
     "koa-session": "^6.4.0",
     "koa-static": "^5.0.0",
-    "kysely": "^0.28.2",
+    "kysely": "^0.28.3",
     "nodemailer": "^7.0.5",
     "npm-check-updates": "^18.0.1",
-    "openai": "^5.9.0",
+    "openai": "^5.10.1",
     "p-debounce": "^4.0.0",
     "p-queue": "^8.1.0",
     "p-wait-for": "^5.0.2",
@@ -123,7 +126,7 @@
     "stripe": "^18.3.0",
     "titleize": "^4.0.0",
     "tough-cookie": "^5.1.2",
-    "zod": "^3.25.74"
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
@@ -138,7 +141,7 @@
     "@types/koa-pino-logger": "^3.0.4",
     "@types/koa-response-time": "^2",
     "@types/koa-static": "^4.0.4",
-    "@types/node": "~24.0.13",
+    "@types/node": "~24.0.14",
     "@types/passport-github2": "^1.2.9",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-local": "^1.0.38",
@@ -153,19 +156,19 @@
     "lint-staged": "^16.1.2",
     "meow": "^13.2.0",
     "picocolors": "^1.1.1",
-    "picomatch": "^4.0.2",
+    "picomatch": "^4.0.3",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-attributes": "^1.0.0",
     "prettier-plugin-packagejson": "^2.5.18",
     "rimraf": "^6.0.1",
     "sass": "1.89.2",
-    "swagger-ui-dist": "^5.26.2",
+    "swagger-ui-dist": "^5.27.0",
     "type-fest": "^4.41.0",
     "typed-htmx": "^0.3.1",
     "typescript": "~5.8.3",
-    "vite": "^7.0.4",
+    "vite": "^7.0.5",
     "vite-bundle-visualizer": "^1.2.1",
     "wait-on": "^8.0.3",
-    "xo": "^1.1.1"
+    "xo": "^1.2.1"
   }
 }
