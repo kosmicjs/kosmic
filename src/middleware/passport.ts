@@ -1,6 +1,7 @@
 // import process from 'node:process';
 import passport from 'koa-passport';
 import {Strategy as LocalStrategy} from 'passport-local';
+import {Strategy as BearerStategy} from 'passport-http-bearer';
 // import {
 //   Strategy as GoogleStrategy,
 //   type Profile,
@@ -79,6 +80,30 @@ passport.use(
       }
     },
   ),
+);
+
+passport.use(
+  'bearer',
+  new BearerStategy(async (token, done) => {
+    logger.debug({token}, 'bearer token received');
+
+    const user = await db
+      .selectFrom('users')
+      .select(['id', 'email', 'first_name', 'last_name'])
+      .where('', '=', token)
+      .executeTakeFirst();
+
+    if (user) {
+      logger.trace({user}, 'found user by bearer token');
+      done(null, user);
+    } else {
+      logger.warn('No user found for bearer token');
+      done(null, false);
+    }
+
+    logger.error(error);
+    done(error);
+  }),
 );
 
 if (config.github) {
