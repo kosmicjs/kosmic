@@ -221,6 +221,23 @@ await describe('server integration', async () => {
     assert.strictEqual(response.headers['hx-redirect'], '/login');
   });
 
+  await test('GET /api/me - 401 unauthorized', async () => {
+    const response = await got.get('api/me');
+    assert.strictEqual(response.statusCode, 401);
+    assert.strictEqual(response.body, 'Unauthorized');
+  });
+
+  // TODO: Extract api key from migrations or use a test key
+  await test.skip('GET /api/me - 200 ok with auth', async () => {
+    const loginResponse = await got.post('api/me', {
+      headers: {
+        Authorization: 'Bearer kosmic',
+      },
+    });
+
+    assert.strictEqual(loginResponse.statusCode, 200);
+  });
+
   after(async () => {
     await migrator.migrateTo(NO_MIGRATIONS);
     server.closeAllConnections();

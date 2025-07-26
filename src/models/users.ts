@@ -11,6 +11,7 @@ export const schema = zod.object({
   phone: zod.string().max(255).nullable(),
   email: zod.email().max(255),
   hash: zod.string().max(255).nullable(),
+  api_key: zod.string().max(255).nullable(),
   is_verified: zod.boolean().default(false),
   verification_token: zod.uuid().nullable(),
   verification_token_expires_at: zod.date().nullable(),

@@ -7,6 +7,7 @@ import {
   addIdColumn,
 } from './utils/helpers.js';
 import logger from '#utils/logger.js';
+import * as apiKeysModel from '#models/api-keys.js';
 
 export type KosmicMigration = Migration & {
   sequence: string;
@@ -243,13 +244,13 @@ export const apiKeys: KosmicMigration = {
       .addColumn('user_id', 'integer', (col) =>
         col.notNull().references('users.id').onDelete('cascade'),
       )
-      .addColumn('name', 'text', (col) => col.notNull()) // Human-readable name for the key
-      .addColumn('key_prefix', 'text', (col) => col.notNull()) // First 8 chars for identification
-      .addColumn('key_hash', 'text', (col) => col.notNull()) // Hashed version of the full key
+      .addColumn('name', 'text', (col) => col.notNull())
+      .addColumn('key_prefix', 'text', (col) => col.notNull())
+      .addColumn('key_hash', 'text', (col) => col.notNull())
       .addColumn('last_used_at', 'timestamp')
-      .addColumn('expires_at', 'timestamp') // Optional expiration
+      .addColumn('expires_at', 'timestamp')
       .addColumn('is_active', 'boolean', (col) => col.notNull().defaultTo(true))
-      .addColumn('permissions', 'json') // For future scope-based permissions
+      .addColumn('permissions', 'json')
       .$call(addTimestampsColumns)
       .execute();
 
@@ -275,6 +276,20 @@ export const apiKeys: KosmicMigration = {
       .ifNotExists()
       .on('api_keys')
       .columns(['key_prefix'])
+      .execute();
+
+    const {apiKey, keyPrefix, keyHash} = await apiKeysModel.generateApiKey();
+
+    logger.info({apiKey}, 'Generated initial API key for admin user');
+
+    await db
+      .insertInto('api_keys')
+      .values({
+        user_id: 1, // Assuming the admin user has ID 1
+        name: 'Kosmic Admin Key',
+        key_prefix: keyPrefix,
+        key_hash: keyHash,
+      })
       .execute();
 
     logger.info('Created table api_keys');
