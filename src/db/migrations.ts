@@ -1,3 +1,4 @@
+import fs from 'node:fs/promises';
 import {type Kysely, type Migration, sql} from 'kysely';
 import argon2 from 'argon2';
 import {
@@ -280,7 +281,7 @@ export const apiKeys: KosmicMigration = {
 
     const {apiKey, keyPrefix, keyHash} = await apiKeysModel.generateApiKey();
 
-    logger.info({apiKey}, 'Generated initial API key for admin user');
+    await fs.writeFile('api_key.txt', `Kosmic Admin Key: ${apiKey}`);
 
     await db
       .insertInto('api_keys')
