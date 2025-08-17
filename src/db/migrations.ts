@@ -9,6 +9,7 @@ import {
 } from './utils/helpers.js';
 import logger from '#utils/logger.js';
 import * as apiKeysModel from '#models/api-keys.js';
+import {config} from '#config/index.js';
 
 export type KosmicMigration = Migration & {
   sequence: string;
@@ -281,7 +282,12 @@ export const apiKeys: KosmicMigration = {
 
     const {apiKey, keyPrefix, keyHash} = await apiKeysModel.generateApiKey();
 
-    await fs.writeFile('api_key.txt', `Kosmic Admin Key: ${apiKey}`);
+    if (config.kosmicEnv !== 'test') {
+      await fs.writeFile(
+        `api_key_${new Date().toISOString()}.txt`,
+        `Kosmic Admin Key: ${apiKey}`,
+      );
+    }
 
     await db
       .insertInto('api_keys')

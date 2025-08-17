@@ -1,6 +1,7 @@
 import {type Middleware} from 'koa';
 import Layout from '#components/layout.js';
 import {type Use} from '#middleware/router/types.js';
+import {db} from '#db/index.js';
 
 export const use: Use = async (ctx, next) => {
   if (!ctx.isAuthenticated()) {
@@ -20,6 +21,12 @@ export const get: Middleware = async (ctx, next) => {
     throw new Error('Unauthorized');
   }
 
+  const apiKeys = await db
+    .selectFrom('api_keys')
+    .where('user_id', '=', ctx.state.user.id)
+    .select(['id', 'name', 'last_used_at', 'is_active', 'created_at'])
+    .execute();
+
   await ctx.render(
     <Layout>
       <div class="row justify-content-center align-items-center">
@@ -28,6 +35,8 @@ export const get: Middleware = async (ctx, next) => {
             <h2>My Account</h2>
           </div>
           <p>Welcome to your future admin panel, {ctx.state.user.email}</p>
+
+          {/* Account Details Form */}
           <form action={`/users/${ctx.state.user.id}`} method="put">
             <div class="mb-3">
               <label for="email" class="form-label">
@@ -73,6 +82,110 @@ export const get: Middleware = async (ctx, next) => {
               Update
             </button>
           </form>
+
+          {/* Sessions & API Keys Card */}
+          <div class="card mt-4">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Sessions & API Keys</h5>
+            </div>
+            <div class="card-body">
+              {/* Active Sessions */}
+              <h6 class="card-subtitle mb-2 text-muted">Active Sessions</h6>
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                  <div>
+                    <small class="text-muted">Current Session</small>
+                    <br />
+                    <span class="badge bg-success">Active</span>
+                  </div>
+                  <small class="text-muted">
+                    Last active: {new Date().toLocaleDateString()}
+                  </small>
+                </div>
+              </div>
+
+              {/* API Keys */}
+              <h6 class="card-subtitle mb-2 text-muted">API Keys</h6>
+              <div class="mb-3">
+                {apiKeys.length > 0 ? (
+                  apiKeys.map((key) => (
+                    <div
+                      key={key.id}
+                      class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2"
+                    >
+                      <div>
+                        <div class="fw-medium">{key.name || 'Unnamed Key'}</div>
+                        <small class="text-muted">
+                          Created:{' '}
+                          {new Date(key.created_at!).toLocaleDateString()}
+                        </small>
+                        <br />
+                        <small class="text-muted">
+                          Last used:{' '}
+                          {key.last_used_at
+                            ? new Date(key.last_used_at).toLocaleDateString()
+                            : 'Never'}
+                        </small>
+                      </div>
+                      <div class="d-flex">
+                        <span
+                          class={`btn btn-sm ${key.is_active ? 'btn-success' : 'btn-secondary'}`}
+                        >
+                          {key.is_active ? 'Active' : 'Inactive'}
+                        </span>
+                        <button
+                          type="button"
+                          class="btn btn-outline-danger btn-sm ms-2"
+                        >
+                          Revoke
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted">No API keys created</span>
+                  </div>
+                )}
+
+                {/* API Key Creation Form */}
+                <form
+                  class="mt-3"
+                  hx-post="/account/api-keys"
+                  hx-target="#api-key-result"
+                  hx-swap="innerHTML"
+                >
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      name="name"
+                      class="form-control form-control-sm"
+                      placeholder="API Key name (optional)"
+                    />
+                    <button
+                      type="submit"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      Create API Key
+                    </button>
+                  </div>
+                </form>
+
+                {/* Result container for the API key response */}
+                <div id="api-key-result" class="mt-3"></div>
+              </div>
+
+              {/* Actions */}
+              <div class="d-flex gap-2 mt-3">
+                <button type="button" class="btn btn-outline-danger btn-sm">
+                  Revoke All Sessions
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm">
+                  Manage API Keys
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </Layout>,

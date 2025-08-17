@@ -1,9 +1,9 @@
 import {type Insertable, type Selectable} from 'kysely';
 import {z as zod} from 'zod';
 import argon2 from 'argon2';
+import {type GeneratedId} from './types.js';
 
 export const schema = zod.object({
-  id: zod.number(),
   user_id: zod.number(),
   name: zod.string().min(1).max(255),
   key_prefix: zod.string().min(1).max(50),
@@ -12,6 +12,8 @@ export const schema = zod.object({
   expires_at: zod.date().nullable(),
   is_active: zod.boolean(),
   permissions: zod.any().nullable(),
+  created_at: zod.date().optional(),
+  updated_at: zod.date().optional(),
 });
 
 export const insertSchema = schema.omit({
@@ -20,7 +22,7 @@ export const insertSchema = schema.omit({
   updated_at: true,
 });
 
-export type ApiKey = zod.infer<typeof schema>;
+export type ApiKey = GeneratedId<zod.infer<typeof schema>>;
 export type SelectableApiKey = Selectable<ApiKey>;
 export type InsertableApiKey = Insertable<ApiKey>;
 
