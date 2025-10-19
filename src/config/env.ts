@@ -62,7 +62,7 @@ export const envSchema = z.object({
   GITHUB_CLIENT_SECRET: z.string().optional(),
   GITHUB_CALLBACK_URL: z.string().optional(),
   SMTP_HOST: z.string().optional(),
-  SMTP_PORT: z.string().optional(),
+  SMTP_PORT: z.string().optional().default('587'),
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
 });

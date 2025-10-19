@@ -166,7 +166,11 @@ passport.use(
 
 // ...existing code...
 
-if (config.github) {
+if (
+  config.github?.clientID &&
+  config.github.clientSecret &&
+  config.github.callbackURL
+) {
   passport.use(
     new GithubStrategy(
       {

@@ -29,62 +29,75 @@ export const get: Middleware = async (ctx, next) => {
 
   await ctx.render(
     <Layout>
-      <div class="row justify-content-center align-items-center">
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-          <div className="d-flex justify-content-center">
+      <div class="row">
+        <div class="col-12">
+          <div className="d-flex justify-content-start">
             <h2>My Account</h2>
           </div>
-          <p>Welcome to your future admin panel, {ctx.state.user.email}</p>
 
-          {/* Account Details Form */}
-          <form action={`/users/${ctx.state.user.id}`} method="put">
-            <div class="mb-3">
-              <label for="email" class="form-label">
-                Email:
-              </label>
-              <input
-                disabled
-                type="text"
-                value={ctx.state.user.email ?? ''}
-                class="form-control form-control-disabled"
-                name="email"
-                id="email"
-                autoComplete="email"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="first_name" class="form-label">
-                First Name:
-              </label>
-              <input
-                type="text"
-                value={ctx.state.user.first_name ?? ''}
-                class="form-control"
-                name="first_name"
-                id="first_name"
-                autoComplete="given_name"
-              />
-            </div>
-            <div class="mb-3">
-              <label for="last_name" class="form-label">
-                Last Name:
-              </label>
-              <input
-                type="text"
-                value={ctx.state.user.last_name ?? ''}
-                class="form-control"
-                name="last_name"
-                id="last_name"
-                autoComplete="family-name"
-              />
-            </div>
-            <button type="submit" class="btn btn-primary">
-              Update
-            </button>
-          </form>
+          <hr />
+        </div>
+      </div>
 
-          {/* Sessions & API Keys Card */}
-          <div class="card mt-4">
+      {/* Account Details Card */}
+      <div class="row g-4">
+        <div class="col-12 col-md-6">
+          <div class="card h-100">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Account Details</h5>
+            </div>
+            <div class="card-body">
+              <form action={`/users/${ctx.state.user.id}`} method="put">
+                <div class="mb-3">
+                  <label for="email" class="form-label">
+                    Email:
+                  </label>
+                  <input
+                    disabled
+                    type="text"
+                    value={ctx.state.user.email ?? ''}
+                    class="form-control form-control-disabled"
+                    name="email"
+                    id="email"
+                    autoComplete="email"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="first_name" class="form-label">
+                    First Name:
+                  </label>
+                  <input
+                    type="text"
+                    value={ctx.state.user.first_name ?? ''}
+                    class="form-control"
+                    name="first_name"
+                    id="first_name"
+                    autoComplete="given_name"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="last_name" class="form-label">
+                    Last Name:
+                  </label>
+                  <input
+                    type="text"
+                    value={ctx.state.user.last_name ?? ''}
+                    class="form-control"
+                    name="last_name"
+                    id="last_name"
+                    autoComplete="family-name"
+                  />
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  Update
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        {/* Sessions & API Keys Card */}
+        <div class="col-12 col-md-6">
+          <div class="card h-100">
             <div class="card-header">
               <h5 class="card-title mb-0">Sessions & API Keys</h5>
             </div>
@@ -111,7 +124,7 @@ export const get: Middleware = async (ctx, next) => {
                   apiKeys.map((key) => (
                     <div
                       key={key.id}
-                      class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2"
+                      class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2 api-key-row"
                     >
                       <div>
                         <div class="fw-medium">{key.name || 'Unnamed Key'}</div>
@@ -129,13 +142,17 @@ export const get: Middleware = async (ctx, next) => {
                       </div>
                       <div class="d-flex">
                         <span
-                          class={`btn btn-sm ${key.is_active ? 'btn-success' : 'btn-secondary'}`}
+                          class={`btn btn-sm ${key.is_active ? 'btn-outline-success' : 'btn-outline-secondary'}`}
                         >
                           {key.is_active ? 'Active' : 'Inactive'}
                         </span>
                         <button
                           type="button"
                           class="btn btn-outline-danger btn-sm ms-2"
+                          hx-delete={`/account/api-keys/${key.id}`}
+                          hx-target="closest .api-key-row"
+                          hx-swap="outerHTML"
+                          hx-confirm="Are you sure you want to revoke this API key?"
                         >
                           Revoke
                         </button>

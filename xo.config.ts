@@ -15,6 +15,14 @@ export default [
       'react/react-in-jsx-scope': 'off',
       'react/self-closing-comp': 'off',
       'unicorn/prevent-abbreviations': 'off',
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+          disallowTypeAnnotations: true,
+          fixStyle: 'separate-type-imports',
+        },
+      ],
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/naming-convention': 'off',
       '@typescript-eslint/no-unused-vars': [
