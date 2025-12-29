@@ -30,10 +30,10 @@ const config: UserConfig = {
     preprocessorOptions: {
       scss: {
         silenceDeprecations: [
-          'mixed-decls',
           'color-functions',
           'global-builtin',
           'import',
+          'if-function',
         ],
       },
     },

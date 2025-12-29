@@ -34,13 +34,12 @@
     "build": "npm run clean && npm run compile",
     "build:vite-plugin": "tsc -p ./scripts/tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
-    "check:watch": "tsc -p tsconfig.json --noEmit --watch",
     "clean": "rimraf dist",
     "compile": "npm run compile:tsc && npm run compile:vite && npm run compile:cp",
     "compile:cp": "cp -rp src/public ./dist/src",
     "compile:tsc": "tsc -p tsconfig.json",
     "compile:vite": "vite build",
-    "dev": "node --no-warnings --experimental-strip-types --enable-source-maps scripts/dev.ts",
+    "dev": "node scripts/dev.ts",
     "lint": "xo",
     "migrate": "npm run clean && npm run compile:tsc && KOSMIC_ENV=migration node --enable-source-maps ./dist/src/db/utils/cli.js",
     "prepare": "husky || true",
@@ -54,9 +53,6 @@
       "prettier-plugin-packagejson",
       "prettier-plugin-organize-attributes"
     ]
-  },
-  "overrides": {
-    "zod": "$zod"
   },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^7.0.2",
