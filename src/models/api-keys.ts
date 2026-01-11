@@ -17,7 +17,6 @@ export const schema = zod.object({
 });
 
 export const insertSchema = schema.omit({
-  id: true,
   created_at: true,
   updated_at: true,
 });
