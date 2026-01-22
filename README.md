@@ -1,30 +1,50 @@
-# spence-s-starter-template
+# spence-s-monorepo-template
 
-[![Node.js CI](https://github.com/spence-s/spence-s-starter-template/actions/workflows/node.js.yml/badge.svg?branch=main&event=push)](https://github.com/spence-s/spence-s-starter-template/actions/workflows/node.js.yml)
+[![Node.js CI](https://github.com/spence-s/spence-s-monorepo-template/actions/workflows/node.js.yml/badge.svg?branch=main&event=push)](https://github.com/spence-s/spence-s-monorepo-template/actions/workflows/node.js.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D22-brightgreen)](https://nodejs.org)
-[![npm version](https://img.shields.io/npm/v/spence-s-starter-template.svg)](https://www.npmjs.com/package/spence-s-starter-template)
-[![npm downloads](https://img.shields.io/npm/dm/spence-s-starter-template.svg)](https://www.npmjs.com/package/spence-s-starter-template)
 
-A bleeding edge, prod ready starter template for creating and publishing [Node.js](https://nodejs.org) libraries to [npm](https://www.npmjs.com/).
+A bleeding edge, prod ready monorepo starter template for creating and publishing multiple [Node.js](https://nodejs.org) packages to [npm](https://www.npmjs.com/).
 
-Features Include:
+## Features
 
 - MIT License
+- npm workspaces for monorepo management
 - Configured for [pure ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c) output
-- Easy out-of-the box development with [watch](https://nodejs.org/api/cli.html#--watch) and [native type stripping](https://nodejs.org/docs/latest/api/typescript.html#modules-typescript)
+- TypeScript project references for fast, efficient builds
+- Easy out-of-the-box development with [watch](https://nodejs.org/api/cli.html#--watch) and [native type stripping](https://nodejs.org/docs/latest/api/typescript.html#modules-typescript)
 - [Editorconfig](https://editorconfig.org/) for collaboration
-- Testing with [node's native test runner](https://nodejs.org/api/test.html) - pre-setup for typescript ESM and TypeScript
+- Testing with [node's native test runner](https://nodejs.org/api/test.html) - pre-setup for TypeScript ESM
 - CI runs on Node.js 20, 22, and 24 for pushes and pull requests to main in [github actions](https://github.com/features/actions)
 - Linting with [xo](https://github.com/xojs/xo) (space configuration)
 - Formatting with [prettier](https://prettier.io/) and [xo](https://github.com/xojs/xo)
 - Markdown linting and formatting with [prettier](https://prettier.io/)
 - Package.json linting and formatting with [prettier-plugin-package-json](https://www.npmjs.com/package/prettier-plugin-packagejson)
-- Sane package.json scripts
+- Sane package.json scripts across all packages
 - [Husky](https://typicode.github.io/husky/) for git hooks management
 - [lint-staged](https://github.com/okonet/lint-staged) for pre-commit linting
 - [Commitlint](https://commitlint.js.org/) with conventional commits
-- [np](https://github.com/sindresorhus/np) for publishing to npm
+- [Changesets](https://github.com/changesets/changesets) for versioning and publishing to npm
+- Automated releases via GitHub Actions
+
+## Monorepo Structure
+
+This template uses npm workspaces to manage multiple packages in a single repository:
+
+```
+spence-s-monorepo-template/
+├── packages/
+│   ├── utils/          # @spence-s/utils - Shared utilities
+│   └── core/           # @spence-s/core - Core functionality
+├── .changeset/         # Changesets configuration
+├── .github/            # CI/CD workflows
+├── .husky/             # Git hooks
+├── package.json        # Root package (private, defines workspaces)
+├── tsconfig.json       # Root TypeScript config (solution file)
+└── xo.config.ts        # Shared linting configuration
+```
+
+Each package in `packages/` is independently publishable to npm but shares common configuration and tooling.
 
 ## Prerequisites
 
@@ -35,89 +55,209 @@ Features Include:
 
 ### Installation
 
-This is a github template and is best used by using the github UI to start a new project.
+This is a GitHub template and is best used by using the GitHub UI to start a new project.
 
-Once you've cloned the template for a new repository, the first thing you want to do is to make sure all the deps are up to date!
+Once you've cloned the template for a new repository:
 
-1. Run `npm install` to get the immediately needed deps
-2. run `npm run update` to have npm-check-updates run an interactive program to update all the other deps.
-3. run `npm run test` to ensure updates haven't broken anything themselves (this typically shouldn't happen).
+1. Run `npm install` to install all dependencies (including workspace packages)
+2. Run `npm run update` to interactively update all dependencies to their latest versions
+3. Run `npm test` to ensure everything works correctly
 
 ### Customizing for Your Project
 
 After cloning this template, you'll want to customize it for your specific project. Here's a checklist:
 
-- [ ] Update `name` in package.json to your project name
-- [ ] Update `description` in package.json
-- [ ] Update `author` information in package.json (name, email, url)
-- [ ] Update `repository.url` in package.json with your repository URL
-- [ ] Update `homepage` and `bugs.url` in package.json
+#### Root Level
+
+- [ ] Update `name` in root package.json to your monorepo name
+- [ ] Update `description` in root package.json
+- [ ] Update `repository.url` in root package.json with your repository URL
+- [ ] Update `homepage` and `bugs.url` in root package.json
 - [ ] Update the author name in LICENSE file
 - [ ] Update this README.md with your project's information
-- [ ] Replace the hello world code in `src/index.ts` with your actual code
-- [ ] Update the tests in `test/index.test.ts` for your code
 
-### Run the hello world
+#### For Each Package
 
-This starter-template is already set up to run typescript code out of the box node native type stripping and node native watch mode.
+- [ ] Update package `name` in package.json (e.g., `@your-org/package-name`)
+- [ ] Update `description` in package.json
+- [ ] Update `author` information in package.json
+- [ ] Update `keywords` in package.json
+- [ ] Replace the example code in `src/` with your actual code
+- [ ] Update the tests in `test/` for your code
+- [ ] Update package references in root `tsconfig.json`
 
-`npm run dev`
+### Run Example Code
 
-### Building the project
+The template includes two example packages to demonstrate the monorepo structure:
 
-`npm run build` will build the project to the `dist` directory (which is already gitignored).
+```bash
+# Build all packages
+npm run build
 
-### Developing
+# Run tests for all packages
+npm test
 
-`npm run dev` will build the project with `tsc --watch` execute the script with the new nodejs `watch` flag.
+# Run tests for a specific package
+npm test -w @spence-s/core
+```
 
-### Testing
+## Working with Packages
 
-`npm run test` run the tests once with node native type stripping.
-`npm run test:coverage` run the tests once with native type stripping node experimental test coverage flags.
-`npm run test:watch` run the tests in native watch mode with native type stripping.
+### Adding a New Package
 
-### Updating dependencies
+1. **Create the package directory:**
 
-`npm run update` will use `ncu -i` to update all dependencies to their latest versions, interactively
+   ```bash
+   mkdir -p packages/my-package/src packages/my-package/test
+   ```
 
-### Releasing
+2. **Create package.json** (copy from `packages/utils/package.json` as template)
 
-To encourage best practices for publishing an open source package on npm, [np is installed by default](https://github.com/sindresorhus/np).
+3. **Create tsconfig.json** (copy from `packages/utils/tsconfig.json` as template)
 
-`npm run release`
+4. **Add package reference to root `tsconfig.json`:**
 
-## Scripts
+   ```json
+   {
+     "files": [],
+     "references": [
+       { "path": "./packages/utils" },
+       { "path": "./packages/core" },
+       { "path": "./packages/my-package" }
+     ]
+   }
+   ```
 
-```json
+5. **Link the workspace:**
+   ```bash
+   npm install
+   ```
+
+### Installing Dependencies
+
+```bash
+# Add dependency to specific package
+npm install lodash -w @spence-s/core
+
+# Add workspace dependency (in package.json)
 {
-  "scripts": {
-    "build": "rimraf dist && tsc -p tsconfig.build.json",
-    "check": "tsc -p tsconfig.json",
-    "dev": "node --watch src/index.ts",
-    "lint": "npm run check && xo",
-    "prepare": "husky",
-    "release": "np",
-    "start": "node dist/src/index.js",
-    "test": "npm run lint && node --test",
-    "test:coverage": "node --test --experimental-test-coverage",
-    "test:watch": "node --test --watch",
-    "update": "ncu -i"
+  "dependencies": {
+    "@spence-s/utils": "workspace:*"
   }
 }
 ```
 
-`build`: Builds the project into a dist directory for releasing to npm as `js` files complete with type defintions and source maps.
-`check`: Check the types without building the project.
-`dev`: Run the program in watch mode.
-`lint`: Run the linter (xo) and type checker. Note: The `test` script runs tests only; run `lint` separately if needed.
-`prepare`: Run the husky prepare script so husky is installed with deps.
-`release`: Use `np` to release the package to npm.
-`start`: Run the build js files from the `build` script.
-`test`: Run tests with node native test runner.
-`test:coverage`: Run tests with node native test coverage.
-`test:watch`: Run tests in watch mode.
-`update`: Update deps interactively to their latest versions.
+### Building and Testing
+
+```bash
+# Build all packages
+npm run build
+
+# Build specific package
+npm run build -w @spence-s/utils
+
+# Test all packages
+npm test
+
+# Test specific package
+npm test -w @spence-s/core
+
+# Type-check all packages
+npm run check
+
+# Lint all packages
+npm run lint
+```
+
+## Publishing with Changesets
+
+This monorepo uses [Changesets](https://github.com/changesets/changesets) for version management and publishing.
+
+### Creating a Changeset
+
+When you make changes to a package:
+
+```bash
+npm run changeset
+```
+
+This will prompt you to:
+
+- Select which packages changed
+- Specify the semver bump (major/minor/patch)
+- Write a summary of the changes
+
+The summary you write becomes the changelog entry.
+
+### Versioning Packages
+
+When you're ready to publish, update package versions:
+
+```bash
+npm run version
+```
+
+This updates package.json versions and generates CHANGELOG.md files based on changesets.
+
+Commit the changes:
+
+```bash
+git add .
+git commit -m "chore: version packages"
+```
+
+### Publishing to npm
+
+```bash
+npm run release
+```
+
+This builds all packages and publishes changed packages to npm.
+
+### Automated Releases (CI)
+
+The GitHub Actions workflow automatically handles releases:
+
+1. When changes are merged to main with changesets
+2. A "Version Packages" PR is automatically created
+3. Merging this PR triggers automatic publishing to npm
+
+**Setup required:**
+
+- Add `NPM_TOKEN` to your GitHub repository secrets
+- The token needs publish access to your npm packages
+
+## Scripts
+
+The root package.json provides workspace-level scripts:
+
+```json
+{
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "changeset": "changeset",
+    "check": "npm run check --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "prepare": "husky",
+    "release": "npm run build && changeset publish",
+    "test": "npm run test --workspaces --if-present",
+    "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "update": "ncu -i",
+    "version": "changeset version"
+  }
+}
+```
+
+- `build`: Build all workspace packages
+- `changeset`: Create a changeset for package changes
+- `check`: Type-check all packages without building
+- `lint`: Run XO linter across all packages
+- `prepare`: Set up Husky git hooks
+- `release`: Build and publish changed packages to npm
+- `test`: Run tests across all packages
+- `test:coverage`: Run tests with coverage across all packages
+- `update`: Interactively update dependencies
+- `version`: Update package versions based on changesets
 
 ## Contributing
 
@@ -125,21 +265,52 @@ This project uses [Commitlint](https://commitlint.js.org/) with conventional com
 
 Examples:
 
-- `feat: add new feature`
-- `fix: resolve bug in function`
-- `docs: update README`
+- `feat(utils): add new string utility`
+- `fix(core): resolve memory leak`
+- `docs: update README with examples`
 - `chore: update dependencies`
 
 Pre-commit hooks will automatically lint your staged files using [Husky](https://typicode.github.io/husky/) and [lint-staged](https://github.com/okonet/lint-staged).
 
 ## TypeScript
 
-The tsconfig included in this template is set up for Node.JS native type stripping and includes the `erasableSyntaxOnly` option, so not all TypeScript features are supported.This decision was made to encourage adoption of cutting edge Node.JS features which improve DX. We continue to maintain a build and release option for packaging only `JavaScript` files, as node native type stripping will not strip imports from `node_modules` folders.
+The tsconfig included in this template is set up for Node.js native type stripping and includes the `erasableSyntaxOnly` option, so not all TypeScript features are supported. This decision was made to encourage adoption of cutting edge Node.js features which improve DX. We continue to maintain a build and release option for packaging only JavaScript files, as node native type stripping will not strip imports from `node_modules` folders.
+
+### TypeScript Project References
+
+This monorepo uses TypeScript project references for:
+
+- **Faster builds** - Only rebuild changed packages
+- **Better IDE support** - Go-to-definition works across packages
+- **Enforced dependency graph** - TypeScript ensures correct build order
+
+Each package has `"composite": true` in its tsconfig.json and declares dependencies in its `"references"` array.
 
 Learn More:
 
 - [TypeScript Modules](https://nodejs.org/api/typescript.html)
 - [Erasable Syntax Only Reference](https://www.typescriptlang.org/tsconfig/#erasableSyntaxOnly)
+- [TypeScript Project References](https://www.typescriptlang.org/docs/handbook/project-references.html)
+
+## Example Packages
+
+### @spence-s/utils
+
+A utility package demonstrating basic package structure with:
+
+- String utilities (capitalize, slugify)
+- Number utilities (clamp)
+- Full test coverage
+- TypeScript type definitions
+
+### @spence-s/core
+
+A core package demonstrating:
+
+- Inter-package dependencies (depends on `@spence-s/utils`)
+- TypeScript project references
+- Building on top of shared utilities
+- Config object creation
 
 ## License
 

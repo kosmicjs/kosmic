@@ -11,3 +11,14 @@ coverage
 .env
 dist
 .history
+
+# Monorepo packages
+packages/*/dist
+packages/*/node_modules
+packages/*/.turbo
+
+# Changesets
+.changeset/*.md
+!.changeset/README.md
+
+*.tsbuildinfo

@@ -1,7 +1,7 @@
 import type {XoConfigItem} from 'xo';
 
 const xoConfig: XoConfigItem[] = [
-  {ignores: ['test/temp', 'coverage']},
+  {ignores: ['test/temp', 'coverage', 'packages/*/dist']},
   {
     prettier: true,
     space: true,
@@ -13,7 +13,7 @@ const xoConfig: XoConfigItem[] = [
   {
     files: ['**/*.{ts,tsx,cts,mts}'],
     rules: {
-      // ensure we don't get empty module imports while using verbatim module syntax
+      // Ensure we don't get empty module imports while using verbatim module syntax
       '@typescript-eslint/no-import-type-side-effects': 'error',
       // Enforce using .ts extensions for local imports in TS files
       // for native node.js type stripping support
