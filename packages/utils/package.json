@@ -29,6 +29,7 @@
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "check": "tsc --noEmit",
+    "lint": "xo --config ../../xo.config.ts",
     "test": "node --test",
     "test:coverage": "node --test --experimental-test-coverage"
   },

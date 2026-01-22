@@ -26,7 +26,7 @@
     "changeset": "changeset",
     "check": "npm run check --workspaces --if-present",
     "clean": "rimraf dist",
-    "lint": "xo",
+    "lint": "xo && npm run lint --workspaces --if-present",
     "prepare": "husky",
     "release": "npm run build && changeset publish",
     "test": "npm run test --workspaces --if-present",
