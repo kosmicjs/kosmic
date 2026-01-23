@@ -1,10 +1,10 @@
 import type {Middleware} from 'koa';
 import {z} from 'zod/v4';
-import {GoogleGenAI} from '@google/genai';
+// import {GoogleGenAI} from '@google/genai';
 import Layout from '#components/layout.js';
-import {config} from '#config/index.js';
+// import {config} from '#config/index.js';
 
-const client = new GoogleGenAI({apiKey: config.google?.geminiApiKey ?? ''});
+// const client = new GoogleGenAI({apiKey: config.google?.geminiApiKey ?? ''});
 
 declare module 'koa-session' {
   interface Session {
@@ -61,12 +61,12 @@ export const post: Middleware = async function (ctx) {
 
   ctx.log.debug({input}, 'AI Chat Input');
 
-  const response = await client.models.generateContent({
-    model: 'gemini-2.0-flash',
-    contents: input,
-  });
+  // const response = await client.models.generateContent({
+  //   model: 'gemini-2.0-flash',
+  //   contents: input,
+  // });
 
-  ctx.log.debug({response}, 'AI Chat Response');
+  // ctx.log.debug({response}, 'AI Chat Response');
 
   await ctx.render(
     <div class="card">
@@ -75,7 +75,7 @@ export const post: Middleware = async function (ctx) {
         <h5 class="card-title">Response</h5>
         <p class="card-text">
           <pre>
-            <code>{response.text}</code>
+            <code>{/* response.text */}</code>
           </pre>
         </p>
       </div>
