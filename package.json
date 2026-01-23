@@ -27,13 +27,13 @@
     "changeset": "changeset",
     "check": "npm run check --workspaces --if-present",
     "clean": "rimraf dist",
-    "dev": "npx dev --workspace kosmic-template",
+    "dev": "npm run dev --workspace kosmic-template",
     "lint": "xo",
     "prepare": "husky",
     "release": "npm run build && changeset publish",
     "test": "npm run test --workspaces --if-present",
     "test:coverage": "npm run test:coverage --workspaces --if-present",
-    "update": "ncu -i",
+    "update": "ncu -i && npx --ws ncu -i",
     "version": "changeset version"
   },
   "prettier": {

@@ -3,8 +3,8 @@
 import process from 'node:process';
 import path from 'node:path';
 import {METHODS} from 'node:http';
+import {globSync} from 'node:fs';
 import type {Middleware, Context} from 'koa';
-import {globby} from 'globby';
 import {match as createMatchFn} from 'path-to-regexp';
 import compose from 'koa-compose';
 import type Koa from 'koa';
@@ -59,10 +59,9 @@ export async function createFsRouter(
   /**
    * Files can automatically handle ts extensions with no added overhead
    */
-  const files = await globby([
-    `${routesDir}/**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}`,
-    `!${routesDir}/**/*.d.{ts,tsx,cts,mts}`,
-  ]);
+  const files = globSync(`${routesDir}/**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts}`, {
+    exclude: [`${routesDir}/**/*.d.{ts,tsx,cts,mts}`],
+  });
 
   const routesFromFilesPromises: Array<Promise<RouteDefinition>> = files.map(
     async (filePath) => {
