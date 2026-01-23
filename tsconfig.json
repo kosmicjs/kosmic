@@ -6,7 +6,6 @@
  */
 {
   "references": [
-    { "path": "./packages/utils" },
     { "path": "./packages/server" },
     { "path": "./packages/router" },
     { "path": "./packages/helmet" },
