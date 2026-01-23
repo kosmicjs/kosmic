@@ -41,7 +41,7 @@ const xoConfig: XoConfigItem[] = [
     },
   },
   {
-    files: 'apps/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}',
+    files: ['apps/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}'],
     space: true,
     prettier: true,
     react: true,

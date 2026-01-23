@@ -5,7 +5,6 @@
  * - This is a solution file for the monorepo with project references to all packages
  */
 {
-  "files": [],
   "references": [
     { "path": "./packages/utils" },
     { "path": "./packages/server" },
@@ -17,6 +16,7 @@
     { "path": "./apps/kosmic-template" }
   ],
   "compilerOptions": {
+    "outDir": "dist",
     /** BUILD */
     /** Build stuffs - source maps and ts definitions for our library */
     "sourceMap": true,
@@ -47,5 +47,6 @@
     /** Show the entire type in intellisense if possible */
     "noErrorTruncation": true,
     "rewriteRelativeImportExtensions": true
-  }
+  },
+  "exclude": ["node_modules", "dist", "apps/kosmic-template/scripts"]
 }

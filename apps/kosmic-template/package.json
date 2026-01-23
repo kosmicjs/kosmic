@@ -47,12 +47,6 @@
     "test": "rimraf dist && tsc -p tsconfig.json && NODE_ENV=test KOSMIC_ENV=test node --test dist/test/server.test.js",
     "test:watch": "rimraf dist && tsc -p tsconfig.json --watch & wait-on dist/test/server.test.js && NODE_ENV=test KOSMIC_ENV=test node --test --watch dist/test/server.test.js"
   },
-  "prettier": {
-    "plugins": [
-      "prettier-plugin-packagejson",
-      "prettier-plugin-organize-attributes"
-    ]
-  },
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^7.0.2",
     "@google/genai": "^1.35.0",
@@ -151,9 +145,6 @@
     "npm-check-updates": "^19.3.1",
     "picocolors": "^1.1.1",
     "picomatch": "^4.0.3",
-    "prettier": "^3.7.4",
-    "prettier-plugin-organize-attributes": "^1.0.0",
-    "prettier-plugin-packagejson": "^2.5.20",
     "rimraf": "^6.1.2",
     "sass": "1.97.2",
     "swagger-ui-dist": "^5.31.0",
@@ -162,7 +153,6 @@
     "typescript": "~5.9.3",
     "vite": "^7.3.1",
     "vite-bundle-visualizer": "^1.2.1",
-    "wait-on": "^9.0.3",
-    "xo": "^1.2.3"
+    "wait-on": "^9.0.3"
   }
 }
