@@ -1,4 +1,4 @@
-import {capitalize, slugify} from '@spence-s/utils';
+import {capitalize, slugify} from '@kosmic/utils';
 
 export type Config = {
   name: string;

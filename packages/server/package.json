@@ -1,7 +1,7 @@
 {
-  "name": "@spence-s/core",
+  "name": "@kosmic/server",
   "version": "0.0.0",
-  "description": "Core functionality for @spence-s packages",
+  "description": "Core functionality for @kosmic packages",
   "keywords": [
     "core"
   ],
@@ -26,14 +26,14 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.json",
     "check": "tsc --noEmit",
     "lint": "xo --config ../../xo.config.ts",
     "test": "node --test",
     "test:coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
-    "@spence-s/utils": "file:../utils"
+    "@kosmic/utils": "^0.0.0"
   },
   "engines": {
     "node": ">=22"

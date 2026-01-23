@@ -2,7 +2,7 @@ import {test, describe} from 'node:test';
 import assert from 'node:assert';
 import {createTitle, createConfig} from '../src/index.ts';
 
-void describe('@spence-s/core', async () => {
+void describe('@kosmic/server', async () => {
   void test('createTitle: capitalizes all words', () => {
     assert.strictEqual(createTitle('hello world'), 'Hello World');
     assert.strictEqual(createTitle('foo bar baz'), 'Foo Bar Baz');

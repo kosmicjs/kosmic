@@ -1,8 +1,8 @@
 import {test, describe} from 'node:test';
 import assert from 'node:assert';
-import {capitalize, clamp, slugify} from '@spence-s/utils';
+import {capitalize, clamp, slugify} from '@kosmic/utils';
 
-void describe('@spence-s/utils', async () => {
+void describe('@kosmic/utils', async () => {
   await test('capitalize: capitalizes first letter', () => {
     assert.ok(capitalize('hello'), 'Hello');
     assert.strictEqual(capitalize('world'), 'World');

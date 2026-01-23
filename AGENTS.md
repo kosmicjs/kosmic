@@ -24,12 +24,12 @@ spence-s-monorepo-template/
 ├── .github/              # CI/CD workflows
 ├── .husky/               # Git hooks
 ├── packages/             # All publishable packages
-│   ├── utils/            # @spence-s/utils - Utility functions
+│   ├── utils/            # @kosmic/utils - Utility functions
 │   │   ├── src/
 │   │   ├── test/
 │   │   ├── package.json
 │   │   └── tsconfig.json
-│   └── core/             # @spence-s/core - Core functionality
+│   └── core/             # @kosmic/server - Core functionality
 │       ├── src/
 │       ├── test/
 │       ├── package.json
@@ -45,14 +45,14 @@ spence-s-monorepo-template/
 ### Building
 
 - `npm run build` - Build all workspace packages
-- `npm run build -w @spence-s/utils` - Build specific package
+- `npm run build -w @kosmic/utils` - Build specific package
 - `npm run check` - Type-check all packages without building
 
 ### Testing
 
 - `npm test` - Run all tests across all packages
 - `npm run test:coverage` - Run tests with coverage for all packages
-- `npm test -w @spence-s/core` - Run tests for specific package
+- `npm test -w @kosmic/server` - Run tests for specific package
 
 #### Running a Single Test File
 
@@ -74,17 +74,17 @@ node --test --watch packages/utils/test/index.test.ts
 
 ```bash
 # Install dependency to specific package
-npm install lodash -w @spence-s/core
+npm install lodash -w @kosmic/server
 
 # Install workspace dependency (edit package.json first)
-# Add "@spence-s/utils": "workspace:*" to dependencies
+# Add "@kosmic/utils": "workspace:*" to dependencies
 npm install
 
 # Run script in all workspaces
 npm run build --workspaces --if-present
 
 # Run script in specific workspace
-npm run test -w @spence-s/utils
+npm run test -w @kosmic/utils
 ```
 
 ### Publishing with Changesets
@@ -111,7 +111,7 @@ npm run test -w @spence-s/utils
 
    ```json
    {
-     "name": "@spence-s/my-package",
+     "name": "@kosmic/my-package",
      "version": "0.0.0",
      "description": "Description of my package",
      "type": "module",
@@ -187,7 +187,7 @@ To use one workspace package in another:
    ```json
    {
      "dependencies": {
-       "@spence-s/utils": "workspace:*"
+       "@kosmic/utils": "workspace:*"
      }
    }
    ```
@@ -202,16 +202,16 @@ To use one workspace package in another:
 
 3. **Import in your code:**
    ```typescript
-   import { capitalize } from "@spence-s/utils";
+   import { capitalize } from "@kosmic/utils";
    ```
 
 The `workspace:*` protocol tells npm to link to the local workspace package. When published, this is automatically replaced with the actual version number.
 
 ### Package Naming Convention
 
-- All packages use the `@spence-s/` scope
+- All packages use the `@kosmic/` scope
 - Package names should be lowercase with hyphens
-- Examples: `@spence-s/utils`, `@spence-s/core`, `@spence-s/my-feature`
+- Examples: `@kosmic/utils`, `@kosmic/server`, `@kosmic/my-feature`
 
 ## Publishing Workflow with Changesets
 
@@ -328,7 +328,7 @@ The project uses maximum TypeScript strictness:
 - **File extensions**: Always include `.ts` extensions in imports within a package (e.g., `import {foo} from './bar.ts'`)
   - This is enforced by `import-x/extensions` rule
   - TypeScript rewrites these to `.js` via `"rewriteRelativeImportExtensions": true`
-- **Cross-package imports**: Use full package names (e.g., `import {foo} from '@spence-s/utils'`)
+- **Cross-package imports**: Use full package names (e.g., `import {foo} from '@kosmic/utils'`)
 
 #### TypeScript Project References
 
@@ -353,7 +353,7 @@ import type { SomeType } from "./types.ts";
 import { someFunction } from "./utils.ts";
 
 // ✅ Correct - Cross-package imports use full package name
-import { capitalize } from "@spence-s/utils";
+import { capitalize } from "@kosmic/utils";
 
 // ✅ Correct - Always include .ts extension for local imports
 import { helloWorld } from "../src/index.ts";
@@ -439,12 +439,12 @@ Follow Conventional Commits specification (@commitlint/config-conventional):
 **Examples**:
 
 - `feat(utils): add string formatting utilities`
-- `fix(core): resolve memory leak in parser`
+- `fix(server): resolve memory leak in parser`
 - `docs: update README with new examples`
 - `test(utils): add tests for edge cases`
 - `chore: update dependencies`
 
-**Optional scope**: Use package name without scope prefix (e.g., `utils`, `core`, not `@spence-s/utils`)
+**Optional scope**: Use package name without scope prefix (e.g., `utils`, `server`, not `@kosmic/utils`)
 
 ### Pre-commit Hooks
 
@@ -471,7 +471,7 @@ This works across all packages in the monorepo.
 ## Important Notes for Agents
 
 1. **Always include file extensions** in TypeScript imports (`.ts` for local imports)
-2. **Use full package names** for cross-package imports (`@spence-s/utils`)
+2. **Use full package names** for cross-package imports (`@kosmic/utils`)
 3. **Use `import type`** for type-only imports to avoid side effects
 4. **Array/object access** may return undefined - handle accordingly
 5. **No enums or namespaces** - use const objects or union types instead
@@ -503,8 +503,8 @@ export type MyType = {
 ### Using Functions from Another Package
 
 ```typescript
-// In @spence-s/core
-import { capitalize } from "@spence-s/utils";
+// In @kosmic/server
+import { capitalize } from "@kosmic/utils";
 
 export function createTitle(input: string): string {
   return input
@@ -521,7 +521,7 @@ import { test, describe } from "node:test";
 import assert from "node:assert";
 import { createTitle } from "../src/index.ts";
 
-void describe("@spence-s/core", async () => {
+void describe("@kosmic/server", async () => {
   await test("createTitle: capitalizes all words", () => {
     assert.strictEqual(createTitle("hello world"), "Hello World");
   });
@@ -586,4 +586,4 @@ If you get "Cannot find module" errors:
 1. Ensure the dependency is listed in package.json
 2. Check tsconfig.json references are correct
 3. Run `npm install` to link workspaces
-4. Try building the dependency first: `npm run build -w @spence-s/utils`
+4. Try building the dependency first: `npm run build -w @kosmic/utils`
