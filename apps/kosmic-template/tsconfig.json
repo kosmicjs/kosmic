@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "declaration": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "Node16",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ES2022",
+    "allowJs": true,
+    "types": ["vite/client", "typed-htmx"],
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noErrorTruncation": true
+  },
+  "exclude": ["node_modules", "dist", "scripts"]
+}

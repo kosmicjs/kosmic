@@ -22,3 +22,5 @@ packages/*/.turbo
 !.changeset/README.md
 
 *.tsbuildinfo
+
+*.code-workspace

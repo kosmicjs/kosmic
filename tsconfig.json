@@ -6,7 +6,10 @@
  */
 {
   "files": [],
-  "references": [{ "path": "./packages/utils" }, { "path": "./packages/core" }],
+  "references": [
+    { "path": "./packages/utils" },
+    { "path": "./packages/server" }
+  ],
   "compilerOptions": {
     /** BUILD */
     /** Build stuffs - source maps and ts definitions for our library */
