@@ -1,4 +1,4 @@
-import {type Middleware} from 'koa';
+import type {Middleware} from 'koa';
 import Stripe from 'stripe';
 import {config} from '#config/index.js';
 

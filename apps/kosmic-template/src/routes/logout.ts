@@ -1,4 +1,4 @@
-import {type Context, type Next} from 'koa';
+import type {Context, Next} from 'koa';
 
 export async function get(ctx: Context, next: Next) {
   ctx.log.debug('logging out');

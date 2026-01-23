@@ -1,4 +1,4 @@
-import {type Middleware} from 'koa';
+import type {Middleware} from 'koa';
 import {CounterIsland} from '#islands/counter.js';
 import Layout from '#components/layout.js';
 

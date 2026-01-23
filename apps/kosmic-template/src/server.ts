@@ -8,16 +8,15 @@ import etag from '@koa/etag';
 import conditional from 'koa-conditional-get';
 import Koa, {type Context} from 'koa';
 import serve from 'koa-static';
+import {renderMiddleware} from '@kosmic/jsx';
+import {createHelmetMiddleware} from '@kosmic/helmet';
+import {createPinoMiddleware} from '@kosmic/pino-http';
+import {errorHandler} from '@kosmic/error-handler';
+import {createFsRouter, type RouteDefinition} from '@kosmic/router';
 import {KyselySessionStore} from '#utils/kysely-session-store.js';
-import {renderMiddleware} from '#middleware/jsx.middleware.js';
-import {helmetMiddleware} from '#middleware/helmet.js';
-import {createPinoMiddleware} from '#middleware/pino-http.js';
-import {errorHandler} from '#middleware/error-handler.js';
-import createFsRouter from '#middleware/router/index.js';
 import logger from '#utils/logger.js';
 import {config} from '#config/index.js';
 import {passport} from '#middleware/passport.js';
-import {type RouteDefinition} from '#middleware/router/types.js';
 
 type Logger = typeof logger;
 
@@ -73,7 +72,7 @@ export async function createServer(): Promise<Server> {
   }
 
   // add pino logger
-  app.use(createPinoMiddleware({logger}));
+  app.use(createPinoMiddleware({logger}, {environment: config.nodeEnv}));
 
   // koa essentials
   app.use(conditional());
@@ -84,7 +83,7 @@ export async function createServer(): Promise<Server> {
   app.use(renderMiddleware);
 
   // error handler
-  app.use(errorHandler());
+  app.use(errorHandler({logger}));
 
   app.keys = config.sessionKeys;
 
@@ -110,7 +109,28 @@ export async function createServer(): Promise<Server> {
   app.use(fsRouterMiddleware);
 
   // security headers
-  app.use(helmetMiddleware);
+  app.use(
+    createHelmetMiddleware({
+      contentSecurityPolicy: {
+        directives: {
+          'upgrade-insecure-requests':
+            config.kosmicEnv === 'development' ? null : [],
+          'script-src': [
+            "'self'",
+            "'unsafe-inline'",
+            "'unsafe-eval'",
+            'http://localhost:5173',
+          ],
+          'connect-src': [
+            "'self'",
+            'http://127.0.0.1:2222',
+            'ws://127.0.0.1:2222',
+            'ws://localhost:5173',
+          ],
+        },
+      },
+    }),
+  );
 
   const server: Server = http.createServer(app.callback());
 

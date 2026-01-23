@@ -1,4 +1,4 @@
-import {type ComponentChildren} from 'preact';
+import type {ComponentChildren} from 'preact';
 import Footer from './footer.js';
 import Header from './header.js';
 import Modal from './modal.js';

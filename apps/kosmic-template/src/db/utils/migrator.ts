@@ -4,7 +4,7 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import {type Migration, type MigrationProvider, Migrator} from 'kysely';
-import {type KosmicMigration} from '#db/migrations.js';
+import type {KosmicMigration} from '#db/migrations.js';
 import {db} from '#db/index.js';
 import logger from '#utils/logger.js';
 

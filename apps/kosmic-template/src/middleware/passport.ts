@@ -9,7 +9,7 @@ import {Strategy as BearerStategy} from 'passport-http-bearer';
 // } from 'passport-google-oauth20';
 import {Strategy as GithubStrategy} from 'passport-github2';
 import argon2 from 'argon2';
-import {type SelectableUser} from '#models/users.js';
+import type {SelectableUser} from '#models/users.js';
 import {db} from '#db/index.js';
 import logger from '#utils/logger.js';
 import {config} from '#config/index.js';

@@ -1,5 +1,5 @@
 import z from 'zod/v4';
-import {type PoolConfig} from 'pg';
+import type {PoolConfig} from 'pg';
 import type JSONTransport from 'nodemailer/lib/json-transport/index.js';
 import type SMTPTransport from 'nodemailer/lib/smtp-transport/index.js';
 import {env, nodeEnv, kosmicEnv} from './env.js';

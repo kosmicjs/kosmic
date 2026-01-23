@@ -1,26 +1,28 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": ".",
+    "composite": true,
     "baseUrl": ".",
     "declaration": true,
+    "declarationMap": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "Node16",
     "outDir": "./dist",
-    "esModuleInterop": true,
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "target": "ES2022",
     "allowJs": true,
     "types": ["vite/client", "typed-htmx"],
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
-    "noErrorTruncation": true
+    "erasableSyntaxOnly": false
   },
-  "exclude": ["node_modules", "dist", "scripts"]
+  "include": ["src/**/*", "test/**/*", "vite.config.ts"],
+  "exclude": ["node_modules", "dist", "scripts"],
+  "references": [
+    { "path": "../../packages/utils" },
+    { "path": "../../packages/server" },
+    { "path": "../../packages/router" },
+    { "path": "../../packages/helmet" },
+    { "path": "../../packages/pino-http" },
+    { "path": "../../packages/jsx" },
+    { "path": "../../packages/error-handler" }
+  ]
 }

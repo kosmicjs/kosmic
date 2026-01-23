@@ -1,5 +1,5 @@
-import {type Middleware} from 'koa';
-import {type JSX} from 'preact';
+import type {Middleware} from 'koa';
+import type {JSX} from 'preact';
 
 declare module 'koa' {
   interface Params {

@@ -1,6 +1,6 @@
 import type {Insertable, Selectable, Updateable} from 'kysely';
 import zod from 'zod/v4';
-import {type GeneratedId} from './types.js';
+import type {GeneratedId} from './types.js';
 import {db} from '#db/index.js';
 import {renderToString as emailRenderToString} from '#emails/helpers/index.js';
 import WelcomeEmail from '#emails/welcome.js';

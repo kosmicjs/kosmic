@@ -1,4 +1,4 @@
-import {type Context, type Next} from 'koa';
+import type {Context, Next} from 'koa';
 import {db} from '#db/index.js';
 import * as Entities from '#models/entities.js';
 import {EntityCard} from '#components/entities/entity-card.js';

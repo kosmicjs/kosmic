@@ -1,0 +1,52 @@
+{
+  "name": "@kosmic/router",
+  "version": "0.0.0",
+  "description": "File-system based router for Koa",
+  "keywords": [
+    "koa",
+    "router",
+    "file-system",
+    "fs-router"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Spencer Snyder",
+    "email": "sasnyde2@gmail.com",
+    "url": "https://spencersnyder.io"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.js"
+      }
+    }
+  },
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "check": "tsc --noEmit",
+    "lint": "xo",
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage"
+  },
+  "dependencies": {
+    "globby": "^15.0.0",
+    "koa": "^3.1.1",
+    "koa-compose": "^4.1.0",
+    "path-to-regexp": "^8.3.0",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@types/koa": "^3.0.1",
+    "@types/koa-compose": "^3.2.9"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

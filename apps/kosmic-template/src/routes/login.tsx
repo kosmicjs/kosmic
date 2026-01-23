@@ -1,4 +1,4 @@
-import {type Next, type Context} from 'koa';
+import type {Next, Context} from 'koa';
 import passport from 'koa-passport';
 import {Layout} from '#components/layout.js';
 import {LoginForm} from '#components/login-form.js';

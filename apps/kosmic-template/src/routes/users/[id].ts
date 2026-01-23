@@ -1,4 +1,4 @@
-import {type Middleware, type Context, type Next} from 'koa';
+import type {Middleware, Context, Next} from 'koa';
 import {db} from '#db/index.js';
 import * as User from '#models/users.js';
 

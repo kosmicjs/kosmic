@@ -3,28 +3,28 @@
 import process from 'node:process';
 import path from 'node:path';
 import {METHODS} from 'node:http';
-import {type Middleware, type Context} from 'koa';
+import type {Middleware, Context} from 'koa';
 import {globby} from 'globby';
 import {match as createMatchFn} from 'path-to-regexp';
 import compose from 'koa-compose';
 import type Koa from 'koa';
-import {routeModuleSchema} from './schema.js';
-import {
-  type HttpVerb,
-  type HttpVerbsAll,
-  type RouteModule,
-  type RouteDefinition,
-} from './types.js';
+import {routeModuleSchema} from './schema.ts';
+import type {
+  HttpVerb,
+  HttpVerbsAll,
+  RouteModule,
+  RouteDefinition,
+} from './types.ts';
 
 declare module 'koa' {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  interface Params extends Record<string, string | undefined> {}
+  interface Parameters_ extends Record<string, string | undefined> {}
   interface Request {
-    params?: Params | undefined;
+    params?: Parameters_ | undefined;
   }
 
   interface DefaultContext {
-    params?: Params | undefined;
+    params?: Parameters_ | undefined;
   }
 }
 
@@ -208,3 +208,11 @@ export async function createFsRouter(
 }
 
 export default createFsRouter;
+
+export {
+  type Use,
+  type RouteDefinition,
+  type HttpVerb,
+  type RouteModule,
+  type HttpVerbsAll,
+} from './types.ts';

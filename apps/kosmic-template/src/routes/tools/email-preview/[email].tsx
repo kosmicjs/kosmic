@@ -1,5 +1,5 @@
-import {type Middleware} from 'koa';
-import {type VNode} from 'preact';
+import type {Middleware} from 'koa';
+import type {VNode} from 'preact';
 import {renderToStringAsync} from 'preact-render-to-string';
 import pretty from 'pretty';
 import got from 'got';

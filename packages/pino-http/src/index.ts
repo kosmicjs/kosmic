@@ -1,14 +1,38 @@
 import {type UUID, randomUUID} from 'node:crypto';
 import {pinoHttp, type Options} from 'pino-http';
-import {type DestinationStream} from 'pino';
-import {type Middleware} from 'koa';
-import {config} from '#config/index.js';
+import type {DestinationStream, Logger} from 'pino';
+import type {Middleware} from 'koa';
+
+declare module 'koa' {
+  interface DefaultContext {
+    log: Logger;
+  }
+
+  interface Request {
+    log: Logger;
+  }
+
+  interface Response {
+    log: Logger;
+  }
+}
 
 const XRID_HEADER = 'x-request-id';
 
+export type PinoHttpOptions = Options;
+
+export type CreatePinoMiddlewareConfig = {
+  /**
+   * Environment mode - determines ID generation strategy
+   * - 'production': Uses UUIDs for request IDs
+   * - 'development' | 'test': Uses sequential numeric IDs with zero-padding
+   */
+  environment?: 'production' | 'development' | 'test';
+};
+
 export function createPinoMiddleware(
   options: Options,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  config?: CreatePinoMiddlewareConfig,
   stream?: DestinationStream,
 ): Middleware {
   let id: UUID | string | number = 0;
@@ -16,7 +40,7 @@ export function createPinoMiddleware(
     const existingId = request.id ?? request.headers[XRID_HEADER];
     if (existingId) return existingId;
 
-    if (config.nodeEnv === 'production') {
+    if (config?.environment === 'production') {
       id = randomUUID();
     } else {
       id = Number(id);

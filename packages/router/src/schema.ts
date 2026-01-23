@@ -1,9 +1,12 @@
 import {z} from 'zod/v4';
 
 export const middlewareSchema = z
-  .custom<(...args: unknown[]) => unknown>((val) => typeof val === 'function', {
-    message: 'Middleware must be a function',
-  })
+  .custom<(...args: unknown[]) => unknown>(
+    (value) => typeof value === 'function',
+    {
+      message: 'Middleware must be a function',
+    },
+  )
   .optional();
 
 export const middlewareArraySchema = z

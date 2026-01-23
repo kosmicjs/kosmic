@@ -1,5 +1,5 @@
 import path from 'node:path';
-import {type ComponentChildren} from 'preact';
+import type {ComponentChildren} from 'preact';
 import humanize from 'humanize-string';
 import titleize from 'titleize';
 import SideNav from '#components/docs/side-nav.js';
@@ -15,9 +15,13 @@ type Props = {
 export default function DocsLayout({pageName, children}: Props) {
   const ctx = getCtx();
 
-  if (!ctx) throw new Error('No context found');
+  if (!ctx) {
+    throw new Error('No context found');
+  }
 
-  if (!ctx.path) throw new Error('No req.path');
+  if (!ctx.path) {
+    throw new Error('No req.path');
+  }
 
   const page = path.basename(ctx.path);
 

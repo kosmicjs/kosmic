@@ -1,6 +1,6 @@
 import type {Context, Next} from 'koa';
 import {renderToStringAsync} from 'preact-render-to-string';
-import {type VNode} from 'preact';
+import type {VNode} from 'preact';
 
 declare module 'koa' {
   /**

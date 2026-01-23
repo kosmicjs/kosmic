@@ -1,4 +1,4 @@
-import {type Middleware} from 'koa';
+import type {Middleware} from 'koa';
 import {z} from 'zod/v4';
 import {GoogleGenAI} from '@google/genai';
 import Layout from '#components/layout.js';

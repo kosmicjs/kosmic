@@ -1,4 +1,4 @@
-import {type Server} from 'node:http';
+import type {Server} from 'node:http';
 import {describe, test, before, after} from 'node:test';
 import assert from 'node:assert';
 import _got from 'got';

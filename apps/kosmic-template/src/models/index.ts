@@ -1,8 +1,8 @@
-import {type User} from './users.js';
-import {type Entity} from './entities.js';
-import {type Email} from './emails.js';
-import {type Sessions} from './sessions.js';
-import {type ApiKey} from './api-keys.js';
+import type {User} from './users.js';
+import type {Entity} from './entities.js';
+import type {Email} from './emails.js';
+import type {Sessions} from './sessions.js';
+import type {ApiKey} from './api-keys.js';
 
 export type Database = {
   users: User;

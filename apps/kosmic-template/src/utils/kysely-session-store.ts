@@ -1,4 +1,4 @@
-import {type stores as SessionStore, type Session} from 'koa-session';
+import type {stores as SessionStore, Session} from 'koa-session';
 import {db} from '#db/index.js';
 import {logger} from '#utils/logger.js';
 

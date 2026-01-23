@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import {type VNode} from 'preact';
+import type {VNode} from 'preact';
 import juice from 'juice';
 import {renderToString as preactRenderToString} from 'preact-render-to-string';
 

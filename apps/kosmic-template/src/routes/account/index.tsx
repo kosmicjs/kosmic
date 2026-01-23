@@ -1,6 +1,6 @@
-import {type Middleware} from 'koa';
+import type {Middleware} from 'koa';
+import type {Use} from '@kosmic/router';
 import Layout from '#components/layout.js';
-import {type Use} from '#middleware/router/types.js';
 import {db} from '#db/index.js';
 
 export const use: Use = async (ctx, next) => {

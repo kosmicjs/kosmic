@@ -1,7 +1,7 @@
-import {type Insertable, type Selectable} from 'kysely';
+import type {Insertable, Selectable} from 'kysely';
 import {z as zod} from 'zod';
 import argon2 from 'argon2';
-import {type GeneratedId} from './types.js';
+import type {GeneratedId} from './types.js';
 
 export const schema = zod.object({
   user_id: zod.number(),

@@ -1,4 +1,4 @@
-import {type ComponentChildren} from 'preact';
+import type {ComponentChildren} from 'preact';
 
 export type EmailLayoutProps = {
   readonly children: ComponentChildren;
