@@ -26,9 +26,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json --watch",
     "check": "tsc --noEmit",
-    "lint": "xo --config ../../xo.config.ts",
+    "lint": "xo",
     "test": "node --test",
     "test:coverage": "node --test --experimental-test-coverage"
   },
