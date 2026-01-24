@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/consistent-indexed-object-style */
 import type {Middleware} from 'koa';
 import type {MatchFunction} from 'path-to-regexp';
-import type {Simplify} from 'type-fest';
 
 export type HttpVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
-export type HttpVerbsAll = Simplify<HttpVerb | 'all'>;
+export type HttpVerbsAll = HttpVerb | 'all';
 
 export type UseObject = {
   [key in HttpVerbsAll]?: Middleware | Middleware[];

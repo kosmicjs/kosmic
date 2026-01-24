@@ -77,6 +77,12 @@ const xoConfig: XoConfigItem[] = [
       'import-x/no-unassigned-import': 'off',
     },
   },
+  {
+    files: ['**/*.test.{ts,tsx,cts,mts}'],
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'off',
+    },
+  },
 ];
 
 export default xoConfig;

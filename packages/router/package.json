@@ -33,10 +33,11 @@
     "build:watch": "tsc -p tsconfig.json --watch",
     "check": "tsc --noEmit",
     "lint": "xo",
-    "test": "node --test",
+    "test": "node --test **/*.test.ts",
     "test:coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
+    "@standard-schema/spec": "^1.1.0",
     "koa": "^3.1.1",
     "koa-compose": "^4.1.0",
     "path-to-regexp": "^8.3.0",

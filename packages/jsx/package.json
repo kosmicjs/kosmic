@@ -34,7 +34,7 @@
     "build:watch": "tsc -p tsconfig.json --watch",
     "check": "tsc --noEmit",
     "lint": "xo",
-    "test": "node --test",
+    "test": "node --test **/*.test.ts",
     "test:coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
