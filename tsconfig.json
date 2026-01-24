@@ -6,7 +6,6 @@
  */
 {
   "references": [
-    { "path": "./packages/server" },
     { "path": "./packages/router" },
     { "path": "./packages/helmet" },
     { "path": "./packages/pino-http" },
