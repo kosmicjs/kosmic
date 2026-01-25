@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import {mkdirSync, writeFileSync, rmSync, existsSync} from 'node:fs';
 import {join} from 'node:path';
 import type {Middleware, Context} from 'koa';
-import {createFsRouter} from './index.ts';
+import {createFsRouter} from '../src/index.ts';
 
 // Mock Koa context helper
 function createMockContext(overrides?: Partial<Context>): Context {

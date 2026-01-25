@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import {test, describe} from 'node:test';
 import assert from 'node:assert';
-import * as schema from './schema.ts';
+import * as schema from '../src/schema.ts';
 
 const fn = () => {
   // noop
