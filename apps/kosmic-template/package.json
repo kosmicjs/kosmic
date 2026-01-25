@@ -96,7 +96,7 @@
     "path-exists": "^5.0.0",
     "path-to-regexp": "^8.3.0",
     "pg": "^8.17.2",
-    "pino": "10.3.0",
+    "pino": "^10.3.0",
     "pino-http": "^11.0.0",
     "pino-princess": "^1.4.1",
     "postcss": "^8.5.6",
