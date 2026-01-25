@@ -10,7 +10,7 @@ export async function renderToString(emailComponent: VNode): Promise<string> {
   // Read the CSS file from the filesystem in node_modules/bootstrap/dist/css/bootstrap.min.css
   // this needs to be done from the dist folder
   const cssFilePath = new URL(
-    '../../../../node_modules/bootstrap/dist/css/bootstrap.min.css',
+    import.meta.resolve('bootstrap/dist/css/bootstrap.min.css'),
     import.meta.url,
   );
   const css = await fs.promises.readFile(cssFilePath, 'utf8');
