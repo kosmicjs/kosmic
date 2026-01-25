@@ -1,43 +1,9 @@
 import {test, describe, before, after} from 'node:test';
 import assert from 'node:assert';
-import {mkdirSync, writeFileSync, rmSync, existsSync} from 'node:fs';
+import {mkdirSync, rmSync, existsSync} from 'node:fs';
 import {join} from 'node:path';
-import type {Middleware, Context} from 'koa';
 import {createFsRouter} from '../src/index.ts';
-
-// Mock Koa context helper
-function createMockContext(overrides?: Partial<Context>): Context {
-  const baseCtx = {
-    method: 'GET',
-    originalUrl: '/',
-    request: {},
-    params: undefined,
-    ...overrides,
-  };
-  return baseCtx as Context;
-}
-
-// Mock next function
-function createMockNext() {
-  let called = false;
-  const next = async () => {
-    called = true;
-  };
-
-  next.wasCalled = () => called;
-  return next;
-}
-
-// Helper to create temporary test routes
-function createTestRoute(dir: string, relativePath: string, content: string) {
-  const fullPath = join(dir, relativePath);
-  const dirPath = fullPath.slice(0, Math.max(0, fullPath.lastIndexOf('/')));
-  if (!existsSync(dirPath)) {
-    mkdirSync(dirPath, {recursive: true});
-  }
-
-  writeFileSync(fullPath, content);
-}
+import {createMockContext, createMockNext, createTestRoute} from './helpers.ts';
 
 describe('@kosmic/router - Path Transformation', async () => {
   const testDir = join(import.meta.dirname, '.test-routes-path');
