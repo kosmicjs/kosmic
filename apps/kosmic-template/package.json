@@ -39,7 +39,7 @@
     "compile:cp": "cp -rp src/public ./dist/src",
     "compile:tsc": "tsc --build tsconfig.json",
     "compile:vite": "vite build",
-    "dev": "@kosmic/cli",
+    "dev": "dev",
     "lint": "xo",
     "migrate": "npm run clean && npm run compile:tsc && KOSMIC_ENV=migration node --enable-source-maps ./dist/src/db/utils/cli.js",
     "prepublishOnly": "npm run build",
