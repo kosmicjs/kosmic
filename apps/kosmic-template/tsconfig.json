@@ -17,6 +17,7 @@
     { "path": "../../packages/helmet" },
     { "path": "../../packages/pino-http" },
     { "path": "../../packages/jsx" },
-    { "path": "../../packages/error-handler" }
+    { "path": "../../packages/error-handler" },
+    { "path": "../../packages/cli" }
   ]
 }

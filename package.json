@@ -27,7 +27,7 @@
     "changeset": "changeset",
     "check": "npm run check --workspaces --if-present",
     "clean": "rimraf dist",
-    "dev": "npm run build:watch -ws --if-present & npm run dev --workspace kosmic-template",
+    "dev": "npm run build:watch -ws --if-present & npm run dev -w kosmic-template",
     "lint": "xo",
     "prepare": "husky",
     "release": "npm run build && changeset publish",
@@ -43,11 +43,6 @@
   },
   "overrides": {
     "eslint": "9.38.0"
-  },
-  "dependencies": {
-    "execa": "^9.6.1",
-    "p-wait-for": "^6.0.0",
-    "path-exists": "^5.0.0"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",

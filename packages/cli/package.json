@@ -1,0 +1,45 @@
+{
+  "name": "@kosmic/cli",
+  "version": "0.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Spencer Snyder",
+    "email": "sasnyde2@gmail.com",
+    "url": "https://spencersnyder.io"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/src/dev.d.ts",
+        "default": "./dist/src/dev.js"
+      }
+    }
+  },
+  "main": "dist/src/dev.js",
+  "types": "dist/src/dev.d.ts",
+  "bin": {
+    "dev": "dist/src/dev.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json --watch",
+    "check": "tsc --noEmit",
+    "lint": "xo",
+    "test": "node --test **/*.test.ts",
+    "test:coverage": "node --test --experimental-test-coverage"
+  },
+  "dependencies": {
+    "execa": "^9.6.1",
+    "p-wait-for": "^6.0.0",
+    "path-exists": "^5.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

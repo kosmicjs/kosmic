@@ -7,7 +7,7 @@ import {execa} from 'execa';
 import pWaitFor from 'p-wait-for';
 import {pathExists} from 'path-exists';
 import {createServer} from 'vite';
-import {tsWatch} from './ts-watch.ts';
+// import {tsWatch} from './ts-watch.ts';
 
 /**
  * This script is used to start the development server for the application.
@@ -28,7 +28,7 @@ const $$ = execa({cwd, stdio: 'inherit', ipc: true});
 await fs.rm('dist', {recursive: true, force: true});
 
 // start ts
-const program = tsWatch();
+// const program = tsWatch();
 
 // wait for the ts output
 await pWaitFor(async () => pathExists('dist/src/index.js'));
@@ -38,7 +38,7 @@ await fs.cp(path.resolve(cwd, 'src', 'public'), publicFolder, {
   recursive: true,
 });
 
-const server = await createServer();
+// const server = await createServer();
 
 async function runKosmicDevServer() {
   const cp = $$`node --watch --watch-preserve-output --enable-source-maps ${path.join('dist', 'src', 'index.js')}`;
@@ -50,21 +50,11 @@ async function runKosmicDevServer() {
       'status' in message &&
       message.status === 'ready'
     ) {
-      server.ws.send({
-        type: 'full-reload',
-      });
+      // server.ws.send({
+      //   type: 'full-reload',
+      // });
     }
   });
 }
 
-await Promise.all([
-  // start the kosmic server
-  runKosmicDevServer(),
-  // start the jobs server from the dist folder in watch mode and enable source maps
-  // $$`node --watch --watch-preserve-output --enable-source-maps ${path.join('dist', 'src', 'jobs.js')}`,
-  // start the vite server running and wait for it to end
-  server.listen(),
-  // await the end of the ts --watch program
-  // eslint-disable-next-line @typescript-eslint/await-thenable
-  program,
-]);
+await runKosmicDevServer();
