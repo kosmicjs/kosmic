@@ -1,19 +1,16 @@
 import fs from 'node:fs/promises';
-import {type Kysely, type Migration, sql} from 'kysely';
+import {type Kysely, sql} from 'kysely';
 import argon2 from 'argon2';
 import {
   createTimestampTrigger,
   dropTimestampTrigger,
   addTimestampsColumns,
   addIdColumn,
-} from './utils/helpers.js';
+  type KosmicMigration,
+} from '@kosmic/cli/migrate';
 import logger from '#utils/logger.js';
 import * as apiKeysModel from '#models/api-keys.js';
 import {config} from '#config/index.js';
-
-export type KosmicMigration = Migration & {
-  sequence: string;
-};
 
 /**
  * Create a trigger function to update the updated_at column

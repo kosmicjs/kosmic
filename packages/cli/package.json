@@ -14,12 +14,19 @@
         "types": "./dist/src/dev.d.ts",
         "default": "./dist/src/dev.js"
       }
+    },
+    "./migrate": {
+      "import": {
+        "types": "./dist/src/migrate/index.d.ts",
+        "default": "./dist/src/migrate/index.js"
+      }
     }
   },
   "main": "dist/src/dev.js",
   "types": "dist/src/dev.d.ts",
   "bin": {
-    "dev": "dist/src/dev.js"
+    "dev": "dist/src/dev.js",
+    "migrate": "dist/src/migrate/cli.js"
   },
   "files": [
     "dist"
@@ -34,8 +41,12 @@
   },
   "dependencies": {
     "execa": "^9.6.1",
+    "kysely": "^0.28.11",
+    "meow": "^14.0.0",
     "p-wait-for": "^6.0.0",
     "path-exists": "^5.0.0",
+    "pino": "^10.3.0",
+    "pino-princess": "^1.4.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1"
   },

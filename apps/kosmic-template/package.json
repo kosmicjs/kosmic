@@ -41,7 +41,7 @@
     "compile:vite": "vite build",
     "dev": "dev",
     "lint": "xo",
-    "migrate": "npm run clean && npm run compile:tsc && KOSMIC_ENV=migration node --enable-source-maps ./dist/src/db/utils/cli.js",
+    "migrate": "npm run clean && npm run compile:tsc && KOSMIC_ENV=migration migrate --db-module ./dist/src/db/index.js --migrations ./dist/src/db/migrations",
     "prepublishOnly": "npm run build",
     "start": "NODE_ENV=production KOSMIC_ENV=production node dist/src/index.js | pino-princess",
     "test": "rimraf dist && tsc -p tsconfig.json && NODE_ENV=test KOSMIC_ENV=test node --test dist/test/server.test.js",
