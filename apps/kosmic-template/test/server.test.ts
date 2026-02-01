@@ -5,9 +5,14 @@ import _got from 'got';
 import * as cheerio from 'cheerio';
 import {NO_MIGRATIONS} from 'kysely';
 import {CookieJar} from 'tough-cookie';
+import {createMigrator} from '@kosmic/cli/migrate';
 import {createServer} from '../src/server.js';
-import {migrator} from '#db/utils/migrator.js';
 import {db} from '#db/index.js';
+
+const migrator = createMigrator({
+  db,
+  migrationsPath: 'apps/kosmic-template/src/db/migrations',
+});
 
 await describe('server integration', async () => {
   let server: Server;

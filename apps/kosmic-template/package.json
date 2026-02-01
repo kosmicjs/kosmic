@@ -48,7 +48,7 @@
     "test:watch": "rimraf dist && tsc -p tsconfig.json --watch & wait-on dist/test/server.test.js && NODE_ENV=test KOSMIC_ENV=test node --test --watch dist/test/server.test.js"
   },
   "dependencies": {
-    "@fullhuman/postcss-purgecss": "^7.0.2",
+    "@fullhuman/postcss-purgecss": "^8.0.0",
     "@google/genai": "^1.39.0",
     "@koa/etag": "^5.0.2",
     "@kosmic/cli": "^0.0.0",
@@ -98,7 +98,7 @@
     "pg": "^8.18.0",
     "pino": "^10.3.0",
     "pino-http": "^11.0.0",
-    "pino-princess": "^1.4.1",
+    "pino-princess": "^1.5.2",
     "postcss": "^8.5.6",
     "postcss-css-variables": "^0.19.0",
     "preact": "^10.28.3",
@@ -121,7 +121,7 @@
     "@types/koa-response-time": "^2",
     "@types/koa-session": "^6.4.5",
     "@types/koa-static": "^4.0.4",
-    "@types/node": "~25.1.0",
+    "@types/node": "~25.2.0",
     "@types/nodemailer": "^7.0.9",
     "@types/passport-github2": "^1.2.9",
     "@types/passport-google-oauth20": "^2.0.17",

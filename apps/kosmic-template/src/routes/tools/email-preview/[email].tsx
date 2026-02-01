@@ -3,7 +3,7 @@ import type {VNode} from 'preact';
 import {renderToStringAsync} from 'preact-render-to-string';
 import pretty from 'pretty';
 import got from 'got';
-import {purgeCSSPlugin} from '@fullhuman/postcss-purgecss';
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 import * as cheerio from 'cheerio';
 import postcss from 'postcss';
 import cssVariables from 'postcss-css-variables';
@@ -60,6 +60,7 @@ export const get: Middleware = async (ctx) => {
     //   preserve: false,
     // }),
     cssVariables(),
+    /** @ts-expect-error typed wrong */
     purgeCSSPlugin({
       content: [{raw: emailHtml, extension: 'html'}],
       variables: true,
