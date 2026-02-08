@@ -105,7 +105,7 @@
     "preact-render-to-string": "^6.6.5",
     "pretty": "^2.0.0",
     "preview-email": "^3.1.1",
-    "stripe": "^20.3.0",
+    "stripe": "^20.3.1",
     "titleize": "^4.0.0",
     "tough-cookie": "^6.0.0",
     "zod": "^4.3.6"
