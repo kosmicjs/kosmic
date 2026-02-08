@@ -121,7 +121,7 @@
     "@types/koa-response-time": "^2",
     "@types/koa-session": "^6.4.5",
     "@types/koa-static": "^4.0.4",
-    "@types/node": "~25.2.0",
+    "@types/node": "~25.2.2",
     "@types/nodemailer": "^7.0.9",
     "@types/passport-github2": "^1.2.9",
     "@types/passport-google-oauth20": "^2.0.17",
