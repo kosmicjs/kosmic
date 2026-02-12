@@ -18,10 +18,14 @@ export type KosmicMigration = Migration & {
 export class ESMFileMigrationProvider implements MigrationProvider {
   constructor(
     private readonly migrationsPath: string,
-    private readonly logger?: {warn: (message: string) => void},
+    private readonly logger?: {
+      info: (message: string) => void;
+      warn: (message: string) => void;
+    },
   ) {}
 
   async getMigrations(): Promise<Record<string, Migration>> {
+    this.logger?.info(`Loading migrations from: ${this.migrationsPath}`);
     let migrations: Record<string, Migration | KosmicMigration> = {};
 
     const resolvedPath = this.migrationsPath;
@@ -36,7 +40,7 @@ export class ESMFileMigrationProvider implements MigrationProvider {
       );
     }
 
-    const standaloneMigrationFile = `${resolvedPath}.js`;
+    const standaloneMigrationFile = `${resolvedPath}.ts`;
 
     try {
       await fs.access(standaloneMigrationFile);
@@ -57,7 +61,7 @@ export class ESMFileMigrationProvider implements MigrationProvider {
     }
 
     if (Array.isArray(files) && files.length > 0) {
-      const jsFiles = files.filter((file) => file.endsWith('.js'));
+      const jsFiles = files.filter((file) => file.endsWith('.ts'));
       for (const fileName of jsFiles) {
         const importPath = path
           .join(resolvedPath, fileName)
@@ -85,11 +89,16 @@ export type MigratorOptions = {
   db: Kysely<any>;
   migrationsPath: string;
   allowUnorderedMigrations?: boolean;
-  logger?: {warn: (message: string) => void};
+  logger?: {warn: (message: string) => void; info: (message: string) => void};
 };
 
 export function createMigrator(options: MigratorOptions): Migrator {
-  const {db, migrationsPath, allowUnorderedMigrations = true, logger} = options;
+  const {
+    db,
+    migrationsPath,
+    allowUnorderedMigrations = false,
+    logger,
+  } = options;
 
   return new Migrator({
     db,

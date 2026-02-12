@@ -1,5 +1,6 @@
 import type {Server} from 'node:http';
 import {describe, test, before, after} from 'node:test';
+import path from 'node:path';
 import assert from 'node:assert';
 import _got from 'got';
 import * as cheerio from 'cheerio';
@@ -8,10 +9,12 @@ import {CookieJar} from 'tough-cookie';
 import {createMigrator} from '@kosmic/cli/migrate';
 import {createServer} from '../src/server.js';
 import {db} from '#db/index.js';
+import {logger} from '#utils/logger.js';
 
 const migrator = createMigrator({
   db,
-  migrationsPath: 'apps/kosmic-template/src/db/migrations',
+  logger,
+  migrationsPath: path.resolve(import.meta.dirname, 'dist', 'src', 'db'),
 });
 
 await describe('server integration', async () => {
