@@ -40,10 +40,11 @@ export class ESMFileMigrationProvider implements MigrationProvider {
       );
     }
 
-    const standaloneMigrationFile = `${resolvedPath}.ts`;
+    const standaloneMigrationFile = resolvedPath;
 
     try {
       await fs.access(standaloneMigrationFile);
+
       migrations = (await import(standaloneMigrationFile)) as Record<
         string,
         KosmicMigration
@@ -57,6 +58,9 @@ export class ESMFileMigrationProvider implements MigrationProvider {
         }),
       );
     } catch {
+      this.logger?.warn(
+        `No standalone migration file found at ${standaloneMigrationFile}. Looking for individual migration files in the directory instead.`,
+      );
       // Standalone migration file doesn't exist, which is fine
     }
 
@@ -93,12 +97,7 @@ export type MigratorOptions = {
 };
 
 export function createMigrator(options: MigratorOptions): Migrator {
-  const {
-    db,
-    migrationsPath,
-    allowUnorderedMigrations = false,
-    logger,
-  } = options;
+  const {db, migrationsPath, allowUnorderedMigrations = true, logger} = options;
 
   return new Migrator({
     db,

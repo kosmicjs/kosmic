@@ -14,7 +14,13 @@ import {logger} from '#utils/logger.js';
 const migrator = createMigrator({
   db,
   logger,
-  migrationsPath: path.resolve(import.meta.dirname, 'dist', 'src', 'db'),
+  migrationsPath: path.resolve(
+    import.meta.dirname,
+    '..',
+    'src',
+    'db',
+    'migrations.js',
+  ),
 });
 
 await describe('server integration', async () => {
@@ -28,8 +34,8 @@ await describe('server integration', async () => {
   });
 
   before(async () => {
-    server = await createServer();
     await migrator.migrateToLatest();
+    server = await createServer();
     server.listen(4567);
   });
 
