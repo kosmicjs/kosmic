@@ -1,5 +1,5 @@
 {
-  "name": "kosmic-template",
+  "name": "kosmic",
   "version": "0.0.0",
   "description": "A highly opinionated and strongly typed Koa web and api template.",
   "bugs": {

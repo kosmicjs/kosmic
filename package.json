@@ -27,7 +27,7 @@
     "changeset": "changeset",
     "check": "npm run check --workspaces --if-present",
     "clean": "rimraf dist",
-    "dev": "npm run build:watch -ws --if-present & npm run dev -w kosmic-template",
+    "dev": "npm run build:watch -ws --if-present & npm run dev -w kosmic",
     "lint": "xo",
     "prepare": "husky",
     "release": "npm run build && changeset publish",

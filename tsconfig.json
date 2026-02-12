@@ -12,7 +12,7 @@
     { "path": "./packages/jsx" },
     { "path": "./packages/error-handler" },
     { "path": "./packages/cli" },
-    { "path": "./apps/kosmic-template" }
+    { "path": "./apps/kosmic" }
   ],
   "compilerOptions": {
     "outDir": "dist",
