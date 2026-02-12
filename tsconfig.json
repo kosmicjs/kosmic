@@ -47,5 +47,5 @@
     "noErrorTruncation": true,
     "rewriteRelativeImportExtensions": true
   },
-  "exclude": ["node_modules", "dist", "apps/kosmic-template/scripts"]
+  "exclude": ["node_modules", "dist", "apps/kosmic/scripts"]
 }
