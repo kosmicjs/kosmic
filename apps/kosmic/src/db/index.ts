@@ -1,7 +1,38 @@
-import {Kysely} from 'kysely';
+import {Kysely, PostgresDialect} from 'kysely';
+import pkg from 'pg';
 import type {Database} from '#models/index.js';
 import logger from '#utils/logger.js';
-import {dialect} from '#db/dialect.js';
+import {config} from '#config/index.js';
+
+const {Pool} = pkg;
+
+export const pool = new Pool({
+  ...config.db?.pg,
+});
+
+pool.on('connect', () => {
+  logger.trace('postgres connected');
+});
+
+pool.on('error', (error) => {
+  logger.error(error);
+});
+
+pool.on('release', () => {
+  logger.trace('postgres release');
+});
+
+pool.on('remove', () => {
+  logger.trace('postgres removed');
+});
+
+pool.on('acquire', () => {
+  logger.trace('postgres acquired');
+});
+
+export const dialect = new PostgresDialect({
+  pool,
+});
 
 export const db = new Kysely<Database>({
   dialect,
