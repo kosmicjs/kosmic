@@ -8,13 +8,25 @@ import type {Middleware, Context} from 'koa';
 import {match as createMatchFn} from 'path-to-regexp';
 import compose from 'koa-compose';
 import type Koa from 'koa';
-import {routeModuleSchema} from './schema.ts';
-import type {
-  HttpVerb,
-  HttpVerbsAll,
-  RouteModule,
-  RouteDefinition,
-} from './types.ts';
+import {
+  routeModuleSchema,
+  type RouteModule,
+  type HttpVerb,
+  type HttpVerbsAll,
+  type RouteDefinition,
+} from './schema.ts';
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object';
+}
+
+function isClass(value: unknown): value is new () => unknown {
+  if (typeof value !== 'function') {
+    return false;
+  }
+
+  return /^class\s/.test(Function.prototype.toString.call(value));
+}
 
 declare module 'koa' {
   // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -67,16 +79,35 @@ export async function createFsRouter(
     async (filePath) => {
       const uriPath = getUriPathFromFilePath(filePath);
 
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      const module = {
-        ...(await import(filePath)),
-      } as RouteModule;
+      const importedModule = (await import(filePath)) as unknown;
+
+      let module: RouteModule | undefined;
+
+      if (
+        typeof importedModule === 'object' &&
+        importedModule !== null &&
+        'default' in importedModule
+      ) {
+        if (isClass(importedModule.default))
+          module = routeModuleSchema.parse(new importedModule.default()); // eslint-disable-line new-cap
+
+        if (typeof importedModule.default === 'function') {
+          module = routeModuleSchema.parse(await importedModule.default()); // eslint-disable-line @typescript-eslint/no-unsafe-call
+        }
+
+        if (isObject(importedModule.default)) {
+          module = routeModuleSchema.parse(importedModule.default);
+        }
+      } else {
+        module = routeModuleSchema.parse(importedModule);
+      }
+
+      if (!module)
+        throw new Error(`No valid route module found in file: ${filePath}`);
 
       if (module?.del) {
         module.delete = module.del;
       }
-
-      routeModuleSchema.parse(module);
 
       return {
         filePath,
@@ -214,4 +245,4 @@ export {
   type HttpVerb,
   type RouteModule,
   type HttpVerbsAll,
-} from './types.ts';
+} from './schema.ts';

@@ -13,7 +13,7 @@ describe('Router Schema Tests', () => {
     let result = schema.middlewareSchema.safeParse(fn);
     assert.ok(result.success, 'Should accept regular function');
     if (result.success) {
-      assert.strictEqual(result.data, fn);
+      assert.deepEqual(result.data, fn);
     }
 
     result = schema.middlewareSchema.safeParse(undefined);
