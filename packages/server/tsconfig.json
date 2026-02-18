@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true
+  },
+  "include": ["src", "test"],
+  "exclude": ["node_modules", "dist"],
+  "references": [
+    { "path": "../router" },
+    { "path": "../helmet" },
+    { "path": "../pino-http" },
+    { "path": "../jsx" },
+    { "path": "../error-handler" }
+  ]
+}

@@ -11,6 +11,7 @@
     { "path": "./packages/pino-http" },
     { "path": "./packages/jsx" },
     { "path": "./packages/error-handler" },
+    { "path": "./packages/server" },
     { "path": "./packages/cli" },
     { "path": "./apps/kosmic" }
   ],

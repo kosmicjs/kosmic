@@ -1,0 +1,63 @@
+{
+  "name": "@kosmic/server",
+  "version": "0.0.0",
+  "description": "Reusable Koa server bootstrap for Kosmic apps",
+  "keywords": [
+    "koa",
+    "server",
+    "bootstrap"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Spencer Snyder",
+    "email": "sasnyde2@gmail.com",
+    "url": "https://spencersnyder.io"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.js"
+      }
+    }
+  },
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json --watch",
+    "check": "tsc --noEmit",
+    "lint": "xo",
+    "test": "node --test **/*.test.ts",
+    "test:coverage": "node --test --experimental-test-coverage"
+  },
+  "dependencies": {
+    "@koa/etag": "^5.0.2",
+    "@kosmic/error-handler": "^0.0.0",
+    "@kosmic/helmet": "^0.0.0",
+    "@kosmic/jsx": "^0.0.0",
+    "@kosmic/pino-http": "^0.0.0",
+    "@kosmic/router": "^0.0.0",
+    "koa": "^3.1.1",
+    "koa-bodyparser": "^4.4.1",
+    "koa-conditional-get": "^3.0.0",
+    "koa-response-time": "^2.1.0",
+    "koa-session": "^6.4.0",
+    "koa-static": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/koa": "^3.0.1",
+    "@types/koa-bodyparser": "^4",
+    "@types/koa-conditional-get": "^2.0.4",
+    "@types/koa-response-time": "^2",
+    "@types/koa-session": "^6.4.5",
+    "@types/koa-static": "^4.0.4"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
