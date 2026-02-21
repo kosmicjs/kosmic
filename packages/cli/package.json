@@ -11,8 +11,8 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/src/dev.d.ts",
-        "default": "./dist/src/dev.js"
+        "types": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.js"
       }
     },
     "./migrate": {
@@ -22,8 +22,8 @@
       }
     }
   },
-  "main": "dist/src/dev.js",
-  "types": "dist/src/dev.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "bin": {
     "dev": "dist/src/dev.js",
     "migrate": "dist/src/migrate/cli.js"
