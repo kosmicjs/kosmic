@@ -1,9 +1,9 @@
 import process from 'node:process';
 import {config} from './config/index.ts';
 import {logger} from './utils/logger.ts';
-import {createServer} from './server.ts';
+import {getServer} from './server.ts';
 
-const server = await createServer();
+const server = await getServer();
 
 server.listen({port: config.port, host: config.host}, () => {
   logger.info(`Server listening on ${config.host}:${config.port}`);

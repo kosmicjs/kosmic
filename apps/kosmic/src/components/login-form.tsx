@@ -1,4 +1,4 @@
-import {getCtx} from '#server';
+import {getCtx} from '@kosmic/server';
 
 export type Props = {
   readonly isSignup: boolean;

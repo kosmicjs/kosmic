@@ -7,7 +7,6 @@ import * as cheerio from 'cheerio';
 import {NO_MIGRATIONS} from 'kysely';
 import {CookieJar} from 'tough-cookie';
 import {createMigrator} from '@kosmic/cli/migrate';
-import {createServer} from '../src/server.ts';
 import {db} from '#db/index.js';
 import {logger} from '#utils/logger.js';
 
@@ -35,7 +34,8 @@ await describe('server integration', async () => {
 
   before(async () => {
     await migrator.migrateToLatest();
-    server = await createServer();
+    const {getServer} = await import('../src/server.ts');
+    server = await getServer();
     server.listen(4567);
   });
 
@@ -254,7 +254,5 @@ await describe('server integration', async () => {
 
   after(async () => {
     await migrator.migrateTo(NO_MIGRATIONS);
-    server.closeAllConnections();
-    server.close();
   });
 });

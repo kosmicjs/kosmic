@@ -1,9 +1,9 @@
 import type {ComponentChildren} from 'preact';
+import {getCtx} from '@kosmic/server';
 import Footer from './footer.tsx';
 import Header from './header.tsx';
 import Modal from './modal.tsx';
 import Toast from './toast.tsx';
-import {getCtx} from '#server';
 import {config} from '#config/index.js';
 
 export type Props = {

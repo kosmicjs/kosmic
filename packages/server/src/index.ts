@@ -1,8 +1,7 @@
 import http, {type Server} from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import type Koa from 'koa';
-import type {Context, Middleware} from 'koa';
+import Koa, {type Context, type Middleware} from 'koa';
 import bodyParser from 'koa-bodyparser';
 import conditional from 'koa-conditional-get';
 import responseTime from 'koa-response-time';
@@ -62,6 +61,8 @@ type ContentSecurityPolicyDirectives = NonNullable<
   ContentSecurityPolicy['directives']
 >;
 
+export const app = new Koa({asyncLocalStorage: true});
+
 export type ServerMiddlewareHooks = {
   beforeCore?: Middleware[];
   afterCore?: Middleware[];
@@ -78,7 +79,6 @@ export type ServerInternals = {
 };
 
 export type CreateServerAppOptions = {
-  app: Koa;
   logger: LoggerLike;
   env: ServerEnvironment;
   routesDir: string;
@@ -275,7 +275,6 @@ export async function createServerApp(
   options: CreateServerAppOptions,
 ): Promise<Koa> {
   const {
-    app,
     logger,
     env,
     routesDir,
@@ -288,10 +287,6 @@ export async function createServerApp(
     middlewares,
     internals,
   } = options;
-
-  if (configuredApps.has(app)) {
-    return app;
-  }
 
   const {
     readFile,
@@ -349,7 +344,7 @@ export async function createServer(
   return http.createServer(app.callback());
 }
 
-export function getCtx(app: Pick<Koa, 'currentContext'>): Context {
+export function getCtx(): Context {
   const ctx = app.currentContext;
 
   if (!ctx) {

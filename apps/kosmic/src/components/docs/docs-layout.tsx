@@ -2,10 +2,10 @@ import path from 'node:path';
 import type {ComponentChildren} from 'preact';
 import humanize from 'humanize-string';
 import titleize from 'titleize';
+import {getCtx} from '@kosmic/server';
 import SideNav from '#components/docs/side-nav.js';
 import ActiveDevWarning from '#components/active-dev-warning.js';
 import Layout from '#components/layout.js';
-import {getCtx} from '#server';
 
 type Props = {
   readonly pageName?: string;

@@ -46,7 +46,6 @@ function createBaseOptions(app: Koa): CreateServerAppOptions {
   };
 
   return {
-    app,
     logger,
     env: {
       nodeEnv: 'test',
@@ -183,14 +182,14 @@ void describe('@kosmic/server', async () => {
     const options = createBaseOptions(app);
 
     assert.throws(() => {
-      getCtx(app);
+      getCtx();
     }, /No context found/u);
 
     options.internals = {
       ...options.internals,
       createFsRouter: async () => ({
         async middleware(ctx) {
-          ctx.status = getCtx(app) === ctx ? 200 : 500;
+          ctx.status = getCtx() === ctx ? 200 : 500;
         },
         routes: [],
       }),
