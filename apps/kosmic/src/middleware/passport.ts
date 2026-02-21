@@ -16,7 +16,7 @@ import {config} from '#config/index.js';
 import * as User from '#models/users.js';
 import {extractKeyPrefix} from '#models/api-keys.js';
 
-declare module 'koa' {
+declare module '@kosmic/server' {
   interface DefaultState {
     user?: SelectableUser;
   }

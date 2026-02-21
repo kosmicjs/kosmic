@@ -1,7 +1,7 @@
 import type {Middleware} from '@kosmic/server';
 import type {JSX} from 'preact';
 
-declare module 'koa' {
+declare module '@kosmic/server' {
   interface Params {
     /**
      * The partial to render.
