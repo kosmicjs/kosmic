@@ -1,8 +1,10 @@
-import {test, describe} from 'node:test';
+import {test, describe, beforeEach} from 'node:test';
 import assert from 'node:assert';
 import http from 'node:http';
-import Koa, {type Middleware} from 'koa';
+import type Koa from 'koa';
+import type {Middleware} from 'koa';
 import {
+  app,
   createServerApp,
   getCtx,
   type CreateServerAppOptions,
@@ -65,6 +67,13 @@ function createBaseOptions(app: Koa): CreateServerAppOptions {
   };
 }
 
+function resetServerAppState(): void {
+  app.middleware.length = 0;
+  app.removeAllListeners();
+  app.keys = [];
+  app.proxy = false;
+}
+
 async function makeRequest(app: Koa): Promise<number> {
   const server = http.createServer(app.callback());
 
@@ -94,8 +103,11 @@ async function makeRequest(app: Koa): Promise<number> {
 }
 
 void describe('@kosmic/server', async () => {
+  beforeEach(() => {
+    resetServerAppState();
+  });
+
   await test('registers middleware pipeline and preserves critical order', async () => {
-    const app = new Koa({asyncLocalStorage: true});
     const beforeCore: Middleware = async (_ctx, next) => {
       await next();
     };
@@ -134,8 +146,7 @@ void describe('@kosmic/server', async () => {
   });
 
   await test('loads manifest in production but not in non-production', async () => {
-    const appProd = new Koa({asyncLocalStorage: true});
-    const optionsProd = createBaseOptions(appProd);
+    const optionsProd = createBaseOptions(app);
 
     const manifest = {
       entry: {css: [], file: 'entry.js', isEntry: true, src: 'entry.ts'},
@@ -153,11 +164,11 @@ void describe('@kosmic/server', async () => {
     };
 
     await createServerApp(optionsProd);
-    const prodStatus = await makeRequest(appProd);
+    const prodStatus = await makeRequest(app);
     assert.strictEqual(prodStatus, 200);
 
-    const appDev = new Koa({asyncLocalStorage: true});
-    const optionsDev = createBaseOptions(appDev);
+    resetServerAppState();
+    const optionsDev = createBaseOptions(app);
     optionsDev.env.kosmicEnv = 'development';
     optionsDev.internals = {
       ...optionsDev.internals,
@@ -173,12 +184,11 @@ void describe('@kosmic/server', async () => {
     };
 
     await createServerApp(optionsDev);
-    const devStatus = await makeRequest(appDev);
+    const devStatus = await makeRequest(app);
     assert.strictEqual(devStatus, 200);
   });
 
   await test('getCtx throws when no context and succeeds during request', async () => {
-    const app = new Koa({asyncLocalStorage: true});
     const options = createBaseOptions(app);
 
     assert.throws(() => {
@@ -201,7 +211,6 @@ void describe('@kosmic/server', async () => {
   });
 
   await test('attaches session, passport, and router middleware when provided', async () => {
-    const app = new Koa({asyncLocalStorage: true});
     const options = createBaseOptions(app);
 
     let sessionFactoryCallCount = 0;
@@ -267,7 +276,6 @@ void describe('@kosmic/server', async () => {
   });
 
   await test('logs session and router events', async () => {
-    const app = new Koa({asyncLocalStorage: true});
     const {logger, warnings, debugLogs} = createLoggerMock();
     const options = createBaseOptions(app);
     options.logger = logger;
