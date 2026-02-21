@@ -1,4 +1,4 @@
-import type {Middleware} from 'koa';
+import type {Middleware} from '@kosmic/server';
 import {passport} from '#middleware/passport.js';
 
 export const use: Middleware = async (ctx, next) => {

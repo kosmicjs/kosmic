@@ -1,4 +1,4 @@
-import type {Middleware} from 'koa';
+import type {Middleware} from '@kosmic/server';
 import type {Use} from '@kosmic/router';
 import Layout from '#components/layout.js';
 import {db} from '#db/index.js';

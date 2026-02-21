@@ -1,4 +1,4 @@
-import type {Middleware} from 'koa';
+import type {Middleware} from '@kosmic/server';
 import type {JSX} from 'preact';
 
 declare module 'koa' {

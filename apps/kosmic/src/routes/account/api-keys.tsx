@@ -1,4 +1,4 @@
-import type {Middleware} from 'koa';
+import type {Middleware} from '@kosmic/server';
 import {db} from '#db/index.js';
 import * as ApiKey from '#models/api-keys.js';
 

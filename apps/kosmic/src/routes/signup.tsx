@@ -1,4 +1,4 @@
-import type {Context, Next} from 'koa';
+import type {Context, Next} from '@kosmic/server';
 import argon2 from 'argon2';
 import z, {string} from 'zod/v4';
 import * as User from '#models/users.js';

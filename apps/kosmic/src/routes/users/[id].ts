@@ -1,4 +1,4 @@
-import type {Middleware, Context, Next} from 'koa';
+import type {Middleware, Context, Next} from '@kosmic/server';
 import {db} from '#db/index.js';
 import * as User from '#models/users.js';
 

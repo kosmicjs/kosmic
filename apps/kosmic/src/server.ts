@@ -1,8 +1,9 @@
 import path from 'node:path';
-import Koa, {type Context} from 'koa';
 import {
+  Koa,
   createServer as createSharedServer,
   getCtx as getSharedCtx,
+  type Context,
 } from '@kosmic/server';
 import {KyselySessionStore} from '#utils/kysely-session-store.js';
 import logger from '#utils/logger.js';

@@ -1,4 +1,4 @@
-import type {Context, Next} from 'koa';
+import type {Context, Next} from '@kosmic/server';
 import {db} from '#db/index.js';
 import * as User from '#models/users.js';
 

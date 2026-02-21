@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import type {Middleware} from 'koa';
+import type {Middleware} from '@kosmic/server';
 import {Layout} from '#components/layout.js';
 
 export const get: Middleware = async (ctx) => {

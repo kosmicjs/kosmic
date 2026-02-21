@@ -15,6 +15,10 @@ import {renderMiddleware} from '@kosmic/jsx';
 import {createPinoMiddleware} from '@kosmic/pino-http';
 import {createFsRouter, type RouteDefinition} from '@kosmic/router';
 
+export {default as Koa} from 'koa';
+export type {Context, Next, Middleware} from 'koa';
+export type {stores as SessionStore, Session} from 'koa-session';
+
 export type Manifest = Record<
   string,
   {
