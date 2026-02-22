@@ -1,20 +1,9 @@
-import {pino} from 'pino';
+import {createKosmicLoggers} from '@kosmic/logger';
 import {config} from '#config/index.js';
 
-export const logger = pino({
-  name: 'kosmic',
+export const {logger, jobsLogger} = createKosmicLoggers({
   level: config.logLevel,
-  ...(config.nodeEnv === 'production'
-    ? {}
-    : {transport: {target: 'pino-princess'}}),
-});
-
-export const jobsLogger = pino({
-  name: '~jobs~',
-  level: config.logLevel,
-  ...(config.nodeEnv === 'production'
-    ? {}
-    : {transport: {target: 'pino-princess'}}),
+  nodeEnv: config.nodeEnv,
 });
 
 export default logger;

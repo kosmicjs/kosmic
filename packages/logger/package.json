@@ -1,0 +1,45 @@
+{
+  "name": "@kosmic/logger",
+  "version": "0.0.0",
+  "description": "Shared pino logger factory utilities for Kosmic apps",
+  "keywords": [
+    "logger",
+    "pino",
+    "logging"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Spencer Snyder",
+    "email": "sasnyde2@gmail.com",
+    "url": "https://spencersnyder.io"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.js"
+      }
+    }
+  },
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json --watch",
+    "check": "tsc --noEmit",
+    "lint": "xo",
+    "test": "node --test **/*.test.ts",
+    "test:coverage": "node --test --experimental-test-coverage"
+  },
+  "dependencies": {
+    "pino": "^10.3.1",
+    "pino-princess": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -9,6 +9,7 @@
     { "path": "./packages/router" },
     { "path": "./packages/helmet" },
     { "path": "./packages/pino-http" },
+    { "path": "./packages/logger" },
     { "path": "./packages/jsx" },
     { "path": "./packages/error-handler" },
     { "path": "./packages/server" },

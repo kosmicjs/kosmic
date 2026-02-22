@@ -3,6 +3,9 @@
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
+    "paths": {
+      "@kosmic/logger": ["../../packages/logger/src/index.ts"]
+    },
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "outDir": "./dist",
     "jsx": "react-jsx",
@@ -17,6 +20,7 @@
     { "path": "../../packages/router" },
     { "path": "../../packages/helmet" },
     { "path": "../../packages/pino-http" },
+    { "path": "../../packages/logger" },
     { "path": "../../packages/jsx" },
     { "path": "../../packages/error-handler" },
     { "path": "../../packages/cli" }
