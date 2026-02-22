@@ -68,7 +68,7 @@
     "typescript": "~5.9.3",
     "vite": "^7.3.1",
     "vite-bundle-visualizer": "^1.2.1",
-    "wait-on": "^9.0.3",
+    "wait-on": "^9.0.4",
     "xo": "^1.2.3"
   },
   "engines": {
