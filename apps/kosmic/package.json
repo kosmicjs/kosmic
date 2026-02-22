@@ -101,7 +101,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^20.4.1",
-    "@commitlint/config-conventional": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.2",
     "@types/bootstrap": "^5.2.10",
     "@types/koa-passport": "^6.0.3",
     "@types/koa-session": "^6.4.5",
