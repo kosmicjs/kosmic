@@ -76,7 +76,7 @@
     "koa-passport": "^6",
     "kysely": "^0.28.11",
     "nodemailer": "^8.0.1",
-    "openai": "^6.21.0",
+    "openai": "^6.22.0",
     "p-wait-for": "^6.0.0",
     "passport-github2": "^0.1.12",
     "passport-google-oauth20": "^2.0.0",
