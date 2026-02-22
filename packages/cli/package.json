@@ -25,7 +25,7 @@
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "bin": {
-    "dev": "dist/src/dev.js",
+    "dev": "dist/src/index.js",
     "migrate": "dist/src/migrate/cli.js"
   },
   "files": [
