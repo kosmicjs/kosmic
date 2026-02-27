@@ -253,6 +253,7 @@ await describe('server integration', async () => {
   });
 
   after(async () => {
+    server.close();
     await migrator.migrateTo(NO_MIGRATIONS);
   });
 });
