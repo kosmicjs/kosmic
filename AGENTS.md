@@ -95,3 +95,4 @@ If a command fails, fix the issue and rerun until all pass.
 - If module resolution fails: verify dependency, TS references, then run `npm install`.
 - If build order issues appear: run root `npm run build`.
 - If lint/type issues persist: run the REQUIRED command trio again after fixes.
+- NEVER use workspace protocol in dependencies. Always install like @kosmic/* for internal deps. npm will take care of it.

@@ -6,7 +6,7 @@ const stripe = config.stripe?.secretKey
   ? new Stripe(config.stripe.secretKey)
   : undefined;
 
-declare module '@kosmic/server' {
+declare module 'koa' {
   interface DefaultState {
     session?: Stripe.Checkout.Session;
   }

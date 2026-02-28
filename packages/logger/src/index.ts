@@ -1,3 +1,4 @@
+import process from 'node:process';
 import {pino, type Logger, type LoggerOptions} from 'pino';
 
 export type LoggerEnvironment =
@@ -49,8 +50,16 @@ export function buildLoggerOptions(
 }
 
 export function createLogger(options: CreateLoggerOptions): Logger {
-  return pino(buildLoggerOptions(options) as LoggerOptions);
+  return pino(buildLoggerOptions(options));
 }
+
+export const logger = pino(
+  buildLoggerOptions({
+    name: 'kosmic',
+    level: 'info',
+    nodeEnv: process.env.NODE_ENV ?? 'development',
+  }),
+);
 
 export function createKosmicLoggers(options: CreateKosmicLoggersOptions): {
   logger: Logger;

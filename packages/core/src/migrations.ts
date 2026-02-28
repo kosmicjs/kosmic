@@ -1,16 +1,28 @@
 import fs from 'node:fs/promises';
-import {type Kysely, sql} from 'kysely';
+import process from 'node:process';
+import {type Kysely, sql, type Migration} from 'kysely';
 import argon2 from 'argon2';
+import {logger} from '@kosmic/logger';
 import {
   createTimestampTrigger,
   dropTimestampTrigger,
   addTimestampsColumns,
   addIdColumn,
-  type KosmicMigration,
-} from '@kosmic/core';
-import logger from '#utils/logger.js';
-import * as apiKeysModel from '#models/api-keys.js';
-import {config} from '#config/index.js';
+} from './helpers.ts';
+import * as apiKeysModel from './api-keys.ts';
+
+/**
+ * Describes a Kosmic migration with an explicit execution order.
+ *
+ * Implement this interface for migrations that should be discovered and run by
+ * the Kosmic CLI.
+ */
+export interface KosmicMigration extends Migration {
+  /**
+   * Ordering token used by migration runners to sort migrations.
+   */
+  sequence: number | string;
+}
 
 /**
  * Create a trigger function to update the updated_at column
@@ -279,7 +291,7 @@ export const apiKeys: KosmicMigration = {
 
     const {apiKey, keyPrefix, keyHash} = await apiKeysModel.generateApiKey();
 
-    if (config.kosmicEnv !== 'test') {
+    if (process.env.KOSMIC_ENV !== 'test') {
       await fs.writeFile(
         `api_key_${new Date().toISOString()}.txt`,
         `Kosmic Admin Key: ${apiKey}`,

@@ -25,6 +25,7 @@
     { "path": "../../packages/logger" },
     { "path": "../../packages/jsx" },
     { "path": "../../packages/error-handler" },
-    { "path": "../../packages/cli" }
+    { "path": "../../packages/cli" },
+    { "path": "../../packages/core" }
   ]
 }

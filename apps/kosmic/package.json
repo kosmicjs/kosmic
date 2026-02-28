@@ -51,6 +51,7 @@
     "@fullhuman/postcss-purgecss": "^8.0.0",
     "@google/genai": "^1.40.0",
     "@kosmic/cli": "^0.0.0",
+    "@kosmic/core": "^0.0.0",
     "@kosmic/logger": "^0.0.0",
     "@kosmic/router": "^0.0.0",
     "@kosmic/server": "^0.0.0",

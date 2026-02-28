@@ -1,17 +1,6 @@
 import type {Middleware} from '@kosmic/server';
 import type {JSX} from 'preact';
 
-declare module '@kosmic/server' {
-  interface Params {
-    /**
-     * The partial to render.
-     *
-     * TODO: validate this string better for security
-     */
-    partial?: string;
-  }
-}
-
 export const get: Middleware = async (ctx) => {
   if (!ctx.request.params?.partial) {
     ctx.throw(404, 'Not Found');
