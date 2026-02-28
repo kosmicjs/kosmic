@@ -20,6 +20,12 @@
         "types": "./dist/src/index.d.ts",
         "default": "./dist/src/index.js"
       }
+    },
+    "./v1": {
+      "import": {
+        "types": "./dist/src/index.v1.d.ts",
+        "default": "./dist/src/index.v1.js"
+      }
     }
   },
   "main": "dist/src/index.js",
