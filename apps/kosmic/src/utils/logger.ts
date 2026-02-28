@@ -1,9 +1,5 @@
-import {createKosmicLoggers} from '@kosmic/logger';
-import {config} from '#config/index.js';
+import {logger} from '@kosmic/logger';
 
-export const {logger, jobsLogger} = createKosmicLoggers({
-  level: config.logLevel,
-  nodeEnv: config.nodeEnv,
-});
+export {logger, logger as default} from '@kosmic/logger';
 
-export default logger;
+export const jobsLogger = logger.child({name: 'jobs'});
