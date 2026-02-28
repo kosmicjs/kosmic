@@ -1,4 +1,5 @@
 import type {Middleware} from '@kosmic/server';
+import {z} from 'zod';
 import {db} from '#db/index.js';
 import * as ApiKey from '#models/api-keys.js';
 
@@ -9,7 +10,7 @@ export const post: Middleware = async (ctx, next) => {
     return;
   }
 
-  const body = ctx.request.body as {name?: string};
+  const body = z.object({name: z.string().optional()}).parse(ctx.request.body);
   const keyName = body.name?.trim();
 
   try {

@@ -8,8 +8,8 @@ export const get: Middleware = async (ctx) => {
 
   ctx.log.debug(`Rendering partial "${ctx.request.params?.partial}"`);
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
   const {default: Modal} = (await import(
-    /* @vite-ignore */
     `../../components/modals/${ctx.request.params?.partial}.js`
   )) as {default: () => JSX.Element};
 

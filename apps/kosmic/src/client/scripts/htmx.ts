@@ -5,6 +5,7 @@ import {initializeIslands} from './islands.tsx';
 import {initializeProgressBar} from './progress-bar.ts';
 import {initializeOffcanvas} from './off-canvas.ts';
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
 const htmx = _htmx as unknown as typeof _htmx.default; // fix ts types hack
 
 htmx.onLoad(function ($content) {

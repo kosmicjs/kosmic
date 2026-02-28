@@ -55,6 +55,7 @@ const xoConfig: XoConfigItem[] = [
       'react/react-in-jsx-scope': 'off',
       'react/self-closing-comp': 'off',
       'unicorn/prevent-abbreviations': 'off',
+      '@typescript-eslint/no-unsafe-type-assertion': 'error',
       '@typescript-eslint/consistent-type-imports': [
         'error',
         {

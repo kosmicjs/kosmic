@@ -34,6 +34,7 @@ export function initializeIslands($content: Element) {
     });
 
     const Component: (props: any) => VNode | Promise<VNode> =
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
       Islands[islandName as keyof typeof Islands];
 
     if (Component) {
@@ -41,6 +42,7 @@ export function initializeIslands($content: Element) {
       let hydrationData: Record<string, unknown> = {};
       if ($island.dataset.props) {
         try {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
           hydrationData = JSON.parse($island.dataset.props ?? '') as Record<
             string,
             unknown

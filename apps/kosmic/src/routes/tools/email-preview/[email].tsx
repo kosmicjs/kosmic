@@ -27,6 +27,7 @@ export const get: Middleware = async (ctx) => {
   }
 
   // convert to try/catch to handle import errors
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
   const {default: emailComponent} = (await import(
     `../../../emails/${emailPath}.js`
   )) as {default: (props: Record<string, unknown>) => VNode};
