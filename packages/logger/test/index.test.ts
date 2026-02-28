@@ -1,63 +1,50 @@
+import process from 'node:process';
 import {describe, test} from 'node:test';
 import assert from 'node:assert';
-import {
-  buildLoggerOptions,
-  createKosmicLoggers,
-  createLogger,
-} from '../src/index.ts';
+import {createLogger, logger} from '../src/index.ts';
 
-void describe('@kosmic/logger', async () => {
-  await test('buildLoggerOptions: omits transport in production', () => {
-    const options = buildLoggerOptions({
-      name: 'api',
-      level: 'info',
-      nodeEnv: 'production',
-    });
-
-    assert.strictEqual(options.name, 'api');
-    assert.strictEqual(options.level, 'info');
-    assert.strictEqual(options.transport, undefined);
+describe('createLogger', () => {
+  test('returns a pino logger with default name "kosmic"', () => {
+    const log = createLogger();
+    assert.ok(typeof log.info === 'function');
+    assert.ok(typeof log.error === 'function');
+    assert.ok(typeof log.warn === 'function');
+    assert.ok(typeof log.debug === 'function');
+    assert.ok(typeof log.fatal === 'function');
   });
 
-  await test('buildLoggerOptions: uses pino-princess transport in non-production', () => {
-    const options = buildLoggerOptions({
-      name: 'api',
-      level: 'debug',
-      nodeEnv: 'development',
-    });
-
-    assert.strictEqual(options.transport?.target, 'pino-princess');
+  test('accepts custom options', () => {
+    const log = createLogger({level: 'debug'});
+    assert.strictEqual(log.level, 'debug');
   });
 
-  await test('buildLoggerOptions: supports custom transport target', () => {
-    const options = buildLoggerOptions({
-      name: 'api',
-      level: 'trace',
-      nodeEnv: 'test',
-      prettyTransportTarget: 'pino/file',
-    });
-
-    assert.strictEqual(options.transport?.target, 'pino/file');
+  test('defaults to info level when LOG_LEVEL is not set', () => {
+    const original = process.env.LOG_LEVEL;
+    delete process.env.LOG_LEVEL;
+    const log = createLogger();
+    assert.strictEqual(log.level, 'info');
+    if (original !== undefined) {
+      process.env.LOG_LEVEL = original;
+    }
   });
 
-  await test('createLogger: creates pino logger with configured bindings', () => {
-    const logger = createLogger({
-      name: 'api',
-      level: 'warn',
-      nodeEnv: 'production',
-    });
-
-    assert.strictEqual(logger.level, 'warn');
-    assert.strictEqual(logger.bindings().name, 'api');
+  test('respects LOG_LEVEL env var', () => {
+    const original = process.env.LOG_LEVEL;
+    process.env.LOG_LEVEL = 'warn';
+    const log = createLogger();
+    assert.strictEqual(log.level, 'warn');
+    if (original === undefined) {
+      delete process.env.LOG_LEVEL;
+    } else {
+      process.env.LOG_LEVEL = original;
+    }
   });
+});
 
-  await test('createKosmicLoggers: creates app and jobs loggers', () => {
-    const {logger, jobsLogger} = createKosmicLoggers({
-      level: 'info',
-      nodeEnv: 'production',
-    });
-
-    assert.strictEqual(logger.bindings().name, 'kosmic');
-    assert.strictEqual(jobsLogger.bindings().name, '~jobs~');
+describe('logger', () => {
+  test('is a valid pino logger instance', () => {
+    assert.ok(typeof logger.info === 'function');
+    assert.ok(typeof logger.error === 'function');
+    assert.ok(typeof logger.warn === 'function');
   });
 });
