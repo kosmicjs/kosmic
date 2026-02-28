@@ -14,6 +14,7 @@ import {createHelmetMiddleware, type HelmetOptions} from '@kosmic/helmet';
 import {renderMiddleware} from '@kosmic/jsx';
 import {createPinoMiddleware} from '@kosmic/pino-http';
 import {createFsRouter} from '@kosmic/router';
+import {logger as defaultLogger} from '@kosmic/logger';
 
 export type {default as Koa} from 'koa';
 export type {Context, Next, Middleware} from 'koa';
@@ -30,13 +31,6 @@ export type Manifest = Record<
     src: string;
   }
 >;
-
-/** Minimal logger interface required by KosmicServer. */
-export type LoggerLike = {
-  debug: (object: unknown, message?: string) => void;
-  warn: (object: unknown, message?: string) => void;
-  error: (error: unknown) => void;
-};
 
 /** Duck-typed Passport instance for session-based auth. */
 export type PassportLike = {
@@ -60,23 +54,10 @@ type RouterLoadedRoute = {
   path: string;
 };
 
-/** Console-based fallback logger used when none is provided. */
-const defaultLogger: LoggerLike = {
-  debug(object: unknown, message?: string) {
-    console.debug(message ?? '', object);
-  },
-  warn(object: unknown, message?: string) {
-    console.warn(message ?? '', object);
-  },
-  error(error: unknown) {
-    console.error(error);
-  },
-};
-
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
 export type KosmicServerOptions = {
   /** Pino-compatible logger instance. Defaults to a console-based logger. */
-  logger?: LoggerLike;
+  logger?: typeof defaultLogger;
   /** Node environment. Defaults to `process.env.NODE_ENV` or `'development'`. */
   nodeEnv?: 'production' | 'development' | 'test';
   /** Kosmic-specific environment string. Defaults to `nodeEnv`. */
@@ -198,7 +179,7 @@ export class KosmicServer {
   }
 
   /** Attach listeners for session and router events. */
-  static #attachEventLogging(koa: Koa, logger: LoggerLike): void {
+  static #attachEventLogging(koa: Koa, logger: typeof defaultLogger): void {
     koa.on('session:missed', (...ev) => {
       logger.warn({...ev}, 'session:missed');
     });

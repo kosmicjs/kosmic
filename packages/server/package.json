@@ -46,6 +46,7 @@
     "@kosmic/error-handler": "^0.0.0",
     "@kosmic/helmet": "^0.0.0",
     "@kosmic/jsx": "^0.0.0",
+    "@kosmic/logger": "^0.0.0",
     "@kosmic/pino-http": "^0.0.0",
     "@kosmic/router": "^0.0.0",
     "koa": "^3.1.1",
