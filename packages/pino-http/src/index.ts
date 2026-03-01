@@ -17,6 +17,16 @@ declare module 'koa' {
   }
 }
 
+declare module 'node:http' {
+  interface IncomingMessage {
+    log: Logger;
+  }
+
+  interface ServerResponse {
+    log: Logger;
+  }
+}
+
 const XRID_HEADER = 'x-request-id';
 
 export type PinoHttpOptions = Options;

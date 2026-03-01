@@ -17,3 +17,5 @@ export function createLogger(options: LoggerOptions = {}) {
 }
 
 export const logger = createLogger();
+
+export type {Logger, LoggerOptions} from 'pino';

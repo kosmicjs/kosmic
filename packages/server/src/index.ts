@@ -1,4 +1,5 @@
-import http, {type Server} from 'node:http';
+import process from 'node:process';
+import http, {type Server, type IncomingMessage} from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import Koa, {type Context, type Middleware} from 'koa';
@@ -12,11 +13,47 @@ import {errorHandler} from '@kosmic/error-handler';
 import {createHelmetMiddleware, type HelmetOptions} from '@kosmic/helmet';
 import {renderMiddleware} from '@kosmic/jsx';
 import {createPinoMiddleware} from '@kosmic/pino-http';
-import {createFsRouter, type RouteDefinition} from '@kosmic/router';
+import {createFsRouter} from '@kosmic/router';
+import {type Logger, logger as defaultLogger} from '@kosmic/logger';
 
+declare module 'koa' {
+  interface DefaultContext {
+    log: Logger;
+  }
+
+  interface Request {
+    log: Logger;
+  }
+
+  interface Response {
+    log: Logger;
+  }
+}
+
+declare module 'node:http' {
+  interface IncomingMessage {
+    log: Logger;
+  }
+
+  interface ServerResponse {
+    log: Logger;
+  }
+}
 export type {default as Koa} from 'koa';
-export type {Context, Next, Middleware} from 'koa';
+export type {
+  Context,
+  Next,
+  Middleware,
+  Parameters_,
+  DefaultContext,
+  ParameterizedContext,
+  DefaultStateExtends,
+  BaseContext,
+  DefaultState,
+} from 'koa';
 export type {stores as SessionStore, Session} from 'koa-session';
+export type {RouteDefinition} from '@kosmic/router';
+export type {HelmetOptions} from '@kosmic/helmet';
 
 export type Manifest = Record<
   string,
@@ -28,26 +65,10 @@ export type Manifest = Record<
   }
 >;
 
-export type LoggerLike = {
-  debug: (object: unknown, message?: string) => void;
-  warn: (object: unknown, message?: string) => void;
-  error: (error: unknown) => void;
-};
-
+/** Duck-typed Passport instance for session-based auth. */
 export type PassportLike = {
   initialize: (options?: {userProperty: string}) => Middleware;
   session: () => Middleware;
-};
-
-export type ServerEnvironment = {
-  nodeEnv: 'production' | 'development' | 'test';
-  kosmicEnv: string;
-  sessionKeys: string[];
-};
-
-type RouterLoadedRoute = {
-  method: string;
-  path: string;
 };
 
 type ContentSecurityPolicyOptions = Exclude<
@@ -61,35 +82,35 @@ type ContentSecurityPolicyDirectives = NonNullable<
   ContentSecurityPolicy['directives']
 >;
 
-export const app = new Koa({asyncLocalStorage: true});
-
-export type ServerMiddlewareHooks = {
-  beforeCore?: Middleware[];
-  afterCore?: Middleware[];
-  beforeRoutes?: Middleware[];
-  afterRoutes?: Middleware[];
+type RouterLoadedRoute = {
+  method: string;
+  path: string;
 };
 
-export type ServerInternals = {
-  readFile?: (filePath: string, encoding: BufferEncoding) => Promise<string>;
-  createFsRouter?: typeof createFsRouter;
-  createPinoMiddleware?: typeof createPinoMiddleware;
-  createHelmetMiddleware?: typeof createHelmetMiddleware;
-  createSessionMiddleware?: typeof session;
-};
-
-export type CreateServerAppOptions = {
-  logger: LoggerLike;
-  env: ServerEnvironment;
-  routesDir: string;
-  publicDir: string;
+/** Options accepted by the KosmicServer constructor. All fields are optional. */
+export type KosmicServerOptions = {
+  /** Pino-compatible logger instance. Defaults to a console-based logger. */
+  logger?: typeof defaultLogger;
+  /** Node environment. Defaults to `process.env.NODE_ENV` or `'development'`. */
+  nodeEnv?: 'production' | 'development' | 'test';
+  /** Kosmic-specific environment string. Defaults to `nodeEnv`. */
+  kosmicEnv?: string;
+  /** Keys used for cookie signing / session encryption. Defaults to `['kosmic-dev-key']`. */
+  sessionKeys?: string[];
+  /** Absolute path to the file-system routes directory. Defaults to `<cwd>/src/routes`. */
+  routesDir?: string;
+  /** Absolute path to the public / static assets directory. Defaults to `<cwd>/src/public`. */
+  publicDir?: string;
+  /** Override the default Vite manifest path (`<publicDir>/.vite/manifest.json`). */
   manifestPath?: string;
+  /** Session store implementation (e.g. a database-backed store). */
   sessionStore?: SessionStore;
+  /** Passport instance for authentication. */
   passport?: PassportLike;
+  /** Helmet options — merged with sensible defaults for CSP. */
   helmetOptions?: HelmetOptions;
+  /** Extra session options (the `store` field is set automatically). */
   sessionOptions?: Omit<session.opts, 'store'>;
-  middlewares?: ServerMiddlewareHooks;
-  internals?: ServerInternals;
 };
 
 declare module 'koa' {
@@ -103,255 +124,260 @@ declare module 'koa' {
   }
 }
 
-const configuredApps = new WeakSet<Koa>();
+/**
+ * Opinionated, class-based Koa server for Kosmic apps.
+ *
+ * @example
+ * ```ts
+ * const server = new KosmicServer({ logger, nodeEnv: 'production', ... });
+ * await server.listen(3000);
+ * ```
+ */
+export class KosmicServer {
+  // --- Public static methods ---
 
-function createDefaultHelmetDirectives(
-  kosmicEnv: string,
-): ContentSecurityPolicyDirectives {
-  return {
-    'upgrade-insecure-requests': kosmicEnv === 'development' ? null : [],
-    'script-src': [
-      "'self'",
-      "'unsafe-inline'",
-      "'unsafe-eval'",
-      'http://localhost:5173',
-    ],
-    'connect-src': [
-      "'self'",
-      'http://127.0.0.1:2222',
-      'ws://127.0.0.1:2222',
-      'ws://localhost:5173',
-    ],
-  };
-}
+  /**
+   * Retrieve the current Koa `Context` via async-local-storage.
+   *
+   * @throws When called outside of a request lifecycle.
+   */
+  static getCtx(): Context {
+    if (!KosmicServer.#instance) {
+      throw new Error('No KosmicServer instance has been created');
+    }
 
-function mergeHelmetOptions(
-  kosmicEnv: string,
-  helmetOptions?: HelmetOptions,
-): HelmetOptions {
-  const defaultDirectives = createDefaultHelmetDirectives(kosmicEnv);
+    const ctx = KosmicServer.#instance.#koa.currentContext;
 
-  let providedCsp: ContentSecurityPolicy | undefined;
+    if (!ctx) {
+      throw new Error('No context found');
+    }
 
-  if (typeof helmetOptions?.contentSecurityPolicy === 'object') {
-    providedCsp = helmetOptions.contentSecurityPolicy;
+    return ctx as Context;
   }
 
-  const providedDirectives = providedCsp?.directives;
+  // --- Static fields ---
 
-  return {
-    ...helmetOptions,
-    contentSecurityPolicy: {
-      ...providedCsp,
-      directives: {
-        ...defaultDirectives,
-        ...providedDirectives,
+  /** The most recently constructed KosmicServer — used by `getCtx()`. */
+  static #instance: KosmicServer | undefined;
+
+  // --- Private static methods ---
+
+  /** Build default CSP directives for development environments. */
+  static #createDefaultHelmetDirectives(
+    kosmicEnv: string,
+  ): ContentSecurityPolicyDirectives {
+    return {
+      'upgrade-insecure-requests': kosmicEnv === 'development' ? null : [],
+      'script-src': [
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        'http://localhost:5173',
+      ],
+      'connect-src': [
+        "'self'",
+        'http://127.0.0.1:2222',
+        'ws://127.0.0.1:2222',
+        'ws://localhost:5173',
+      ],
+    };
+  }
+
+  /** Merge user-provided helmet options with sane CSP defaults. */
+  static #mergeHelmetOptions(
+    kosmicEnv: string,
+    helmetOptions?: HelmetOptions,
+  ): HelmetOptions {
+    const defaultDirectives =
+      KosmicServer.#createDefaultHelmetDirectives(kosmicEnv);
+
+    let providedCsp: ContentSecurityPolicy | undefined;
+
+    if (typeof helmetOptions?.contentSecurityPolicy === 'object') {
+      providedCsp = helmetOptions.contentSecurityPolicy;
+    }
+
+    const providedDirectives = providedCsp?.directives;
+
+    return {
+      ...helmetOptions,
+      contentSecurityPolicy: {
+        ...providedCsp,
+        directives: {
+          ...defaultDirectives,
+          ...providedDirectives,
+        },
       },
-    },
-  };
-}
-
-function useMiddlewares(app: Koa, middlewares: Middleware[]): void {
-  for (const middleware of middlewares) {
-    app.use(middleware);
+    };
   }
-}
 
-function attachCoreMiddleware(
-  app: Koa,
-  options: {
-    env: ServerEnvironment;
-    logger: LoggerLike;
-    publicDir: string;
-    manifestPath: string;
-    readFile: NonNullable<ServerInternals['readFile']>;
-    pinoMiddlewareFactory: NonNullable<ServerInternals['createPinoMiddleware']>;
-  },
-): void {
-  app.use(responseTime());
+  /** Attach listeners for session and router events. */
+  static #attachEventLogging(koa: Koa, logger: typeof defaultLogger): void {
+    koa.on('session:missed', (...ev) => {
+      logger.warn({...ev}, 'session:missed');
+    });
 
-  app.use(serve(options.publicDir));
+    koa.on('session:invalid', (...ev) => {
+      logger.warn({...ev}, 'session:invalid');
+    });
 
-  if (options.env.kosmicEnv === 'production') {
-    app.use(async (ctx, next) => {
-      const manifest = JSON.parse(
-        await options.readFile(options.manifestPath, 'utf8'),
-      ) as Manifest;
-      ctx.state.manifest = manifest;
-      await next();
+    koa.on('session:expired', (...ev) => {
+      logger.warn({...ev}, 'session:expired');
+    });
+
+    koa.on('router:loaded', (ev: {routes: RouterLoadedRoute[]}) => {
+      logger.debug({routes: ev.routes}, 'router:loaded');
     });
   }
 
-  app.use(
-    options.pinoMiddlewareFactory(
-      {logger: options.logger} as Parameters<typeof createPinoMiddleware>[0],
-      {environment: options.env.nodeEnv},
-    ),
-  );
+  // --- Instance fields ---
 
-  app.use(conditional());
-  app.use(etag());
-  app.use(bodyParser());
-  app.use(renderMiddleware);
-  app.use(errorHandler({logger: options.logger}));
-}
+  readonly #koa: Koa;
+  readonly #options: KosmicServerOptions;
+  #server: Server | undefined;
 
-function attachSessionAndPassport(
-  app: Koa,
-  options: {
-    env: ServerEnvironment;
-    sessionStore?: SessionStore | undefined;
-    sessionOptions?: Omit<session.opts, 'store'> | undefined;
-    passport?: PassportLike | undefined;
-    sessionMiddlewareFactory: NonNullable<
-      ServerInternals['createSessionMiddleware']
-    >;
-  },
-): void {
-  app.keys = options.env.sessionKeys;
-  app.proxy = options.env.kosmicEnv === 'production';
+  // --- Constructor ---
 
-  if (options.sessionStore) {
-    app.use(
-      options.sessionMiddlewareFactory(
-        {
-          secure: options.env.kosmicEnv === 'production',
-          sameSite: 'lax',
-          ...options.sessionOptions,
-          store: options.sessionStore,
-        },
-        app,
+  constructor(options: KosmicServerOptions) {
+    this.#koa = new Koa({asyncLocalStorage: true});
+    this.#options = options;
+    KosmicServer.#instance = this;
+  }
+
+  // --- Instance accessors ---
+
+  /** The underlying Koa application. */
+  get app(): Koa {
+    return this.#koa;
+  }
+
+  /** The underlying `http.Server`, available after `.listen()` resolves. */
+  get server(): Server | undefined {
+    return this.#server;
+  }
+
+  // --- Instance methods ---
+
+  /**
+   * Bootstrap middleware, load file-system routes, and start listening.
+   *
+   * @returns The raw `http.Server` for lifecycle management.
+   */
+  async listen(port: number, host = '0.0.0.0'): Promise<Server> {
+    await this.#bootstrap();
+
+    // @ts-expect-error Koa typings don't allow for generic request/response types, but the underlying `http.Server` is compatible with the standard types.
+    const server = http.createServer<Koa.Request['req'], Koa.Response>(
+      this.#koa.callback(),
+    );
+    this.#server = server;
+
+    await new Promise<void>((resolve) => {
+      server.listen(port, host, () => {
+        resolve();
+      });
+    });
+
+    return server;
+  }
+
+  // --- Private instance methods ---
+
+  /** Wire up the full middleware pipeline and file-system router. */
+  async #bootstrap(): Promise<void> {
+    const nodeEnv =
+      this.#options.nodeEnv ??
+      (process.env.NODE_ENV as KosmicServerOptions['nodeEnv']) ??
+      'development';
+    const logger = this.#options.logger ?? defaultLogger;
+    const kosmicEnv = this.#options.kosmicEnv ?? nodeEnv;
+    const sessionKeys = this.#options.sessionKeys ?? ['kosmic-dev-key'];
+    const routesDir =
+      this.#options.routesDir ?? path.join(process.cwd(), 'src', 'routes');
+    const publicDir =
+      this.#options.publicDir ?? path.join(process.cwd(), 'src', 'public');
+    const manifestPath =
+      this.#options.manifestPath ??
+      path.join(publicDir, '.vite', 'manifest.json');
+    const {sessionStore, passport, helmetOptions, sessionOptions} =
+      this.#options;
+
+    const koa = this.#koa;
+
+    // --- Core middleware ---
+    koa.use(responseTime());
+    koa.use(serve(publicDir));
+
+    if (kosmicEnv === 'production') {
+      koa.use(async (ctx, next) => {
+        const manifest = JSON.parse(
+          await fs.readFile(manifestPath, 'utf8'),
+        ) as Manifest;
+        ctx.state.manifest = manifest;
+        await next();
+      });
+    }
+
+    koa.use(
+      createPinoMiddleware(
+        {logger} as Parameters<typeof createPinoMiddleware>[0],
+        {environment: nodeEnv},
       ),
     );
+
+    koa.use(conditional());
+    koa.use(etag());
+    koa.use(bodyParser());
+    koa.use(renderMiddleware);
+    koa.use(errorHandler({logger}));
+
+    // --- Session & Passport ---
+    koa.keys = sessionKeys;
+    koa.proxy = kosmicEnv === 'production';
+
+    if (sessionStore) {
+      koa.use(
+        session(
+          {
+            secure: kosmicEnv === 'production',
+            sameSite: 'lax',
+            ...sessionOptions,
+            store: sessionStore,
+          },
+          koa,
+        ),
+      );
+    }
+
+    if (passport) {
+      koa.use(passport.initialize({userProperty: 'email'}));
+      koa.use(passport.session());
+    }
+
+    // --- File-system router ---
+    const {middleware: fsRouterMiddleware} = await createFsRouter(
+      routesDir,
+      koa,
+    );
+    koa.use(fsRouterMiddleware);
+
+    // --- Helmet (last) ---
+    koa.use(
+      createHelmetMiddleware(
+        KosmicServer.#mergeHelmetOptions(kosmicEnv, helmetOptions),
+      ),
+    );
+
+    // --- Event logging ---
+    KosmicServer.#attachEventLogging(koa, logger);
   }
-
-  if (options.passport) {
-    app.use(options.passport.initialize({userProperty: 'email'}));
-    app.use(options.passport.session());
-  }
 }
 
-function getResolvedInternals(internals?: ServerInternals): {
-  readFile: NonNullable<ServerInternals['readFile']>;
-  fsRouterFactory: NonNullable<ServerInternals['createFsRouter']>;
-  pinoMiddlewareFactory: NonNullable<ServerInternals['createPinoMiddleware']>;
-  helmetMiddlewareFactory: NonNullable<
-    ServerInternals['createHelmetMiddleware']
-  >;
-  sessionMiddlewareFactory: NonNullable<
-    ServerInternals['createSessionMiddleware']
-  >;
-} {
-  return {
-    readFile: internals?.readFile ?? fs.readFile,
-    fsRouterFactory: internals?.createFsRouter ?? createFsRouter,
-    pinoMiddlewareFactory:
-      internals?.createPinoMiddleware ?? createPinoMiddleware,
-    helmetMiddlewareFactory:
-      internals?.createHelmetMiddleware ?? createHelmetMiddleware,
-    sessionMiddlewareFactory: internals?.createSessionMiddleware ?? session,
-  };
-}
-
-function attachAppEventLogging(app: Koa, logger: LoggerLike): void {
-  app.on('session:missed', (...ev) => {
-    logger.warn({...ev}, 'session:missed');
-  });
-
-  app.on('session:invalid', (...ev) => {
-    logger.warn({...ev}, 'session:invalid');
-  });
-
-  app.on('session:expired', (...ev) => {
-    logger.warn({...ev}, 'session:expired');
-  });
-
-  app.on('router:loaded', (ev: {routes: RouterLoadedRoute[]}) => {
-    logger.debug({routes: ev.routes}, 'router:loaded');
-  });
-}
-
-export async function createServerApp(
-  options: CreateServerAppOptions,
-): Promise<Koa> {
-  const {
-    logger,
-    env,
-    routesDir,
-    publicDir,
-    manifestPath = path.join(publicDir, '.vite', 'manifest.json'),
-    sessionStore,
-    passport,
-    helmetOptions,
-    sessionOptions,
-    middlewares,
-    internals,
-  } = options;
-
-  const {
-    readFile,
-    fsRouterFactory,
-    pinoMiddlewareFactory,
-    helmetMiddlewareFactory,
-    sessionMiddlewareFactory,
-  } = getResolvedInternals(internals);
-
-  attachCoreMiddleware(app, {
-    env,
-    logger,
-    publicDir,
-    manifestPath,
-    readFile,
-    pinoMiddlewareFactory,
-  });
-
-  useMiddlewares(app, middlewares?.beforeCore ?? []);
-
-  attachSessionAndPassport(app, {
-    env,
-    sessionStore,
-    sessionOptions,
-    passport,
-    sessionMiddlewareFactory,
-  });
-
-  useMiddlewares(app, middlewares?.afterCore ?? []);
-  useMiddlewares(app, middlewares?.beforeRoutes ?? []);
-
-  const {middleware: fsRouterMiddleware} = await fsRouterFactory(
-    routesDir,
-    app,
-  );
-  app.use(fsRouterMiddleware);
-
-  useMiddlewares(app, middlewares?.afterRoutes ?? []);
-
-  app.use(
-    helmetMiddlewareFactory(mergeHelmetOptions(env.kosmicEnv, helmetOptions)),
-  );
-
-  attachAppEventLogging(app, logger);
-  configuredApps.add(app);
-
-  return app;
-}
-
-export async function createServer(
-  options: CreateServerAppOptions,
-): Promise<Server> {
-  const app = await createServerApp(options);
-
-  return http.createServer(app.callback());
-}
-
+/**
+ * Convenience wrapper around `KosmicServer.getCtx()`.
+ *
+ * Retrieves the current Koa `Context` via async-local-storage.
+ */
 export function getCtx(): Context {
-  const ctx = app.currentContext;
-
-  if (!ctx) {
-    throw new Error('No context found');
-  }
-
-  return ctx as Context;
+  return KosmicServer.getCtx();
 }
-
-export type {RouteDefinition} from '@kosmic/router';

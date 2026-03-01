@@ -3,13 +3,12 @@ import {config} from './config/index.ts';
 import {logger} from './utils/logger.ts';
 import {getServer} from './server.ts';
 
-const server = await getServer();
+const kosmicServer = getServer();
 
-server.listen({port: config.port, host: config.host}, () => {
-  logger.info(`Server listening on ${config.host}:${config.port}`);
+const server = await kosmicServer.listen(config.port, config.host);
 
-  if (process.send) process.send({status: 'ready'});
-});
+logger.info(`Server listening on ${config.host}:${config.port}`);
+if (process.send) process.send({status: 'ready'});
 
 // throw to bubble up to uncaughtException
 process.on('unhandledRejection', async (error) => {

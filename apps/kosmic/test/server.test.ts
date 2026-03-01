@@ -35,8 +35,8 @@ await describe('server integration', async () => {
   before(async () => {
     await migrator.migrateToLatest();
     const {getServer} = await import('../src/server.ts');
-    server = await getServer();
-    server.listen(4567);
+    const kosmicServer = getServer();
+    server = await kosmicServer.listen(4567);
   });
 
   await test('GET / 200 ok', async () => {
