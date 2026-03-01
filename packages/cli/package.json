@@ -42,7 +42,6 @@
   "dependencies": {
     "execa": "^9.6.1",
     "kysely": "^0.28.11",
-    "meow": "^14.1.0",
     "p-wait-for": "^6.0.0",
     "path-exists": "^5.0.0",
     "pino": "^10.3.1",
