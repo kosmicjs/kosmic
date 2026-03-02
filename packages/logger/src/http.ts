@@ -40,6 +40,9 @@ export type CreatePinoMiddlewareConfig = {
   environment?: 'production' | 'development' | 'test';
 };
 
+/**
+ * Create Koa middleware backed by pino-http.
+ */
 export function createPinoMiddleware(
   options: Options,
   config?: CreatePinoMiddlewareConfig,

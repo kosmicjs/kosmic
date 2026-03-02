@@ -20,6 +20,12 @@
         "types": "./dist/src/index.d.ts",
         "default": "./dist/src/index.js"
       }
+    },
+    "./http": {
+      "import": {
+        "types": "./dist/src/http.d.ts",
+        "default": "./dist/src/http.js"
+      }
     }
   },
   "main": "dist/src/index.js",
@@ -36,8 +42,13 @@
     "test:coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
+    "koa": "^3.1.2",
     "pino": "^10.3.1",
+    "pino-http": "^11.0.0",
     "pino-princess": "^1.6.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^3.0.1"
   },
   "engines": {
     "node": ">=22"

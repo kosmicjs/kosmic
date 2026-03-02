@@ -16,7 +16,6 @@
     { "path": "../../packages/server" },
     { "path": "../../packages/router" },
     { "path": "../../packages/helmet" },
-    { "path": "../../packages/pino-http" },
     { "path": "../../packages/core" },
     { "path": "../../packages/logger" },
     { "path": "../../packages/jsx" },

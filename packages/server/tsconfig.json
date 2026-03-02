@@ -11,7 +11,6 @@
   "references": [
     { "path": "../router" },
     { "path": "../helmet" },
-    { "path": "../pino-http" },
     { "path": "../logger" },
     { "path": "../jsx" },
     { "path": "../core" },

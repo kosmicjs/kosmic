@@ -1,5 +1,11 @@
 import process from 'node:process';
-import {pino, type LoggerOptions} from 'pino';
+import {pino, type LoggerOptions, type Logger} from 'pino';
+
+export {
+  createPinoMiddleware,
+  type PinoHttpOptions,
+  type CreatePinoMiddlewareConfig,
+} from './http.ts';
 
 export function createLogger(options: LoggerOptions = {}) {
   return pino({

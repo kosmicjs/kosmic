@@ -87,7 +87,6 @@
     "path-to-regexp": "^8.3.0",
     "pg": "^8.19.0",
     "pino": "^10.3.1",
-    "pino-http": "^11.0.0",
     "pino-princess": "^1.6.1",
     "postcss": "^8.5.6",
     "postcss-css-variables": "^0.19.0",

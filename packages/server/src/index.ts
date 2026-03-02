@@ -12,9 +12,12 @@ import etag from '@koa/etag';
 import {errorHandler} from '@kosmic/error-handler';
 import {createHelmetMiddleware, type HelmetOptions} from '@kosmic/helmet';
 import {renderMiddleware} from '@kosmic/jsx';
-import {createPinoMiddleware} from '@kosmic/pino-http';
 import {createFsRouter} from '@kosmic/router';
-import {type Logger, logger as defaultLogger} from '@kosmic/logger';
+import {
+  createPinoMiddleware,
+  type Logger,
+  logger as defaultLogger,
+} from '@kosmic/logger';
 
 export type {default as Koa} from 'koa';
 export type {
