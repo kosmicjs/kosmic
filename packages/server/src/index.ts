@@ -18,73 +18,9 @@ import {
   type Logger,
   logger as defaultLogger,
 } from '@kosmic/logger';
+import type {Manifest, PassportLike, RouterLoadedRoute} from './types.ts';
 
-export type {default as Koa} from 'koa';
-export type {
-  Context,
-  Next,
-  Middleware,
-  Parameters_,
-  DefaultContext,
-  ParameterizedContext,
-  DefaultStateExtends,
-  BaseContext,
-  DefaultState,
-  Request,
-  Response,
-} from 'koa';
-export type {stores as SessionStore, Session} from 'koa-session';
-export type {RouteDefinition} from '@kosmic/router';
-export type {HelmetOptions} from '@kosmic/helmet';
-declare module 'koa' {
-  interface DefaultState {
-    manifest?: Manifest;
-  }
-  interface DefaultContext {
-    log: Logger;
-  }
-
-  interface Request {
-    body?: unknown;
-    rawBody: string;
-    log: Logger;
-  }
-
-  interface Response {
-    log: Logger;
-  }
-}
-
-declare module 'node:http' {
-  interface IncomingMessage {
-    log: Logger;
-  }
-
-  interface ServerResponse {
-    log: Logger;
-  }
-}
-
-export type Manifest = Record<
-  string,
-  {
-    css: string[];
-    file: string;
-    isEntry: boolean;
-    src: string;
-  }
->;
-
-/** Duck-typed Passport instance for session-based auth. */
-export type PassportLike = {
-  initialize: (options?: {userProperty: string}) => Middleware;
-  session: () => Middleware;
-};
-
-type RouterLoadedRoute = {
-  method: string;
-  path: string;
-};
+export type * from './types.ts';
 
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
 export type KosmicServerOptions = {
