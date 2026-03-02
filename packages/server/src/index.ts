@@ -78,10 +78,6 @@ type ContentSecurityPolicyOptions = Exclude<
 
 type ContentSecurityPolicy = NonNullable<ContentSecurityPolicyOptions>;
 
-type ContentSecurityPolicyDirectives = NonNullable<
-  ContentSecurityPolicy['directives']
->;
-
 type RouterLoadedRoute = {
   method: string;
   path: string;
@@ -155,88 +151,12 @@ export class KosmicServer {
     return ctx as Context;
   }
 
-  // --- Static fields ---
-
   /** The most recently constructed KosmicServer — used by `getCtx()`. */
   static #instance: KosmicServer | undefined;
-
-  // --- Private static methods ---
-
-  /** Build default CSP directives for development environments. */
-  static #createDefaultHelmetDirectives(
-    kosmicEnv: string,
-  ): ContentSecurityPolicyDirectives {
-    return {
-      'upgrade-insecure-requests': kosmicEnv === 'development' ? null : [],
-      'script-src': [
-        "'self'",
-        "'unsafe-inline'",
-        "'unsafe-eval'",
-        'http://localhost:5173',
-      ],
-      'connect-src': [
-        "'self'",
-        'http://127.0.0.1:2222',
-        'ws://127.0.0.1:2222',
-        'ws://localhost:5173',
-      ],
-    };
-  }
-
-  /** Merge user-provided helmet options with sane CSP defaults. */
-  static #mergeHelmetOptions(
-    kosmicEnv: string,
-    helmetOptions?: HelmetOptions,
-  ): HelmetOptions {
-    const defaultDirectives =
-      KosmicServer.#createDefaultHelmetDirectives(kosmicEnv);
-
-    let providedCsp: ContentSecurityPolicy | undefined;
-
-    if (typeof helmetOptions?.contentSecurityPolicy === 'object') {
-      providedCsp = helmetOptions.contentSecurityPolicy;
-    }
-
-    const providedDirectives = providedCsp?.directives;
-
-    return {
-      ...helmetOptions,
-      contentSecurityPolicy: {
-        ...providedCsp,
-        directives: {
-          ...defaultDirectives,
-          ...providedDirectives,
-        },
-      },
-    };
-  }
-
-  /** Attach listeners for session and router events. */
-  static #attachEventLogging(koa: Koa, logger: typeof defaultLogger): void {
-    koa.on('session:missed', (...ev) => {
-      logger.warn({...ev}, 'session:missed');
-    });
-
-    koa.on('session:invalid', (...ev) => {
-      logger.warn({...ev}, 'session:invalid');
-    });
-
-    koa.on('session:expired', (...ev) => {
-      logger.warn({...ev}, 'session:expired');
-    });
-
-    koa.on('router:loaded', (ev: {routes: RouterLoadedRoute[]}) => {
-      logger.debug({routes: ev.routes}, 'router:loaded');
-    });
-  }
-
-  // --- Instance fields ---
 
   readonly #koa: Koa;
   readonly #options: KosmicServerOptions;
   #server: Server | undefined;
-
-  // --- Constructor ---
 
   constructor(options: KosmicServerOptions) {
     this.#koa = new Koa({asyncLocalStorage: true});
@@ -244,19 +164,17 @@ export class KosmicServer {
     KosmicServer.#instance = this;
   }
 
-  // --- Instance accessors ---
-
   /** The underlying Koa application. */
   get app(): Koa {
     return this.#koa;
   }
 
-  /** The underlying `http.Server`, available after `.listen()` resolves. */
+  /**
+   * The underlying `http.Server`, available after `.listen()` resolves.
+   */
   get server(): Server | undefined {
     return this.#server;
   }
-
-  // --- Instance methods ---
 
   /**
    * Bootstrap middleware, load file-system routes, and start listening.
@@ -281,9 +199,52 @@ export class KosmicServer {
     return server;
   }
 
-  // --- Private instance methods ---
+  /**
+   * Merge user-provided helmet options with sane CSP defaults.
+   */
+  #mergeHelmetOptions(
+    kosmicEnv: string,
+    helmetOptions?: HelmetOptions,
+  ): HelmetOptions {
+    const defaultDirectives = {
+      'upgrade-insecure-requests': kosmicEnv === 'development' ? null : [],
+      'script-src': [
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        'http://localhost:5173',
+      ],
+      'connect-src': [
+        "'self'",
+        'http://127.0.0.1:2222',
+        'ws://127.0.0.1:2222',
+        'ws://localhost:5173',
+      ],
+    };
 
-  /** Wire up the full middleware pipeline and file-system router. */
+    let providedCsp: ContentSecurityPolicy | undefined;
+
+    if (typeof helmetOptions?.contentSecurityPolicy === 'object') {
+      providedCsp = helmetOptions.contentSecurityPolicy;
+    }
+
+    const providedDirectives = providedCsp?.directives;
+
+    return {
+      ...helmetOptions,
+      contentSecurityPolicy: {
+        ...providedCsp,
+        directives: {
+          ...defaultDirectives,
+          ...providedDirectives,
+        },
+      },
+    };
+  }
+
+  /**
+   * Wire up the full middleware pipeline and file-system router.
+   */
   async #bootstrap(): Promise<void> {
     const nodeEnv =
       this.#options.nodeEnv ??
@@ -304,7 +265,6 @@ export class KosmicServer {
 
     const koa = this.#koa;
 
-    // --- Core middleware ---
     koa.use(responseTime());
     koa.use(serve(publicDir));
 
@@ -336,6 +296,18 @@ export class KosmicServer {
     koa.proxy = kosmicEnv === 'production';
 
     if (sessionStore) {
+      koa.on('session:missed', (...ev) => {
+        logger.warn({...ev}, 'session:missed');
+      });
+
+      koa.on('session:invalid', (...ev) => {
+        logger.warn({...ev}, 'session:invalid');
+      });
+
+      koa.on('session:expired', (...ev) => {
+        logger.warn({...ev}, 'session:expired');
+      });
+
       koa.use(
         session(
           {
@@ -354,6 +326,11 @@ export class KosmicServer {
       koa.use(passport.session());
     }
 
+    koa.on('router:loaded', (ev: {routes: RouterLoadedRoute[]}) => {
+      console.log('Router loaded with routes:');
+      logger.debug({routes: ev.routes}, 'router:loaded');
+    });
+
     // --- File-system router ---
     const {middleware: fsRouterMiddleware} = await createFsRouter(
       routesDir,
@@ -364,12 +341,9 @@ export class KosmicServer {
     // --- Helmet (last) ---
     koa.use(
       createHelmetMiddleware(
-        KosmicServer.#mergeHelmetOptions(kosmicEnv, helmetOptions),
+        this.#mergeHelmetOptions(kosmicEnv, helmetOptions),
       ),
     );
-
-    // --- Event logging ---
-    KosmicServer.#attachEventLogging(koa, logger);
   }
 }
 

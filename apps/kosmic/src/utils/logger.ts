@@ -1,5 +1,8 @@
-import {logger} from '@kosmic/logger';
+import {createLogger} from '@kosmic/logger';
+import {config} from '#config/index.js';
 
-export {logger, logger as default} from '@kosmic/logger';
+export const jobsLogger = createLogger({name: 'jobs'});
 
-export const jobsLogger = logger.child({name: 'jobs'});
+export const logger = createLogger({level: config.logLevel});
+
+export default logger;

@@ -25,16 +25,24 @@ export const kosmicEnv = z
 
 const parsedEnv: Record<string, string> = {};
 
+const envPath = path.resolve(import.meta.dirname, process.cwd(), `.env`);
+
 // laod .env first
 dotenv.config({
-  path: path.resolve(import.meta.dirname, process.cwd(), `.env`),
+  path: envPath,
   processEnv: parsedEnv,
   quiet: true,
 });
 
+const envPathSpecific = path.resolve(
+  import.meta.dirname,
+  process.cwd(),
+  `.env.${kosmicEnv}`,
+);
+
 // then override with specific env
 dotenv.config({
-  path: path.resolve(import.meta.dirname, process.cwd(), `.env.${kosmicEnv}`),
+  path: envPathSpecific,
   processEnv: parsedEnv,
   override: true,
   quiet: true,
