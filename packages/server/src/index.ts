@@ -17,11 +17,16 @@ import {createFsRouter} from '@kosmic/router';
 import {type Logger, logger as defaultLogger} from '@kosmic/logger';
 
 declare module 'koa' {
+  interface DefaultState {
+    manifest?: Manifest;
+  }
   interface DefaultContext {
     log: Logger;
   }
 
   interface Request {
+    body?: unknown;
+    rawBody: string;
     log: Logger;
   }
 
@@ -108,17 +113,6 @@ export type KosmicServerOptions = {
   /** Extra session options (the `store` field is set automatically). */
   sessionOptions?: Omit<session.opts, 'store'>;
 };
-
-declare module 'koa' {
-  interface Request {
-    body?: unknown;
-    rawBody: string;
-  }
-
-  interface DefaultState {
-    manifest?: Manifest;
-  }
-}
 
 /**
  * Opinionated, class-based Koa server for Kosmic apps.
