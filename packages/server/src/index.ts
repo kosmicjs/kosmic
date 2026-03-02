@@ -78,13 +78,6 @@ export type PassportLike = {
   session: () => Middleware;
 };
 
-type ContentSecurityPolicyOptions = Exclude<
-  HelmetOptions['contentSecurityPolicy'],
-  boolean
->;
-
-type ContentSecurityPolicy = NonNullable<ContentSecurityPolicyOptions>;
-
 type RouterLoadedRoute = {
   method: string;
   path: string;
@@ -93,7 +86,7 @@ type RouterLoadedRoute = {
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
 export type KosmicServerOptions = {
   /** Pino-compatible logger instance. Defaults to a console-based logger. */
-  logger?: typeof defaultLogger;
+  logger?: Logger;
   /** Node environment. Defaults to `process.env.NODE_ENV` or `'development'`. */
   nodeEnv?: 'production' | 'development' | 'test';
   /** Kosmic-specific environment string. Defaults to `nodeEnv`. */
@@ -136,7 +129,7 @@ export class KosmicServer {
       throw new Error('No KosmicServer instance has been created');
     }
 
-    const ctx = KosmicServer.#instance.#koa.currentContext;
+    const ctx = KosmicServer.#instance.koa.currentContext;
 
     if (!ctx) {
       throw new Error('No context found');
@@ -145,29 +138,22 @@ export class KosmicServer {
     return ctx as Context;
   }
 
-  /** The most recently constructed KosmicServer — used by `getCtx()`. */
+  /** Singleton */
   static #instance: KosmicServer | undefined;
 
-  readonly #koa: Koa;
-  readonly #options: KosmicServerOptions;
-  #server: Server | undefined;
+  koa: Koa;
+  options: KosmicServerOptions;
+  server: Server | undefined;
 
   constructor(options: KosmicServerOptions) {
-    this.#koa = new Koa({asyncLocalStorage: true});
-    this.#options = options;
+    this.koa = new Koa({asyncLocalStorage: true});
+    this.options = options;
     KosmicServer.#instance = this;
   }
 
   /** The underlying Koa application. */
   get app(): Koa {
-    return this.#koa;
-  }
-
-  /**
-   * The underlying `http.Server`, available after `.listen()` resolves.
-   */
-  get server(): Server | undefined {
-    return this.#server;
+    return this.koa;
   }
 
   /**
@@ -179,18 +165,17 @@ export class KosmicServer {
     await this.#bootstrap();
 
     // @ts-expect-error Koa typings don't allow for generic request/response types, but the underlying `http.Server` is compatible with the standard types.
-    const server = http.createServer<Koa.Request['req'], Koa.Response>(
-      this.#koa.callback(),
+    this.server = http.createServer<Koa.Request['req'], Koa.Response>(
+      this.koa.callback(),
     );
-    this.#server = server;
 
     await new Promise<void>((resolve) => {
-      server.listen(port, host, () => {
+      this.server?.listen(port, host, () => {
         resolve();
       });
     });
 
-    return server;
+    return this.server;
   }
 
   /**
@@ -216,7 +201,7 @@ export class KosmicServer {
       ],
     };
 
-    let providedCsp: ContentSecurityPolicy | undefined;
+    let providedCsp;
 
     if (typeof helmetOptions?.contentSecurityPolicy === 'object') {
       providedCsp = helmetOptions.contentSecurityPolicy;
@@ -241,23 +226,23 @@ export class KosmicServer {
    */
   async #bootstrap(): Promise<void> {
     const nodeEnv =
-      this.#options.nodeEnv ??
+      this.options.nodeEnv ??
       (process.env.NODE_ENV as KosmicServerOptions['nodeEnv']) ??
       'development';
-    const logger = this.#options.logger ?? defaultLogger;
-    const kosmicEnv = this.#options.kosmicEnv ?? nodeEnv;
-    const sessionKeys = this.#options.sessionKeys ?? ['kosmic-dev-key'];
+    const logger = this.options.logger ?? defaultLogger;
+    const kosmicEnv = this.options.kosmicEnv ?? nodeEnv;
+    const sessionKeys = this.options.sessionKeys ?? ['kosmic-dev-key'];
     const routesDir =
-      this.#options.routesDir ?? path.join(process.cwd(), 'src', 'routes');
+      this.options.routesDir ?? path.join(process.cwd(), 'src', 'routes');
     const publicDir =
-      this.#options.publicDir ?? path.join(process.cwd(), 'src', 'public');
+      this.options.publicDir ?? path.join(process.cwd(), 'src', 'public');
     const manifestPath =
-      this.#options.manifestPath ??
+      this.options.manifestPath ??
       path.join(publicDir, '.vite', 'manifest.json');
     const {sessionStore, passport, helmetOptions, sessionOptions} =
-      this.#options;
+      this.options;
 
-    const koa = this.#koa;
+    const {koa} = this;
 
     koa.use(responseTime());
     koa.use(serve(publicDir));
@@ -272,12 +257,7 @@ export class KosmicServer {
       });
     }
 
-    koa.use(
-      createPinoMiddleware(
-        {logger} as Parameters<typeof createPinoMiddleware>[0],
-        {environment: nodeEnv},
-      ),
-    );
+    koa.use(createPinoMiddleware({logger}, {environment: nodeEnv}));
 
     koa.use(conditional());
     koa.use(etag());
@@ -321,7 +301,6 @@ export class KosmicServer {
     }
 
     koa.on('router:loaded', (ev: {routes: RouterLoadedRoute[]}) => {
-      console.log('Router loaded with routes:');
       logger.debug({routes: ev.routes}, 'router:loaded');
     });
 
