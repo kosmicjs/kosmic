@@ -3,9 +3,9 @@
 import process from 'node:process';
 import previewEmail from 'preview-email';
 import nodemailer from 'nodemailer';
+import {config} from '@kosmic/config';
 import {db} from '#db/index.js';
 import {jobsLogger as logger} from '#utils/logger.js';
-import {config} from '#config/index.js';
 
 logger.info('Starting emails job');
 

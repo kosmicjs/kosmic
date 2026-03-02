@@ -1,5 +1,5 @@
 import {createLogger} from '@kosmic/logger';
-import {config} from '#config/index.js';
+import {config} from '@kosmic/config';
 
 export const jobsLogger = createLogger({name: 'jobs'});
 

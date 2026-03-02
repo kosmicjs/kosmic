@@ -2,7 +2,7 @@ import type {Middleware} from '@kosmic/server';
 import {z} from 'zod/v4';
 // import {GoogleGenAI} from '@google/genai';
 import Layout from '#components/layout.js';
-// import {config} from '#config/index.js';
+// import {config} from '@kosmic/config';
 
 // const client = new GoogleGenAI({apiKey: config.google?.geminiApiKey ?? ''});
 

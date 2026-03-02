@@ -21,6 +21,7 @@
     { "path": "../../packages/jsx" },
     { "path": "../../packages/error-handler" },
     { "path": "../../packages/cli" },
-    { "path": "../../packages/core" }
+    { "path": "../../packages/core" },
+    { "path": "../../packages/config" }
   ]
 }

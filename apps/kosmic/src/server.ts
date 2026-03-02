@@ -1,8 +1,8 @@
 import path from 'node:path';
 import {KosmicServer} from '@kosmic/server';
+import {config} from '@kosmic/config';
 import {KyselySessionStore} from '#utils/kysely-session-store.js';
 import logger from '#utils/logger.js';
-import {config} from '#config/index.js';
 import {passport} from '#middleware/passport.js';
 
 export const getServer = () =>

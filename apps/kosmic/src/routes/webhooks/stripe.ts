@@ -1,6 +1,6 @@
 import type {Middleware} from '@kosmic/server';
 import Stripe from 'stripe';
-import {config} from '#config/index.js';
+import {config} from '@kosmic/config';
 
 const stripe = config.stripe?.secretKey
   ? new Stripe(config.stripe.secretKey)

@@ -1,7 +1,7 @@
 import type {Insertable, Selectable, Updateable} from 'kysely';
 import zod from 'zod/v4';
+import {config} from '@kosmic/config';
 import type {GeneratedId} from './types.ts';
-import {config} from '#config/index.js';
 
 export const schema = zod.object({
   id: zod.number().int().positive(),

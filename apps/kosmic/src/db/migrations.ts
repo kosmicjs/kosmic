@@ -8,9 +8,9 @@ import {
   addIdColumn,
   type KosmicMigration,
 } from '@kosmic/core';
+import {config} from '@kosmic/config';
 import logger from '#utils/logger.js';
 import * as apiKeysModel from '#models/api-keys.js';
-import {config} from '#config/index.js';
 
 /**
  * Create a trigger function to update the updated_at column

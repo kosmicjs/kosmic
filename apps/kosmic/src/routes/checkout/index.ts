@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import type {Use} from '@kosmic/router';
-import {config} from '../../config/index.ts';
+import {config} from '@kosmic/config';
 
 const stripe = config.stripe?.secretKey
   ? new Stripe(config.stripe.secretKey)

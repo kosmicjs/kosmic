@@ -1,5 +1,5 @@
 import process from 'node:process';
-import {config} from './config/index.ts';
+import {config} from '@kosmic/config';
 import {logger} from './utils/logger.ts';
 import {getServer} from './server.ts';
 

@@ -13,9 +13,9 @@ import cssVariables from 'postcss-css-variables';
 // import postcssColorRgbaFallback from 'postcss-color-rgba-fallback';
 // import autoPrefixer from 'autoprefixer';
 import juice from 'juice';
+import {config} from '@kosmic/config';
 import Layout from '#components/layout.js';
 import {EmailPreviewIsland} from '#islands/email-preview.js';
-import {config} from '#config/index.js';
 
 export const get: Middleware = async (ctx) => {
   const {email: emailPath} = ctx.params ?? {};

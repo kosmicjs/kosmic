@@ -1,8 +1,8 @@
 import {Kysely, PostgresDialect} from 'kysely';
 import pkg from 'pg';
+import {config} from '@kosmic/config';
 import type {Database} from '#models/index.js';
 import logger from '#utils/logger.js';
-import {config} from '#config/index.js';
 
 const {Pool} = pkg;
 
