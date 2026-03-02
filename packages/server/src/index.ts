@@ -16,6 +16,23 @@ import {createPinoMiddleware} from '@kosmic/pino-http';
 import {createFsRouter} from '@kosmic/router';
 import {type Logger, logger as defaultLogger} from '@kosmic/logger';
 
+export type {default as Koa} from 'koa';
+export type {
+  Context,
+  Next,
+  Middleware,
+  Parameters_,
+  DefaultContext,
+  ParameterizedContext,
+  DefaultStateExtends,
+  BaseContext,
+  DefaultState,
+  Request,
+  Response,
+} from 'koa';
+export type {stores as SessionStore, Session} from 'koa-session';
+export type {RouteDefinition} from '@kosmic/router';
+export type {HelmetOptions} from '@kosmic/helmet';
 declare module 'koa' {
   interface DefaultState {
     manifest?: Manifest;
@@ -44,21 +61,6 @@ declare module 'node:http' {
     log: Logger;
   }
 }
-export type {default as Koa} from 'koa';
-export type {
-  Context,
-  Next,
-  Middleware,
-  Parameters_,
-  DefaultContext,
-  ParameterizedContext,
-  DefaultStateExtends,
-  BaseContext,
-  DefaultState,
-} from 'koa';
-export type {stores as SessionStore, Session} from 'koa-session';
-export type {RouteDefinition} from '@kosmic/router';
-export type {HelmetOptions} from '@kosmic/helmet';
 
 export type Manifest = Record<
   string,
@@ -115,7 +117,7 @@ export type KosmicServerOptions = {
 };
 
 /**
- * Opinionated, class-based Koa server for Kosmic apps.
+ * Opinionated, Koa server for Kosmic apps.
  *
  * @example
  * ```ts
@@ -124,8 +126,6 @@ export type KosmicServerOptions = {
  * ```
  */
 export class KosmicServer {
-  // --- Public static methods ---
-
   /**
    * Retrieve the current Koa `Context` via async-local-storage.
    *
