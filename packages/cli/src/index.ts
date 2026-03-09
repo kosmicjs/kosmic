@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import process from 'node:process';
+import {parseArgs} from 'node:util';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {execa} from 'execa';
@@ -16,6 +17,29 @@ import {tsWatch} from './ts-watch.ts';
  * We monitor the ipc channel for a ready message from the kosmic server that occurs after an automatic restart.
  * When we recieve the ready messaage we send a web-socket message through vite server to reload the page.
  */
+
+const cli = parseArgs({
+  options: {
+    help: {
+      type: 'boolean',
+      short: 'h',
+    },
+  },
+});
+
+if (cli.values.help) {
+  console.log(
+    `
+A development server for kosmic applications.
+
+Usage
+  $ kosmic dev <options>
+
+Options
+  --help, -h          Show this help message
+    `.trim(),
+  );
+}
 
 const cwd = process.cwd();
 const distFolder = path.resolve(cwd, 'dist');
