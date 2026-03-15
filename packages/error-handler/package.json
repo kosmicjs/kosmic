@@ -43,7 +43,7 @@
   "devDependencies": {
     "@kosmic/jsx": "^0.0.0",
     "@types/koa": "^3.0.1",
-    "preact": "^10.28.4"
+    "preact": "^10.29.0"
   },
   "peerDependencies": {
     "@kosmic/jsx": "^0.0.0",

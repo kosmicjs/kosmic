@@ -37,7 +37,7 @@
   "dependencies": {
     "@kosmic/logger": "^0.0.0",
     "argon2": "^0.44.0",
-    "kysely": "^0.28.11"
+    "kysely": "^0.28.12"
   },
   "engines": {
     "node": ">=22"

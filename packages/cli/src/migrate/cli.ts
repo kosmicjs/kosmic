@@ -105,6 +105,8 @@ function parseCliArgs(argv: string[]): ParsedCliArgs {
 
 async function loadDb(dbModulePath: string): Promise<Kysely<any>> {
   const resolvedPath = path.resolve(process.cwd(), dbModulePath);
+  // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
   const module = (await import(resolvedPath)) as {db: Kysely<any>};
   return module.db;
 }

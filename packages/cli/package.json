@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "execa": "^9.6.1",
-    "kysely": "^0.28.11",
+    "kysely": "^0.28.12",
     "p-wait-for": "^6.0.0",
     "path-exists": "^5.0.0",
     "pino": "^10.3.1",

@@ -1,5 +1,5 @@
 import process from 'node:process';
-import http, {type Server, type IncomingMessage} from 'node:http';
+import type {Server} from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import Koa, {type Context, type Middleware} from 'koa';
@@ -74,6 +74,8 @@ export class KosmicServer {
       throw new Error('No context found');
     }
 
+    // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
     return ctx as Context;
   }
 
@@ -103,16 +105,7 @@ export class KosmicServer {
   async listen(port: number, host = '0.0.0.0'): Promise<Server> {
     await this.#bootstrap();
 
-    // @ts-expect-error Koa typings don't allow for generic request/response types, but the underlying `http.Server` is compatible with the standard types.
-    this.server = http.createServer<Koa.Request['req'], Koa.Response>(
-      this.koa.callback(),
-    );
-
-    await new Promise<void>((resolve) => {
-      this.server?.listen(port, host, () => {
-        resolve();
-      });
-    });
+    this.server = this.koa.listen(port, host);
 
     return this.server;
   }
@@ -166,6 +159,8 @@ export class KosmicServer {
   async #bootstrap(): Promise<void> {
     const nodeEnv =
       this.options.nodeEnv ??
+      // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
       (process.env.NODE_ENV as KosmicServerOptions['nodeEnv']) ??
       'development';
     const logger = this.options.logger ?? defaultLogger;
@@ -188,6 +183,8 @@ export class KosmicServer {
 
     if (kosmicEnv === 'production') {
       koa.use(async (ctx, next) => {
+        // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
         const manifest = JSON.parse(
           await fs.readFile(manifestPath, 'utf8'),
         ) as Manifest;

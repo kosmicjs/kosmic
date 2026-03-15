@@ -18,8 +18,8 @@ declare global {
      */
     on(
       name: string,
-      selector: string | ((...args: any) => unknown),
-      fn?: (...args: any) => unknown,
+      selector: string | ((...args: any) => void),
+      fn?: (...args: any) => void,
     ): void;
   }
 }
@@ -38,7 +38,7 @@ Node.prototype.on = function (name: string, selector, fn) {
       event.target?.matches(selector)
     ) {
       // eslint-disable-next-line prefer-rest-params
-      return fn.apply(event.target, [...arguments]);
+      fn.apply(event.target, [...arguments]);
     }
   });
 };

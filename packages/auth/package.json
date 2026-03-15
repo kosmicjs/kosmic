@@ -1,8 +1,13 @@
 {
   "name": "@kosmic/auth",
   "version": "0.0.0",
-  "description": "",
-  "keywords": [],
+  "description": "Auth for kobo apps, including authentication and authorization middleware",
+  "keywords": [
+    "kosmic",
+    "auth",
+    "authentication",
+    "authorization"
+  ],
   "license": "MIT",
   "author": {
     "name": "Spencer Snyder",

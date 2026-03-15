@@ -2,6 +2,7 @@ import {z} from 'zod/v4';
 import type {Middleware as KoaMiddleware} from 'koa';
 import type {MatchFunction} from 'path-to-regexp';
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
 export const middlewareSchema = z
   .custom<(...args: unknown[]) => unknown>(
     (value) => typeof value === 'function',
@@ -89,4 +90,6 @@ export type RouteDefinition = {
 } & Partial<Record<HttpVerb, Middleware>>;
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export abstract class RouteClass implements RouteModule {}
+export abstract class RouteClass implements RouteModule {
+  //
+}

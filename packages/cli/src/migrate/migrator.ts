@@ -22,7 +22,9 @@ export class ESMFileMigrationProvider implements MigrationProvider {
       info: (message: string) => void;
       warn: (message: string) => void;
     },
-  ) {}
+  ) {
+    //
+  }
 
   async getMigrations(): Promise<Record<string, Migration>> {
     this.logger?.info(`Loading migrations from: ${this.migrationsPath}`);
@@ -45,6 +47,7 @@ export class ESMFileMigrationProvider implements MigrationProvider {
     try {
       await fs.access(standaloneMigrationFile);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
       migrations = (await import(standaloneMigrationFile)) as Record<
         string,
         KosmicMigration
@@ -71,6 +74,7 @@ export class ESMFileMigrationProvider implements MigrationProvider {
           .join(resolvedPath, fileName)
           .replaceAll('\\', '/');
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
         const migration = (await import(importPath)) as {
           up: () => Promise<void>;
           down: () => Promise<void>;

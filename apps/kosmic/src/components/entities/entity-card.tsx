@@ -1,5 +1,41 @@
 import type {SelectableEntity} from '#models/entities.js';
 
+function EntityDeleteButton({entity}: {readonly entity: SelectableEntity}) {
+  return (
+    <button
+      type="button"
+      hx-delete={`/account/entities/${entity.id}`}
+      hx-target={`#entity${entity.id}`}
+      hx-swap="delete"
+      class="btn btn-outline-danger btn-sm"
+    >
+      <i class="bi bi-trash p-0 m-0" />
+    </button>
+  );
+}
+
+function EntityEditButton({entity}: {readonly entity: SelectableEntity}) {
+  return (
+    <button
+      type="button"
+      hx-get={`/account/entities/${entity.id}`}
+      hx-target={`#entity${entity.id}`}
+      hx-swap="outerHTML"
+      class="btn btn-outline-primary btn-sm"
+    >
+      <i class="bi bi-gear p-0 m-0" />
+    </button>
+  );
+}
+
+function EntitySaveButton() {
+  return (
+    <button type="submit" class="btn btn-outline-primary btn-sm">
+      <i class="bi bi-floppy p-0 m-0" />
+    </button>
+  );
+}
+
 export function EntityCard({
   entity,
   isEditable,
@@ -7,42 +43,6 @@ export function EntityCard({
   readonly entity: SelectableEntity;
   readonly isEditable?: boolean;
 }) {
-  function EntityDeleteButton() {
-    return (
-      <button
-        type="button"
-        hx-delete={`/account/entities/${entity.id}`}
-        hx-target={`#entity${entity.id}`}
-        hx-swap="delete"
-        class="btn btn-outline-danger btn-sm"
-      >
-        <i class="bi bi-trash p-0 m-0" />
-      </button>
-    );
-  }
-
-  function EntityEditButton() {
-    return (
-      <button
-        type="button"
-        hx-get={`/account/entities/${entity.id}`}
-        hx-target={`#entity${entity.id}`}
-        hx-swap="outerHTML"
-        class="btn btn-outline-primary btn-sm"
-      >
-        <i class="bi bi-gear p-0 m-0" />
-      </button>
-    );
-  }
-
-  function EntitySaveButton() {
-    return (
-      <button type="submit" class="btn btn-outline-primary btn-sm">
-        <i class="bi bi-floppy p-0 m-0" />
-      </button>
-    );
-  }
-
   return (
     <div class="col-12 px-5 py-1" id={`entity${entity.id}`}>
       <div class="card">
@@ -69,7 +69,7 @@ export function EntityCard({
             <div class="mb-1"></div>
             <div class="d-flex justify-content-between">
               <EntitySaveButton />
-              <EntityDeleteButton />
+              <EntityDeleteButton entity={entity} />
             </div>
           </form>
         ) : (
@@ -77,8 +77,8 @@ export function EntityCard({
             <h5 class="card-title">{entity.name}</h5>
             <p class="card-text">{entity.description}</p>
             <div class="d-flex justify-content-between">
-              <EntityEditButton />
-              <EntityDeleteButton />
+              <EntityEditButton entity={entity} />
+              <EntityDeleteButton entity={entity} />
             </div>
           </div>
         )}

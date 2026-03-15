@@ -27,16 +27,16 @@ export const passwordSchema = zod.string().min(8).max(255);
 // For development, we allow any password for testing purposes
 if (config.kosmicEnv !== 'development') {
   passwordSchema
-    .refine((password) => /[A-Z]/.test(password), {
+    .refine((password) => /[A-Z]/v.test(password), {
       message: 'Password must contain an uppercase letter',
     })
-    .refine((password) => /[a-z]/.test(password), {
+    .refine((password) => /[a-z]/v.test(password), {
       message: 'Password must contain a lowercase letter',
     })
-    .refine((password) => /\d/.test(password), {
+    .refine((password) => /\d/v.test(password), {
       message: 'Password must contain a digit',
     })
-    .refine((password) => /[!@#$%^&*]/.test(password), {
+    .refine((password) => /[!@#$%^\u0026*]/v.test(password), {
       message: 'Password must contain a special character',
     });
 }

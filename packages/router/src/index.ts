@@ -25,7 +25,7 @@ function isClass(value: unknown): value is new () => unknown {
     return false;
   }
 
-  return /^class\s/.test(Function.prototype.toString.call(value));
+  return /^class\s/v.test(Function.prototype.toString.call(value));
 }
 
 declare module 'koa' {
@@ -55,13 +55,16 @@ export async function createFsRouter(
   const getUriPathFromFilePath = (filePath: string): string =>
     filePath
       .replaceAll(
-        new RegExp(`(${routesDir})|(\\.(j|t)sx?)|(\\/index)|(\\/*$)`, 'g'),
+        new RegExp(
+          String.raw`(${routesDir})|(\.(j|t)sx?)|(\/index)|(\/*$)`,
+          'gv',
+        ),
         '',
       )
       .split(path.sep)
       .map((part) => {
-        if (/^\[.*]$/.test(part)) {
-          return part.replace(/^\[/, ':').replace(/]$/, '');
+        if (/^\[.*\]$/v.test(part)) {
+          return part.replace(/^\[/v, ':').replace(/\]$/v, '');
         }
 
         return part;
@@ -119,16 +122,17 @@ export async function createFsRouter(
   );
 
   // eslint-disable-next-line unicorn/no-await-expression-member
-  const routes = (await Promise.all(routesFromFilesPromises)).sort((a, b) =>
-    a.uriPath < b.uriPath
-      ? -1
-      : a.uriPath > b.uriPath
-        ? 1
-        : a.uriPath.split('/').length < b.uriPath.split('/').length
-          ? -1
-          : a.uriPath.startsWith(':')
-            ? 1
-            : -1,
+  const routes = (await Promise.all(routesFromFilesPromises)).toSorted(
+    (a, b) =>
+      a.uriPath < b.uriPath
+        ? -1
+        : a.uriPath > b.uriPath
+          ? 1
+          : a.uriPath.split('/').length < b.uriPath.split('/').length
+            ? -1
+            : a.uriPath.startsWith(':')
+              ? 1
+              : -1,
   );
 
   const routesByUriPath: Record<string, RouteDefinition> = {};
@@ -226,8 +230,11 @@ export async function createFsRouter(
       return match;
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
     if (!matchedRoute) return next() as Promise<void>;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
     const fn = matchedRoute?.[ctx.method?.toLowerCase() as HttpVerb];
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
     if (!fn || typeof fn !== 'function') return next() as Promise<void>;
     ctx.request.params = matchedRoute?.params;
     ctx.params = matchedRoute?.params;

@@ -28,7 +28,7 @@ emailsJob.start();
 logger.info('Cron jobs started');
 
 // throw to bubble up to uncaughtException
-process.on('unhandledRejection', async (error) => {
+process.on('unhandledRejection', (error) => {
   throw error;
 });
 

@@ -15,7 +15,7 @@ export default function EmailPreview({html}: Props) {
         <li class="nav-item">
           <a
             class={clsx('nav-link cursor-pointer', {active: tab === 'preview'})}
-            onClick={async () => {
+            onClick={() => {
               setTab('preview');
             }}
           >

@@ -1,4 +1,5 @@
 #!/usr/bin/env node --experimental-strip-types
+/* eslint-disable @typescript-eslint/no-unsafe-type-assertion */
 /**
  * Sync script that deep merges package.base.json into each packages/* workspace
  * The base fields override package-specific fields for consistency

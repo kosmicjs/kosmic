@@ -11,7 +11,7 @@ logger.info(`Server listening on ${config.host}:${config.port}`);
 if (process.send) process.send({status: 'ready'});
 
 // throw to bubble up to uncaughtException
-process.on('unhandledRejection', async (error) => {
+process.on('unhandledRejection', (error) => {
   throw error;
 });
 

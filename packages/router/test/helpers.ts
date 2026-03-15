@@ -11,6 +11,8 @@ export function createMockContext(overrides?: Partial<Context>): Context {
     params: undefined,
     ...overrides,
   };
+  // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
   return baseCtx as Context;
 }
 

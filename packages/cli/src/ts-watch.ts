@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-type-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -31,6 +32,7 @@ export function tsWatch(callback?: () => Promise<void>) {
     ts.sys,
     ts.createEmitAndSemanticDiagnosticsBuilderProgram,
     origWatchDiagnosticReporter,
+    // eslint-disable-next-line @typescript-eslint/strict-void-return
     createWatchStatusChanged(origWatchStatusReporter, callback ?? noop),
   );
 
@@ -42,7 +44,6 @@ function createWatchStatusChanged(
   onSuccess: () => Promise<void>,
 ) {
   return async function (this: any, diagnostic: ts.Diagnostic, ...args: any[]) {
-    // eslint-disable-next-line promise/prefer-await-to-then
     return onSuccess().then(() =>
       watchStatusReporter.call(this, diagnostic, ...args),
     );

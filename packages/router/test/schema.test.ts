@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-extraneous-class */
-/* eslint-disable @typescript-eslint/no-empty-function */
+
 import {test, describe} from 'node:test';
 import assert from 'node:assert';
 import * as schema from '../src/schema.ts';
@@ -19,19 +19,30 @@ describe('Router Schema Tests', () => {
     result = schema.middlewareSchema.safeParse(undefined);
     assert.ok(result.success, 'Should accept undefined');
 
-    const arrowFn = () => {};
+    const arrowFn = () => {
+      //
+    };
+
     result = schema.middlewareSchema.safeParse(arrowFn);
     assert.ok(result.success, 'Should accept arrow function');
 
-    const asyncFn = async () => {};
+    const asyncFn = async () => {
+      //
+    };
+
     result = schema.middlewareSchema.safeParse(asyncFn);
     assert.ok(result.success, 'Should accept async function');
 
-    const generatorFn = function* () {};
+    const generatorFn = function* () {
+      //
+    };
+
     result = schema.middlewareSchema.safeParse(generatorFn);
     assert.ok(result.success, 'Should accept generator function');
 
-    class TestClass {}
+    class TestClass {
+      //
+    }
     result = schema.middlewareSchema.safeParse(TestClass);
     assert.ok(result.success, 'Should accept class constructor');
   });

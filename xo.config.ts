@@ -89,6 +89,7 @@ const xoConfig: XoConfigItem[] = [
     files: ['**/*.test.{ts,tsx,cts,mts}'],
     rules: {
       '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-unsafe-type-assertion': 'off',
     },
   },
 ];

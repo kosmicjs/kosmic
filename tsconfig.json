@@ -24,9 +24,9 @@
     "declaration": true,
     /** MODULES
     /** Tells TS to use either cjs or esm modules based on package.json */
-    "module": "node20",
+    "module": "nodenext",
     /** Use the latest version of ECMAScript */
-    "target": "es2023",
+    "target": "es2024",
     /** Use the latest version of ECMAScript modules */
     "lib": ["esnext"],
     /** For nodejs libs, for browser or other environments, this will change */
