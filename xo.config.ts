@@ -1,7 +1,14 @@
 import type {XoConfigItem} from 'xo';
 
 const xoConfig: XoConfigItem[] = [
-  {ignores: ['test/temp', 'coverage', 'packages/*/dist']},
+  {
+    ignores: [
+      'test/temp',
+      'coverage',
+      'packages/*/dist',
+      'scripts/generate/package-template/**',
+    ],
+  },
   {
     prettier: true,
     space: true,

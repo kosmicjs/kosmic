@@ -1,0 +1,4 @@
+
+export default function {{name}}() {
+  // Add your {{name}} logic here
+}
