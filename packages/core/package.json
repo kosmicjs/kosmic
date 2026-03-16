@@ -37,7 +37,12 @@
   "dependencies": {
     "@kosmic/logger": "^0.0.0",
     "argon2": "^0.44.0",
-    "kysely": "^0.28.12"
+    "koa": "^3.1.2",
+    "kysely": "^0.28.12",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/koa": "^3.0.1"
   },
   "engines": {
     "node": ">=22"
