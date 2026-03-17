@@ -83,7 +83,8 @@ function generate(): void {
     throw new Error('--name is required. Run with --help for usage.');
   }
 
-  if (!/^[a-z\d][a-z\d-]*$/v.test(name)) {
+  // eslint-disable-next-line require-unicode-regexp
+  if (!/^[a-z\d][a-z\d-]*$/.test(name)) {
     throw new Error(
       '--name must be a valid package name (lowercase letters, numbers, and hyphens only).',
     );

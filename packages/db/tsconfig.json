@@ -6,14 +6,12 @@
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["src", "test"],
-  "exclude": ["node_modules", "dist"],
-  "references": [
-    {
-      "path": "../core"
-    },
-    {
-      "path": "../config"
-    }
+  "include": [
+    "src",
+    "test"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }
