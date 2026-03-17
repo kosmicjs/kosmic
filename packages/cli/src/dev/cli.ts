@@ -39,6 +39,7 @@ Options
   --help, -h          Show this help message
     `.trim(),
   );
+  process.exit(0);
 }
 
 const cwd = process.cwd();
