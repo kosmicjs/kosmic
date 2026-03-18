@@ -14,14 +14,12 @@
   "exclude": ["node_modules", "dist", "scripts"],
   "references": [
     { "path": "../../packages/server" },
-    { "path": "../../packages/router" },
-    { "path": "../../packages/helmet" },
     { "path": "../../packages/core" },
     { "path": "../../packages/logger" },
     { "path": "../../packages/jsx" },
-    { "path": "../../packages/error-handler" },
     { "path": "../../packages/cli" },
     { "path": "../../packages/core" },
-    { "path": "../../packages/config" }
+    { "path": "../../packages/config" },
+    { "path": "../../packages/db" }
   ]
 }

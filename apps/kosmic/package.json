@@ -51,6 +51,7 @@
     "@kosmic/cli": "^0.0.0",
     "@kosmic/config": "^0.0.0",
     "@kosmic/core": "^0.0.0",
+    "@kosmic/db": "^0.0.0",
     "@kosmic/logger": "^0.0.0",
     "@kosmic/router": "^0.0.0",
     "@kosmic/server": "^0.0.0",
