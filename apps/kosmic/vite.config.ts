@@ -1,11 +1,10 @@
 /* eslint-disable unicorn/prefer-module */
 import path from 'node:path';
 import {type UserConfig, createLogger} from 'vite';
-import {pino} from 'pino';
+import {createLogger as createKosmicLogger} from '@kosmic/logger';
 
-const viteLogger = pino({
+const viteLogger = createKosmicLogger({
   name: '~vite~',
-  transport: {target: 'pino-princess'},
 });
 
 const config: UserConfig = {

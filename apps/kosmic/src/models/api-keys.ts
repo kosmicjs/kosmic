@@ -1,4 +1,4 @@
-import type {Insertable, Selectable} from 'kysely';
+import type {Insertable, Selectable} from '@kosmic/db';
 import {z as zod} from 'zod';
 import argon2 from 'argon2';
 import type {GeneratedId} from './types.ts';

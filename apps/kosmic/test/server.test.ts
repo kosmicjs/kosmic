@@ -4,7 +4,7 @@ import path from 'node:path';
 import assert from 'node:assert';
 import _got from 'got';
 import * as cheerio from 'cheerio';
-import {NO_MIGRATIONS} from 'kysely';
+import {NO_MIGRATIONS} from '@kosmic/db';
 import {CookieJar} from 'tough-cookie';
 import {createMigrator} from '@kosmic/cli/migrate';
 import {db} from '#db/index.js';

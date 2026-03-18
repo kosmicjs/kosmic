@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises';
-import {type Kysely, sql} from 'kysely';
+import {type Kysely, sql} from '@kosmic/db';
 import argon2 from 'argon2';
 import {
   createTimestampTrigger,
