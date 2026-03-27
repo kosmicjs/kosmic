@@ -34,7 +34,8 @@
   "dependencies": {
     "@kosmic/config": "^0.0.0",
     "@kosmic/logger": "^0.0.0",
-    "kysely": "^0.28.12",
+    "@types/pg": "^8.20.0",
+    "kysely": "^0.28.14",
     "pg": "^8.20.0"
   },
   "engines": {

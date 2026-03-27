@@ -50,7 +50,7 @@
     "koa-static": "^5.0.0"
   },
   "devDependencies": {
-    "@types/koa": "^3.0.1",
+    "@types/koa": "^3.0.2",
     "@types/koa-bodyparser": "^4",
     "@types/koa-conditional-get": "^2.0.4",
     "@types/koa-response-time": "^2",

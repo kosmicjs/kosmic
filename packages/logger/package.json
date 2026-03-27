@@ -48,7 +48,7 @@
     "pino-princess": "^1.6.1"
   },
   "devDependencies": {
-    "@types/koa": "^3.0.1"
+    "@types/koa": "^3.0.2"
   },
   "engines": {
     "node": ">=22"

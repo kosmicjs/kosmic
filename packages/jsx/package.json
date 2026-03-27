@@ -43,7 +43,7 @@
     "preact-render-to-string": "^6.6.6"
   },
   "devDependencies": {
-    "@types/koa": "^3.0.1"
+    "@types/koa": "^3.0.2"
   },
   "engines": {
     "node": ">=22"
