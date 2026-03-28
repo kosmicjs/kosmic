@@ -37,12 +37,12 @@ const cli = parseArgs({
   },
 });
 
-if (cli.values.help) {
-  console.log(helpText);
-  process.exit(0);
-}
-
 if (cli.positionals.length === 0) {
+  if (cli.values.help) {
+    console.log(helpText);
+    process.exit(0);
+  }
+
   console.error('No command provided.');
   console.log(helpText);
   process.exit(1);
