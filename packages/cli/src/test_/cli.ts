@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import process from 'node:process';
 import {parseArgs} from 'node:util';
 import {execa} from 'execa';
 
 const HELP_TEXT = `
-Build client assets with Vite.
+Compile and run application tests.
 
 Usage
-  $ kosmic compile-vite [options]
+  $ kosmic test [options]
 
 Options
   --cwd               Working directory (default: process.cwd())
@@ -36,4 +38,8 @@ if (cli.values.help) {
 const cwd = cli.values.cwd ?? process.cwd();
 const $$ = execa({cwd, stdio: 'inherit'});
 
-await $$`vite build`;
+await fs.rm(path.resolve(cwd, 'dist'), {recursive: true, force: true});
+await $$`tsc -p tsconfig.json`;
+await $$({
+  env: {...process.env, NODE_ENV: 'test', KOSMIC_ENV: 'test'},
+})`node --test ${path.join('dist', 'test', 'server.test.js')}`;

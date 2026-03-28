@@ -19,6 +19,9 @@ Options
 const cli = parseArgs({
   allowPositionals: true,
   options: {
+    cwd: {
+      type: 'string',
+    },
     help: {
       type: 'boolean',
       short: 'h',
@@ -31,7 +34,7 @@ if (cli.values.help) {
   process.exit(0);
 }
 
-const cwd = process.cwd();
+const cwd = cli.values.cwd ?? process.cwd();
 const $$ = execa({cwd, stdio: 'inherit'});
 
 // clean

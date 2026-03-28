@@ -21,6 +21,9 @@ import {tsWatch} from './ts-watch.ts';
 const cli = parseArgs({
   allowPositionals: true,
   options: {
+    cwd: {
+      type: 'string',
+    },
     help: {
       type: 'boolean',
       short: 'h',
@@ -43,7 +46,7 @@ Options
   process.exit(0);
 }
 
-const cwd = process.cwd();
+const cwd = cli.values.cwd ?? process.cwd();
 const distFolder = path.resolve(cwd, 'dist');
 const publicFolder = path.resolve(distFolder, 'src', 'public');
 

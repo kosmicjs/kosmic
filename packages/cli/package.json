@@ -23,10 +23,7 @@
     }
   },
   "bin": {
-    "build": "dist/src/build/cli.js",
-    "dev": "dist/src/dev/cli.js",
-    "kosmic": "dist/src/index.js",
-    "migrate": "dist/src/migrate/cli.js"
+    "kosmic": "dist/src/index.js"
   },
   "files": [
     "dist"
@@ -36,7 +33,7 @@
     "build:watch": "tsc -p tsconfig.json --watch",
     "check": "tsc --noEmit",
     "lint": "xo",
-    "test": "node --test **/*.test.ts",
+    "test": "node --test test/*.test.ts",
     "test:coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {

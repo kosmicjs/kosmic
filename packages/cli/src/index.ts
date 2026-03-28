@@ -152,7 +152,7 @@ switch (command) {
   }
 
   case COMMANDS.test: {
-    await import('./test/cli.ts');
+    await import('./test_/cli.ts');
 
     break;
   }
