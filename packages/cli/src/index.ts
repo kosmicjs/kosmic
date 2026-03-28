@@ -3,10 +3,21 @@ import process from 'node:process';
 import {parseArgs} from 'node:util';
 
 const COMMANDS = {
-  dev: 'dev',
-  migrate: 'migrate',
   build: 'build',
+  buildVitePlugin: 'build:vite-plugin',
+  check: 'check',
+  clean: 'clean',
+  compile: 'compile',
+  compileCp: 'compile:cp',
+  compileTsc: 'compile:tsc',
+  compileVite: 'compile:vite',
+  dev: 'dev',
+  lint: 'lint',
+  migrate: 'migrate',
+  prepublishOnly: 'prepublishOnly',
   start: 'start',
+  test: 'test',
+  testWatch: 'test:watch',
 } as const;
 
 const helpText = `
@@ -18,10 +29,21 @@ Usage
   $ kos <command> [options]
 
 Commands
-  dev
-  migrate
   build
+  build:vite-plugin
+  check
+  clean
+  compile
+  compile:cp
+  compile:tsc
+  compile:vite
+  dev
+  lint
+  migrate
+  prepublishOnly
   start
+  test
+  test:watch
 
 Options
   --help, -h          Show this help message
@@ -51,29 +73,95 @@ if (!command) {
 }
 
 switch (command) {
-  case COMMANDS.dev: {
-    await import('./dev/cli.ts');
-
-    break;
-  }
-
-  case COMMANDS.migrate: {
-    await import('./migrate/cli.ts');
-
-    break;
-  }
-
   case COMMANDS.build: {
     await import('./build/cli.ts');
 
     break;
   }
 
-  // case COMMANDS.start: {
-  //   await import('./start/cli.ts');
+  case COMMANDS.buildVitePlugin: {
+    await import('./build-vite-plugin/cli.ts');
 
-  //   break;
-  // }
+    break;
+  }
+
+  case COMMANDS.check: {
+    await import('./check/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.clean: {
+    await import('./clean/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.compile: {
+    await import('./compile/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.compileCp: {
+    await import('./compile-cp/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.compileTsc: {
+    await import('./compile-tsc/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.compileVite: {
+    await import('./compile-vite/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.dev: {
+    await import('./dev/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.lint: {
+    await import('./lint/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.migrate: {
+    await import('./migrate-app/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.prepublishOnly: {
+    await import('./prepublish-only/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.start: {
+    await import('./start/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.test: {
+    await import('./test/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.testWatch: {
+    await import('./test-watch/cli.ts');
+
+    break;
+  }
 
   default: {
     console.error(`Unknown command: ${command}`);
