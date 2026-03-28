@@ -23,6 +23,7 @@
     }
   },
   "bin": {
+    "build": "dist/src/build/cli.js",
     "dev": "dist/src/dev/cli.js",
     "kosmic": "dist/src/index.js",
     "migrate": "dist/src/migrate/cli.js"

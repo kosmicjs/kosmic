@@ -63,11 +63,11 @@ switch (command) {
     break;
   }
 
-  // case COMMANDS.build: {
-  //   await import('./build/cli.ts');
+  case COMMANDS.build: {
+    await import('./build/cli.ts');
 
-  //   break;
-  // }
+    break;
+  }
 
   // case COMMANDS.start: {
   //   await import('./start/cli.ts');
