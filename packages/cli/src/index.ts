@@ -37,7 +37,9 @@ const cli = parseArgs({
   },
 });
 
-if (cli.positionals.length === 0) {
+const [command] = cli.positionals;
+
+if (!command) {
   if (cli.values.help) {
     console.log(helpText);
     process.exit(0);
@@ -47,8 +49,6 @@ if (cli.positionals.length === 0) {
   console.log(helpText);
   process.exit(1);
 }
-
-const command = cli.positionals[0]!;
 
 switch (command) {
   case COMMANDS.dev: {
