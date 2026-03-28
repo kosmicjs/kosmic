@@ -30,12 +30,10 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "kosmic build",
-    "check": "tsc -p tsconfig.json --noEmit",
     "clean": "kosmic clean",
     "dev": "kosmic dev",
     "lint": "xo",
     "migrate": "kosmic migrate",
-    "prepublishOnly": "npm run build",
     "start": "kosmic start",
     "test": "kosmic test",
     "test:watch": "kosmic test:watch"
