@@ -1,16 +1,12 @@
 import type {Next, Context} from '@kosmic/server';
-import passport from 'koa-passport';
 import {Layout} from '#components/layout.js';
 import {LoginForm} from '#components/login-form.js';
+import {authenticateLocal} from '#middleware/auth.js';
 
 export async function post(ctx: Context, next: Next) {
   ctx.set('HX-Redirect', '/login');
 
-  await passport.authenticate('local', {
-    failWithError: true,
-    failureMessage: 'Invalid email or password',
-    successMessage: 'Logged in',
-  })(ctx, next);
+  await authenticateLocal(ctx, next);
 
   // successful login
   ctx.set('HX-Redirect', '/account');

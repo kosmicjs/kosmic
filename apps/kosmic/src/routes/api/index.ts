@@ -1,6 +1,6 @@
 import type {Middleware} from '@kosmic/server';
-import {passport} from '#middleware/passport.js';
+import {authenticateBearer} from '#middleware/auth.js';
 
 export const use: Middleware = async (ctx, next) => {
-  await passport.authenticate('bearer', {session: false})(ctx, next);
+  await authenticateBearer(ctx, next);
 };

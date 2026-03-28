@@ -6,6 +6,7 @@
  */
 {
   "references": [
+    { "path": "./packages/auth" },
     { "path": "./packages/router" },
     { "path": "./packages/helmet" },
     { "path": "./packages/logger" },

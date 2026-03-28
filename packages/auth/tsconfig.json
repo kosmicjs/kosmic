@@ -14,6 +14,15 @@
     },
     {
       "path": "../config"
+    },
+    {
+      "path": "../db"
+    },
+    {
+      "path": "../logger"
+    },
+    {
+      "path": "../server"
     }
   ]
 }
