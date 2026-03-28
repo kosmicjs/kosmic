@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
+import fs from 'node:fs/promises';
 import process from 'node:process';
 import path from 'node:path';
 import {parseArgs} from 'node:util';
+import {execa} from 'execa';
 import {NO_MIGRATIONS, type Kysely} from 'kysely';
 import {pino} from 'pino';
 import {createMigrator} from './migrator.ts';
@@ -20,6 +22,7 @@ Options
   --db, -d     Path to the module exporting the kysely db instance, resolved from the cwd argument
   --migrations, -m    Path to the migrations directory, resolved from the cwd argument
   --cwd               The working directory to resolve the db-module and migrations paths from (default: process.cwd())
+  This command cleans dist and runs tsc --build before executing migrations.
   --help, -h          Show this help message
 `.trim();
 
@@ -65,15 +68,17 @@ if (cli.values.help === true) {
   process.exit(0);
 }
 
+const cwd = cli.values.cwd ?? process.cwd();
+
 const fullDbModulePath = path.resolve(
-  cli.values.cwd ?? process.cwd(),
+  cwd,
   cli.values.db ?? path.join('src', 'db', 'index.ts'),
 );
 // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
 const dbModule = (await import(fullDbModulePath)) as {db: Kysely<any>};
 
 const migrationsPath = path.resolve(
-  cli.values.cwd ?? process.cwd(),
+  cwd,
   cli.values.migrations ?? path.join('src', 'db', 'migrations'),
 );
 

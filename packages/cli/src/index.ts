@@ -134,13 +134,7 @@ switch (command) {
   }
 
   case COMMANDS.migrate: {
-    await import('./migrate-app/cli.ts');
-
-    break;
-  }
-
-  case COMMANDS.prepublishOnly: {
-    await import('./prepublish-only/cli.ts');
+    await import('./migrate/cli.ts');
 
     break;
   }
