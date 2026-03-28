@@ -37,7 +37,7 @@
     "compile:cp": "cp -rp src/public ./dist/src",
     "compile:tsc": "tsc --build tsconfig.json",
     "compile:vite": "vite build",
-    "dev": "dev",
+    "dev": "kosmic dev",
     "lint": "xo",
     "migrate": "npm run clean && npm run compile:tsc && KOSMIC_ENV=migration migrate -d ./src/db/index.ts --migrations ./src/db/migrations.ts",
     "prepublishOnly": "npm run build",
@@ -114,7 +114,6 @@
     "type-fest": "^5.5.0",
     "typed-htmx": "^0.3.1",
     "typescript": "~5.9.3",
-    "vite": "^8.0.3",
     "wait-on": "^9.0.4"
   }
 }

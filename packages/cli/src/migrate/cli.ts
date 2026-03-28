@@ -17,8 +17,8 @@ Commands
   reset    Rollback all migrations
 
 Options
-  --db-module, -d     Path to the module exporting the kysely db instance (required)
-  --migrations, -m    Path to the migrations directory (required)
+  --db-module, -d     Path to the module exporting the kysely db instance
+  --migrations, -m    Path to the migrations directory
   --help, -h          Show this help message
 `.trim();
 

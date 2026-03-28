@@ -19,6 +19,7 @@ import {tsWatch} from './ts-watch.ts';
  */
 
 const cli = parseArgs({
+  allowPositionals: true,
   options: {
     help: {
       type: 'boolean',

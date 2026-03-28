@@ -24,6 +24,7 @@
   },
   "bin": {
     "dev": "dist/src/dev/cli.js",
+    "kosmic": "dist/src/index.js",
     "migrate": "dist/src/migrate/cli.js"
   },
   "files": [
