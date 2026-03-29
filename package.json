@@ -60,7 +60,7 @@
     "rolldown": "^1.0.0-rc.12",
     "swagger-ui-dist": "^5.32.1",
     "type-fest": "^5.5.0",
-    "typescript": "~5.9.3",
+    "typescript": "~6.0.2",
     "wait-on": "^9.0.4",
     "xo": "^2.0.2"
   },
