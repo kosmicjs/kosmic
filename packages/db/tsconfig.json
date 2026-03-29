@@ -13,5 +13,13 @@
   "exclude": [
     "node_modules",
     "dist"
+  ],
+  "references": [
+    {
+      "path": "../config"
+    },
+    {
+      "path": "../logger"
+    }
   ]
 }
