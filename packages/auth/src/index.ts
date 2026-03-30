@@ -1,4 +1,6 @@
 import type {Middleware} from 'koa';
+import {config} from '@kosmic/config';
+import type {Kysely} from '@kosmic/db';
 import type {Logger} from '@kosmic/logger';
 import type {SessionStore} from '@kosmic/server';
 import {
@@ -12,6 +14,7 @@ import {
   KyselySessionStore,
   type KyselySessionStoreDb,
 } from './session-store.ts';
+import {userInsertSchema} from './models/users.ts';
 
 export type {SelectableUser} from './models/users.ts';
 export type {SessionRow} from './models/sessions.ts';
@@ -61,6 +64,62 @@ export function createKosmicAuth(options: CreateKosmicAuthOptions): KosmicAuth {
     sessionStore: new KyselySessionStore(options.db, options.logger),
     ...createAuthMiddleware(passport),
   };
+}
+
+/**
+ * Creates a fully configured auth bundle using shared app config defaults.
+ */
+export function createKosmicAuthFromConfig<TDatabase>(options: {
+  db: Kysely<TDatabase>;
+  logger: Logger;
+}): KosmicAuth {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+  const authDb = options.db as unknown as KyselySessionStoreDb;
+
+  const passportOptions: CreateKosmicAuthOptions['passport'] = {
+    async createGithubUser(input) {
+      const user = await authDb
+        .insertInto('users')
+        .values(
+          await userInsertSchema.parseAsync({
+            first_name: input.firstName,
+            role: 'user',
+            last_name: input.lastName,
+            email: input.email,
+            github_access_token: input.accessToken,
+            github_refresh_token: input.refreshToken,
+          }),
+        )
+        .returning(['id', 'email', 'first_name', 'last_name', 'role'])
+        .executeTakeFirstOrThrow();
+
+      return {
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name ?? undefined,
+        last_name: user.last_name ?? undefined,
+        role: user.role,
+      };
+    },
+  };
+
+  if (
+    config.github?.clientID &&
+    config.github.clientSecret &&
+    config.github.callbackURL
+  ) {
+    passportOptions.github = {
+      clientID: config.github.clientID,
+      clientSecret: config.github.clientSecret,
+      callbackURL: config.github.callbackURL,
+    };
+  }
+
+  return createKosmicAuth({
+    db: authDb,
+    logger: options.logger,
+    passport: passportOptions,
+  });
 }
 
 /**

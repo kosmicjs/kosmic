@@ -18,7 +18,6 @@
   "imports": {
     "#components/*": "./dist/src/components/*",
     "#models/*": "./dist/src/models/*",
-    "#middleware/*": "./dist/src/middleware/*",
     "#db/*": "./dist/src/db/*",
     "#emails/*": "./dist/src/emails/*",
     "#utils/*": "./dist/src/utils/*",
