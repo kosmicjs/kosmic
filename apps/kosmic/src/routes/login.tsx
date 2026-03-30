@@ -1,5 +1,5 @@
 import type {Next, Context} from '@kosmic/server';
-import {authenticateLocal} from '../auth.js';
+import {authenticateLocal} from '#utils/auth.js';
 import {Layout} from '#components/layout.js';
 import {LoginForm} from '#components/login-form.js';
 

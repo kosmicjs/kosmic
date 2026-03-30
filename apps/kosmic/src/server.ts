@@ -1,6 +1,6 @@
 import path from 'node:path';
 import {KosmicServer} from '@kosmic/server';
-import {passport, sessionStore} from './auth.js';
+import {passport, sessionStore} from '#utils/auth.js';
 
 export const kosmicServer = new KosmicServer({
   routesDir: path.join(import.meta.dirname, 'routes'),
