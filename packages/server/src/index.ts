@@ -23,8 +23,6 @@ import type {Manifest, PassportLike, RouterLoadedRoute} from './types.ts';
 
 export type * from './types.ts';
 
-console.log('config', config);
-
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
 export type KosmicServerOptions = {
   /** Pino-compatible logger instance. Defaults to a console-based logger. */

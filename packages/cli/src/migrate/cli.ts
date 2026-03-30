@@ -79,7 +79,7 @@ const dbModule = (await import(fullDbModulePath)) as {db: Kysely<any>};
 
 const migrationsPath = path.resolve(
   cwd,
-  cli.values.migrations ?? path.join('src', 'db', 'migrations'),
+  cli.values.migrations ?? path.join('src', 'db', 'migrations.ts'),
 );
 
 const migrator = createMigrator({
@@ -88,7 +88,7 @@ const migrator = createMigrator({
   logger,
 });
 
-const command = cli.positionals[0] ?? 'up';
+const command = cli.positionals.slice(1)[0] ?? 'up';
 
 switch (command) {
   case 'up': {
