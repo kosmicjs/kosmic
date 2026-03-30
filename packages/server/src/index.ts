@@ -2,13 +2,14 @@ import process from 'node:process';
 import type {Server} from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import Koa, {type Context, type Middleware} from 'koa';
+import Koa, {type Context} from 'koa';
 import bodyParser from 'koa-bodyparser';
 import conditional from 'koa-conditional-get';
 import responseTime from 'koa-response-time';
 import session, {type stores as SessionStore} from 'koa-session';
 import serve from 'koa-static';
 import etag from '@koa/etag';
+import {config} from '@kosmic/config';
 import {errorHandler} from '@kosmic/error-handler';
 import {createHelmetMiddleware, type HelmetOptions} from '@kosmic/helmet';
 import {renderMiddleware} from '@kosmic/jsx';
@@ -22,15 +23,13 @@ import type {Manifest, PassportLike, RouterLoadedRoute} from './types.ts';
 
 export type * from './types.ts';
 
+console.log('config', config);
+
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
 export type KosmicServerOptions = {
   /** Pino-compatible logger instance. Defaults to a console-based logger. */
   logger?: Logger;
-  /** Node environment. Defaults to `process.env.NODE_ENV` or `'development'`. */
-  nodeEnv?: 'production' | 'development' | 'test';
-  /** Kosmic-specific environment string. Defaults to `nodeEnv`. */
-  kosmicEnv?: string;
-  /** Keys used for cookie signing / session encryption. Defaults to `['kosmic-dev-key']`. */
+  /** Keys used for cookie signing / session encryption. Defaults to `config.sessionKeys`. */
   sessionKeys?: string[];
   /** Absolute path to the file-system routes directory. Defaults to `<cwd>/src/routes`. */
   routesDir?: string;
@@ -102,7 +101,7 @@ export class KosmicServer {
    *
    * @returns The raw `http.Server` for lifecycle management.
    */
-  async listen(port: number, host = '0.0.0.0'): Promise<Server> {
+  async listen(port = config.port, host = config.host): Promise<Server> {
     await this.#bootstrap();
 
     this.server = this.koa.listen(port, host);
@@ -157,15 +156,8 @@ export class KosmicServer {
    * Wire up the full middleware pipeline and file-system router.
    */
   async #bootstrap(): Promise<void> {
-    const nodeEnv =
-      this.options.nodeEnv ??
-      // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-      (process.env.NODE_ENV as KosmicServerOptions['nodeEnv']) ??
-      'development';
     const logger = this.options.logger ?? defaultLogger;
-    const kosmicEnv = this.options.kosmicEnv ?? nodeEnv;
-    const sessionKeys = this.options.sessionKeys ?? ['kosmic-dev-key'];
+    const sessionKeys = this.options.sessionKeys ?? config.sessionKeys;
     const routesDir =
       this.options.routesDir ?? path.join(process.cwd(), 'src', 'routes');
     const publicDir =
@@ -181,7 +173,7 @@ export class KosmicServer {
     koa.use(responseTime());
     koa.use(serve(publicDir));
 
-    if (kosmicEnv === 'production') {
+    if (config.kosmicEnv === 'production') {
       koa.use(async (ctx, next) => {
         // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
         // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
@@ -193,7 +185,7 @@ export class KosmicServer {
       });
     }
 
-    koa.use(createPinoMiddleware({logger}, {environment: nodeEnv}));
+    koa.use(createPinoMiddleware({logger}, {environment: config.nodeEnv}));
 
     koa.use(conditional());
     koa.use(etag());
@@ -203,7 +195,7 @@ export class KosmicServer {
 
     // --- Session & Passport ---
     koa.keys = sessionKeys;
-    koa.proxy = kosmicEnv === 'production';
+    koa.proxy = config.kosmicEnv === 'production';
 
     if (sessionStore) {
       koa.on('session:missed', (...ev) => {
@@ -221,7 +213,7 @@ export class KosmicServer {
       koa.use(
         session(
           {
-            secure: kosmicEnv === 'production',
+            secure: config.kosmicEnv === 'production',
             sameSite: 'lax',
             ...sessionOptions,
             store: sessionStore,
@@ -250,7 +242,7 @@ export class KosmicServer {
     // --- Helmet (last) ---
     koa.use(
       createHelmetMiddleware(
-        this.#mergeHelmetOptions(kosmicEnv, helmetOptions),
+        this.#mergeHelmetOptions(config.kosmicEnv, helmetOptions),
       ),
     );
   }

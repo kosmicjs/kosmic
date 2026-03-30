@@ -1,13 +1,12 @@
 import process from 'node:process';
 import {config} from '@kosmic/config';
-import {logger} from './utils/logger.ts';
-import {getServer} from './server.ts';
-
-const kosmicServer = getServer();
+import {logger} from '@kosmic/logger';
+import {kosmicServer} from './server.ts';
 
 const server = await kosmicServer.listen(config.port, config.host);
 
 logger.info(`Server listening on ${config.host}:${config.port}`);
+
 if (process.send) process.send({status: 'ready'});
 
 // throw to bubble up to uncaughtException

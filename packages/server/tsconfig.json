@@ -9,6 +9,7 @@
   "include": ["src", "test"],
   "exclude": ["node_modules", "dist"],
   "references": [
+    { "path": "../config" },
     { "path": "../router" },
     { "path": "../helmet" },
     { "path": "../logger" },
