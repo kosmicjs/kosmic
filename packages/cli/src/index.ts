@@ -11,6 +11,7 @@ const COMMANDS = {
   compileCp: 'compile:cp',
   compileTsc: 'compile:tsc',
   compileVite: 'compile:vite',
+  create: 'create',
   dev: 'dev',
   lint: 'lint',
   migrate: 'migrate',
@@ -37,6 +38,7 @@ Commands
   compile:cp
   compile:tsc
   compile:vite
+  create
   dev
   lint
   migrate
@@ -51,6 +53,7 @@ Options
 
 const cli = parseArgs({
   allowPositionals: true,
+  strict: false,
   options: {
     help: {
       type: 'boolean',
@@ -117,6 +120,12 @@ switch (command) {
 
   case COMMANDS.compileVite: {
     await import('./compile-vite/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.create: {
+    await import('./create/cli.ts');
 
     break;
   }
