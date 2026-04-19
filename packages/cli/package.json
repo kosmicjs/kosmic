@@ -38,13 +38,13 @@
   },
   "dependencies": {
     "execa": "^9.6.1",
-    "kysely": "^0.28.14",
+    "kysely": "^0.28.16",
     "p-wait-for": "^6.0.0",
     "path-exists": "^5.0.0",
     "pino": "^10.3.1",
     "pino-princess": "^1.6.1",
-    "typescript": "~5.9.3",
-    "vite": "^8.0.3"
+    "typescript": "~6.0.3",
+    "vite": "^8.0.8"
   },
   "engines": {
     "node": ">=22"
