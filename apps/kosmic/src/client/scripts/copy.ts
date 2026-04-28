@@ -17,7 +17,9 @@ export function initializeCodeCopy($el: Element) {
         clearTimeout(copiedTimeout);
       }
 
-      copyToClipboard($el.dataset.code?.trim?.());
+      copyToClipboard($el.dataset.code?.trim?.()).catch(() => {
+        // ignore
+      });
       const previousTooltip = Tooltip.getOrCreateInstance($el);
       previousTooltip.dispose();
       const copiedTip = new Tooltip($el, {
