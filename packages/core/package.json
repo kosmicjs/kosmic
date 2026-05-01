@@ -1,6 +1,6 @@
 {
   "name": "@kosmic/core",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Core shared utilities for Kosmic packages and apps",
   "keywords": [
     "core",
@@ -35,7 +35,7 @@
     "test:coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
-    "@kosmic/logger": "^0.0.0",
+    "@kosmic/logger": "^0.0.1",
     "argon2": "^0.44.0",
     "koa": "^3.2.0",
     "kysely": "^0.28.16",

@@ -1,6 +1,6 @@
 {
   "name": "kosmic",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A highly opinionated and strongly typed Koa web and api template.",
   "bugs": {
     "url": "https://github.com/spence-s/kosmic/issues"
@@ -40,14 +40,14 @@
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^8.0.0",
     "@google/genai": "^1.50.1",
-    "@kosmic/auth": "^0.0.0",
-    "@kosmic/cli": "^0.0.0",
-    "@kosmic/config": "^0.0.0",
-    "@kosmic/core": "^0.0.0",
-    "@kosmic/db": "^0.0.0",
-    "@kosmic/logger": "^0.0.0",
-    "@kosmic/router": "^0.0.0",
-    "@kosmic/server": "^0.0.0",
+    "@kosmic/auth": "^0.0.1",
+    "@kosmic/cli": "^0.0.1",
+    "@kosmic/config": "^0.0.1",
+    "@kosmic/core": "^0.0.1",
+    "@kosmic/db": "^0.0.1",
+    "@kosmic/logger": "^0.0.1",
+    "@kosmic/router": "^0.0.1",
+    "@kosmic/server": "^0.1.0",
     "@popperjs/core": "^2.11.8",
     "@stripe/stripe-js": "^9.3.1",
     "argon2": "^0.44.0",

@@ -1,6 +1,6 @@
 {
   "name": "@kosmic/server",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Reusable Koa server bootstrap for Kosmic apps",
   "keywords": [
     "koa",
@@ -37,12 +37,12 @@
   },
   "dependencies": {
     "@koa/etag": "^5.0.2",
-    "@kosmic/config": "^0.0.0",
-    "@kosmic/error-handler": "^0.0.0",
-    "@kosmic/helmet": "^0.0.0",
-    "@kosmic/jsx": "^0.0.0",
-    "@kosmic/logger": "^0.0.0",
-    "@kosmic/router": "^0.0.0",
+    "@kosmic/config": "^0.0.1",
+    "@kosmic/error-handler": "^0.0.1",
+    "@kosmic/helmet": "^0.0.1",
+    "@kosmic/jsx": "^0.0.1",
+    "@kosmic/logger": "^0.0.1",
+    "@kosmic/router": "^0.0.1",
     "koa": "^3.2.0",
     "koa-bodyparser": "^4.4.1",
     "koa-conditional-get": "^3.0.0",

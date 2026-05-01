@@ -1,6 +1,6 @@
 {
   "name": "@kosmic/logger",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Shared pino logger factory utilities for Kosmic apps",
   "keywords": [
     "logger",
