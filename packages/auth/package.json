@@ -51,7 +51,7 @@
     "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
     "type-fest": "^5.6.0",
-    "zod": "^4.3.6"
+    "zod": "^4.4.2"
   },
   "devDependencies": {
     "@types/koa": "^3.0.2",

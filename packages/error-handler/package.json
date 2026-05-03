@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "koa": "^3.2.0",
-    "zod": "^4.3.6"
+    "zod": "^4.4.2"
   },
   "devDependencies": {
     "@kosmic/jsx": "^0.0.1",

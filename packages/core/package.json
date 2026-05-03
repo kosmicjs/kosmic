@@ -39,7 +39,7 @@
     "argon2": "^0.44.0",
     "koa": "^3.2.0",
     "kysely": "^0.28.16",
-    "zod": "^4.3.6"
+    "zod": "^4.4.2"
   },
   "devDependencies": {
     "@types/koa": "^3.0.2"
