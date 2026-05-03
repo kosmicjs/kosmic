@@ -35,7 +35,7 @@
     "@kosmic/config": "^0.0.1",
     "@kosmic/logger": "^0.0.1",
     "@types/pg": "^8.20.0",
-    "kysely": "^0.28.16",
+    "kysely": "^0.28.17",
     "pg": "^8.20.0"
   },
   "engines": {
