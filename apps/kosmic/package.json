@@ -1,6 +1,6 @@
 {
   "name": "kosmic",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A highly opinionated and strongly typed Koa web and api template.",
   "bugs": {
     "url": "https://github.com/spence-s/kosmic/issues"
@@ -41,7 +41,7 @@
     "@fullhuman/postcss-purgecss": "^8.0.0",
     "@google/genai": "^1.50.1",
     "@kosmic/auth": "^0.0.1",
-    "@kosmic/cli": "^0.0.1",
+    "@kosmic/cli": "^0.0.2",
     "@kosmic/config": "^0.0.1",
     "@kosmic/core": "^0.0.1",
     "@kosmic/db": "^0.0.1",
