@@ -1,0 +1,39 @@
+import path from 'node:path';
+import {KosmicServer, type SessionStore} from '@kosmic/server';
+
+class MemorySessionStore implements SessionStore {
+  readonly #sessions = new Map<string, unknown>();
+
+  /**
+   * Retrieve a serialized session value.
+   */
+  async get(key: string): Promise<unknown> {
+    return this.#sessions.get(key);
+  }
+
+  /**
+   * Persist a serialized session value.
+   */
+  async set(key: string, value: unknown): Promise<void> {
+    this.#sessions.set(key, value);
+  }
+
+  /**
+   * Remove an existing session value.
+   */
+  async destroy(key: string): Promise<void> {
+    this.#sessions.delete(key);
+  }
+}
+
+export const kosmicServer = new KosmicServer({
+  routesDir: path.join(import.meta.dirname, 'routes'),
+  sessionStore: new MemorySessionStore(),
+});
+
+/**
+ * Return the app singleton.
+ */
+export function getServer(): KosmicServer {
+  return kosmicServer;
+}

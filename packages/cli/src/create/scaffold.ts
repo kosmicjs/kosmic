@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {authTemplateFiles} from './templates/auth.ts';
-import {baseTemplateFiles} from './templates/base.ts';
+import {authTemplateDirectory} from './templates/auth.ts';
+import {baseTemplateDirectory} from './templates/base.ts';
 
 export type ScaffoldOptions = {
   readonly projectName: string;
@@ -25,34 +25,61 @@ export async function directoryHasFiles(
 }
 
 /**
- * Replace known placeholders in template file content.
+ * Render placeholders in template content using the provided context.
  */
 function renderTemplate(
   fileContents: string,
-  context: {projectName: string},
+  context: Record<string, string>,
 ): string {
-  return fileContents.replaceAll('{{projectName}}', context.projectName);
+  return fileContents.replaceAll(
+    /\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/gv,
+    (match: string, key: string): string => context[key] ?? match,
+  );
 }
 
 /**
- * Write all template files to the target directory.
+ * Recursively list all files in a template directory.
+ */
+async function getTemplateFiles(templateDirectory: string): Promise<string[]> {
+  const entries = await fs.readdir(templateDirectory, {withFileTypes: true});
+  const files = await Promise.all(
+    entries.map(async (entry) => {
+      const entryPath = path.join(templateDirectory, entry.name);
+
+      if (entry.isDirectory()) {
+        return getTemplateFiles(entryPath);
+      }
+
+      return [entryPath];
+    }),
+  );
+
+  return files.flat();
+}
+
+/**
+ * Write template files from a source directory to the target directory.
  */
 async function writeTemplates(
   targetDirectory: string,
-  templateFiles: Record<string, string>,
-  context: {projectName: string},
+  templateDirectory: string,
+  context: Record<string, string>,
 ): Promise<void> {
-  const writes = Object.entries(templateFiles).map(
-    async ([relativePath, templateValue]) => {
-      const outputPath = path.join(targetDirectory, relativePath);
-      await fs.mkdir(path.dirname(outputPath), {recursive: true});
-      await fs.writeFile(
-        outputPath,
-        renderTemplate(templateValue, context),
-        'utf8',
-      );
-    },
-  );
+  const templateFiles = await getTemplateFiles(templateDirectory);
+  const writes = templateFiles.map(async (templatePath) => {
+    const relativePath = path
+      .relative(templateDirectory, templatePath)
+      .replace(/\.tmpl$/v, '');
+    const outputPath = path.join(targetDirectory, relativePath);
+    const templateValue = await fs.readFile(templatePath, 'utf8');
+
+    await fs.mkdir(path.dirname(outputPath), {recursive: true});
+    await fs.writeFile(
+      outputPath,
+      renderTemplate(templateValue, context),
+      'utf8',
+    );
+  });
 
   await Promise.all(writes);
 }
@@ -73,9 +100,9 @@ export async function scaffoldKosmicProject(
 
   const context = {projectName};
 
-  await writeTemplates(targetDirectory, baseTemplateFiles, context);
+  await writeTemplates(targetDirectory, baseTemplateDirectory, context);
 
   if (withAuth) {
-    await writeTemplates(targetDirectory, authTemplateFiles, context);
+    await writeTemplates(targetDirectory, authTemplateDirectory, context);
   }
 }

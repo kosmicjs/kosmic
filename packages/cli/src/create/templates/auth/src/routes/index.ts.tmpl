@@ -1,0 +1,87 @@
+import type {Context} from '@kosmic/server';
+
+/**
+ * Render the default landing page.
+ */
+export async function get(ctx: Context) {
+  const user = ctx.session?.user;
+
+  ctx.type = 'html';
+  ctx.body = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{projectName}}</title>
+    <style>
+      :root {
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --text: #14213d;
+        --muted: #5f6c80;
+        --accent: #fca311;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+        color: var(--text);
+        background: radial-gradient(circle at 20% 20%, #fff9eb 0%, var(--bg) 50%);
+      }
+
+      main {
+        max-width: 42rem;
+        padding: 2rem;
+      }
+
+      section {
+        background: var(--card);
+        border-radius: 14px;
+        box-shadow: 0 12px 36px rgb(20 33 61 / 0.12);
+        padding: 2rem;
+      }
+
+      h1 {
+        margin-top: 0;
+        font-size: 2rem;
+      }
+
+      nav {
+        margin-top: 1.25rem;
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      a {
+        color: #7a4a00;
+      }
+
+      p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>{{projectName}}</h1>
+        <p>
+          This app includes optional auth routes. Edit <code>src/routes</code> to
+          extend the template.
+        </p>
+        <nav>
+          ${
+            user
+              ? '<a href="/account">Account</a><a href="/logout">Logout</a>'
+              : '<a href="/login">Login</a>'
+          }
+        </nav>
+      </section>
+    </main>
+  </body>
+</html>`;
+}

@@ -1,0 +1,30 @@
+{
+  "name": "{{projectName}}",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "build": "kosmic build",
+    "check": "tsc --noEmit",
+    "dev": "kosmic dev",
+    "lint": "xo",
+    "start": "kosmic start",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@kosmic/cli": "latest",
+    "@kosmic/config": "latest",
+    "@kosmic/logger": "latest",
+    "@kosmic/server": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "~25.5.0",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.3",
+    "xo": "^1.2.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

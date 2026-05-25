@@ -1,0 +1,8 @@
+declare module 'koa-session' {
+  interface Session {
+    user?: {
+      username: string;
+      loggedInAt: string;
+    };
+  }
+}

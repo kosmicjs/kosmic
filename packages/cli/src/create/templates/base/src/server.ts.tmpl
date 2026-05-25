@@ -1,0 +1,13 @@
+import path from 'node:path';
+import {KosmicServer} from '@kosmic/server';
+
+export const kosmicServer = new KosmicServer({
+  routesDir: path.join(import.meta.dirname, 'routes'),
+});
+
+/**
+ * Return the app singleton.
+ */
+export function getServer(): KosmicServer {
+  return kosmicServer;
+}

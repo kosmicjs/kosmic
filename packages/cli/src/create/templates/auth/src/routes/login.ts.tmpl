@@ -1,0 +1,128 @@
+import type {Context} from '@kosmic/server';
+
+/**
+ * Safely read a trimmed string value from an unknown request body object.
+ */
+function readBodyString(
+  body: unknown,
+  key: 'username' | 'password',
+): string | undefined {
+  if (!body || typeof body !== 'object') {
+    return undefined;
+  }
+
+  const value = (body as Record<string, unknown>)[key];
+
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+
+  const trimmedValue = value.trim();
+  return trimmedValue.length > 0 ? trimmedValue : undefined;
+}
+
+/**
+ * Render the login form.
+ */
+export async function get(ctx: Context) {
+  ctx.type = 'html';
+  ctx.body = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+        background: #f6f7fb;
+      }
+
+      form {
+        width: min(24rem, calc(100vw - 2rem));
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 24px rgb(20 33 61 / 0.12);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.6rem;
+        margin-top: 0.25rem;
+        margin-bottom: 0.75rem;
+        border: 1px solid #d6dbe7;
+        border-radius: 8px;
+      }
+
+      button {
+        border: 0;
+        border-radius: 8px;
+        padding: 0.6rem 0.9rem;
+        background: #fca311;
+        color: #1f2937;
+        font-weight: 600;
+      }
+
+      .message {
+        color: #9a3412;
+      }
+    </style>
+  </head>
+  <body>
+    <form method="post" action="/login">
+      <h1>Sign in</h1>
+      <p class="message">${ctx.query.error ? 'Invalid credentials.' : ''}</p>
+      <label>
+        Username
+        <input required name="username" autocomplete="username" />
+      </label>
+      <label>
+        Password
+        <input
+          required
+          type="password"
+          name="password"
+          autocomplete="current-password"
+        />
+      </label>
+      <button type="submit">Login</button>
+    </form>
+  </body>
+</html>`;
+}
+
+/**
+ * Validate credentials and establish a session.
+ */
+export async function post(ctx: Context) {
+  const expectedUsername = process.env.APP_AUTH_USERNAME ?? 'admin';
+  const expectedPassword = process.env.APP_AUTH_PASSWORD ?? 'kosmic';
+  const username = readBodyString(ctx.request.body, 'username');
+  const password = readBodyString(ctx.request.body, 'password');
+
+  if (
+    !ctx.session ||
+    username !== expectedUsername ||
+    password !== expectedPassword
+  ) {
+    ctx.redirect('/login?error=1');
+    return;
+  }
+
+  ctx.session.user = {
+    username,
+    loggedInAt: new Date().toISOString(),
+  };
+
+  ctx.redirect('/account');
+}
