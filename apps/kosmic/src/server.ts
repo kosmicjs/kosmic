@@ -7,5 +7,3 @@ export const kosmicServer = new KosmicServer({
   sessionStore,
   passport,
 });
-
-export const getServer = (): KosmicServer => kosmicServer;

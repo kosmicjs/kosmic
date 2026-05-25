@@ -7,10 +7,3 @@ export const kosmicServer = new KosmicServer({
   sessionStore,
   passport,
 });
-
-/**
- * Return the app singleton.
- */
-export function getServer(): KosmicServer {
-  return kosmicServer;
-}
