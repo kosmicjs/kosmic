@@ -1,12 +1,10 @@
-import type {Context} from '@kosmic/server';
+import type {Context, Next} from '@kosmic/server';
 
 /**
- * Destroy the local session user and redirect home.
+ * Logout the current user and redirect home.
  */
-export async function get(ctx: Context) {
-  if (ctx.session) {
-    delete ctx.session.user;
-  }
+export async function get(ctx: Context, _next: Next) {
+  await ctx.logout();
 
   ctx.redirect('/');
 }

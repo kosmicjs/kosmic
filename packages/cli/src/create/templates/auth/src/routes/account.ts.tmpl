@@ -4,12 +4,12 @@ import type {Context} from '@kosmic/server';
  * Render the protected account page.
  */
 export async function get(ctx: Context) {
-  const user = ctx.session?.user;
-
-  if (!user) {
-    ctx.redirect('/login');
+  if (!ctx.isAuthenticated()) {
+    ctx.redirect(`/login?redirect=${encodeURIComponent(ctx.request.url)}`);
     return;
   }
+
+  const user = ctx.state.user as {email?: string; role?: string} | undefined;
 
   ctx.type = 'html';
   ctx.body = `<!doctype html>
@@ -40,8 +40,8 @@ export async function get(ctx: Context) {
   <body>
     <article>
       <h1>Account</h1>
-      <p>Welcome, ${user.username}.</p>
-      <p>Logged in at ${new Date(user.loggedInAt).toLocaleString()}.</p>
+      <p>Email: ${user?.email ?? 'unknown'}</p>
+      <p>Role: ${user?.role ?? 'user'}</p>
       <p><a href="/logout">Logout</a></p>
     </article>
   </body>

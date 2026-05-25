@@ -1,0 +1,120 @@
+import type {Context} from '@kosmic/server';
+import argon2 from 'argon2';
+import z, {string} from 'zod/v4';
+import * as User from '#models/users.js';
+import * as Emails from '#models/emails.js';
+import {db} from '#db/index.js';
+
+/**
+ * Render a minimal signup form.
+ */
+export async function get(ctx: Context) {
+  ctx.type = 'html';
+  ctx.body = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Signup</title>
+  </head>
+  <body>
+    <form method="post" action="/signup">
+      <h1>Create account</h1>
+      <label>
+        Email
+        <input required type="email" name="email" autocomplete="email" />
+      </label>
+      <label>
+        Password
+        <input required type="password" name="password" autocomplete="new-password" />
+      </label>
+      <label>
+        Confirm Password
+        <input required type="password" name="password_confirm" autocomplete="new-password" />
+      </label>
+      <button type="submit">Create account</button>
+    </form>
+  </body>
+</html>`;
+}
+
+/**
+ * Create a user with zod validation.
+ */
+export async function post(ctx: Context) {
+  let userData: z.infer<typeof User.insertSchema> | undefined;
+  let passwords:
+    | {
+        password: string;
+        password_confirm: string;
+      }
+    | undefined;
+
+  const errors: z.core.$ZodIssue[] = [];
+
+  try {
+    userData = await User.insertSchema.parseAsync(ctx.request.body);
+  } catch (error) {
+    if (!(error instanceof z.ZodError)) {
+      throw error;
+    }
+
+    errors.push(...error.issues);
+  }
+
+  try {
+    passwords = await z
+      .object({
+        password: User.passwordSchema,
+        password_confirm: User.passwordSchema,
+      })
+      .refine((data) => data.password.trim() === data.password_confirm.trim(), {
+        message: 'Password and password confirmation do not match',
+        path: ['password_confirm'],
+      })
+      .parseAsync(ctx.request.body);
+  } catch (error) {
+    if (!(error instanceof z.ZodError)) {
+      throw error;
+    }
+
+    errors.push(...error.issues);
+  }
+
+  if (errors.length > 0) {
+    ctx.status = 400;
+
+    const formValues = z.object({
+      email: string().optional(),
+      password: string().optional(),
+      password_confirm: string().optional(),
+    });
+
+    const values = formValues.parse(ctx.request.body);
+
+    const allMessages = errors.map((error) => error.message).join(', ');
+    ctx.type = 'html';
+    ctx.body = `<p>Validation failed: ${allMessages}</p><p><a href="/signup">Try again</a></p><pre>${JSON.stringify(values, undefined, 2)}</pre>`;
+    return;
+  }
+
+  if (!userData || !passwords) {
+    throw new Error('Fatal: Invalid signup payload');
+  }
+
+  const hash = await argon2.hash(passwords.password);
+
+  const user = await db
+    .insertInto('users')
+    .values({
+      ...userData,
+      hash,
+    })
+    .returning(['id', 'email'])
+    .executeTakeFirstOrThrow();
+
+  await Emails.queueWelcomeEmail(user.id, user.email);
+
+  await ctx.login(user);
+  ctx.redirect('/account');
+}

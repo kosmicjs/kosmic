@@ -1,0 +1,6 @@
+import {createLogger} from '@kosmic/logger';
+import {config} from '@kosmic/config';
+
+export const logger = createLogger({level: config.logLevel});
+
+export default logger;

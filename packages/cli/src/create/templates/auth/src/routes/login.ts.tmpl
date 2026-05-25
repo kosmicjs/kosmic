@@ -1,25 +1,5 @@
-import type {Context} from '@kosmic/server';
-
-/**
- * Safely read a trimmed string value from an unknown request body object.
- */
-function readBodyString(
-  body: unknown,
-  key: 'username' | 'password',
-): string | undefined {
-  if (!body || typeof body !== 'object') {
-    return undefined;
-  }
-
-  const value = (body as Record<string, unknown>)[key];
-
-  if (typeof value !== 'string') {
-    return undefined;
-  }
-
-  const trimmedValue = value.trim();
-  return trimmedValue.length > 0 ? trimmedValue : undefined;
-}
+import type {Context, Next} from '@kosmic/server';
+import {authenticateLocal} from '#utils/auth.js';
 
 /**
  * Render the login form.
@@ -83,8 +63,8 @@ export async function get(ctx: Context) {
       <h1>Sign in</h1>
       <p class="message">${ctx.query.error ? 'Invalid credentials.' : ''}</p>
       <label>
-        Username
-        <input required name="username" autocomplete="username" />
+        Email
+        <input required type="email" name="email" autocomplete="email" />
       </label>
       <label>
         Password
@@ -96,33 +76,20 @@ export async function get(ctx: Context) {
         />
       </label>
       <button type="submit">Login</button>
+      <p><a href="/signup">Create account</a></p>
     </form>
   </body>
 </html>`;
 }
 
 /**
- * Validate credentials and establish a session.
+ * Authenticate with passport local strategy.
  */
-export async function post(ctx: Context) {
-  const expectedUsername = process.env.APP_AUTH_USERNAME ?? 'admin';
-  const expectedPassword = process.env.APP_AUTH_PASSWORD ?? 'kosmic';
-  const username = readBodyString(ctx.request.body, 'username');
-  const password = readBodyString(ctx.request.body, 'password');
+export async function post(ctx: Context, next: Next) {
+  ctx.set('HX-Redirect', '/login?error=1');
 
-  if (
-    !ctx.session ||
-    username !== expectedUsername ||
-    password !== expectedPassword
-  ) {
-    ctx.redirect('/login?error=1');
-    return;
-  }
+  await authenticateLocal(ctx, next);
 
-  ctx.session.user = {
-    username,
-    loggedInAt: new Date().toISOString(),
-  };
-
+  ctx.set('HX-Redirect', '/account');
   ctx.redirect('/account');
 }

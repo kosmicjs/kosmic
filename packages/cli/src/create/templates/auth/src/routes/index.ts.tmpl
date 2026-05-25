@@ -1,10 +1,11 @@
 import type {Context} from '@kosmic/server';
 
 /**
- * Render the default landing page.
+ * Render the minimal landing page for the auth template.
  */
 export async function get(ctx: Context) {
-  const user = ctx.session?.user;
+  const isAuthenticated = ctx.isAuthenticated();
+  const user = ctx.state.user as {email?: string} | undefined;
 
   ctx.type = 'html';
   ctx.body = `<!doctype html>
@@ -70,14 +71,22 @@ export async function get(ctx: Context) {
       <section>
         <h1>{{projectName}}</h1>
         <p>
-          This app includes optional auth routes. Edit <code>src/routes</code> to
-          extend the template.
+          This template ships with database-backed auth, migrations, and zod models.
         </p>
+        <p>
+          Start by editing <code>src/routes</code>, <code>src/models</code>, and
+          <code>src/db/migrations.ts</code>.
+        </p>
+        ${
+          isAuthenticated
+            ? `<p>Signed in as <strong>${user?.email ?? 'unknown'}</strong>.</p>`
+            : '<p>You are not signed in.</p>'
+        }
         <nav>
           ${
-            user
+            isAuthenticated
               ? '<a href="/account">Account</a><a href="/logout">Logout</a>'
-              : '<a href="/login">Login</a>'
+              : '<a href="/signup">Signup</a><a href="/login">Login</a>'
           }
         </nav>
       </section>

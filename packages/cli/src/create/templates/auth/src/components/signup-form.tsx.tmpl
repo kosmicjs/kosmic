@@ -1,0 +1,79 @@
+import clsx from 'clsx';
+import type z from 'zod/v4';
+
+export type SignupFormProps = {
+  readonly email?: string;
+  readonly password?: string;
+  readonly password_confirm?: string;
+  readonly errors?: z.core.$ZodIssue[];
+};
+
+export function SignupForm({
+  errors,
+  email,
+  password,
+  password_confirm,
+}: SignupFormProps) {
+  const emailErrors = errors?.filter((error) => error.path.includes('email'));
+  const passwordErrors = errors?.filter((error) =>
+    error.path.includes('password'),
+  );
+  const passwordConfirmErrors = errors?.filter((error) =>
+    error.path.includes('password_confirm'),
+  );
+
+  return (
+    <form method="post" action="/signup">
+      <h1>Create account</h1>
+      <label>
+        Email
+        <input
+          required
+          type="email"
+          name="email"
+          value={email}
+          class={clsx({
+            'is-invalid': Number(emailErrors?.length) > 0,
+          })}
+        />
+      </label>
+      {emailErrors?.map((error) => (
+        <p>{error.message}</p>
+      ))}
+
+      <label>
+        Password
+        <input
+          required
+          type="password"
+          name="password"
+          value={password}
+          class={clsx({
+            'is-invalid': Number(passwordErrors?.length) > 0,
+          })}
+        />
+      </label>
+      {passwordErrors?.map((error) => (
+        <p>{error.message}</p>
+      ))}
+
+      <label>
+        Confirm Password
+        <input
+          required
+          type="password"
+          name="password_confirm"
+          value={password_confirm}
+          class={clsx({
+            'is-invalid': Number(passwordConfirmErrors?.length) > 0,
+          })}
+        />
+      </label>
+      {passwordConfirmErrors?.map((error) => (
+        <p>{error.message}</p>
+      ))}
+
+      <button type="submit">Create account</button>
+    </form>
+  );
+}

@@ -1,0 +1,26 @@
+export type LoginFormProps = {
+  readonly error?: string;
+};
+
+export function LoginForm({error}: LoginFormProps) {
+  return (
+    <form method="post" action="/login">
+      <h1>Sign in</h1>
+      <p>{error ?? ''}</p>
+      <label>
+        Email
+        <input required type="email" name="email" autoComplete="email" />
+      </label>
+      <label>
+        Password
+        <input
+          required
+          type="password"
+          name="password"
+          autoComplete="current-password"
+        />
+      </label>
+      <button type="submit">Login</button>
+    </form>
+  );
+}

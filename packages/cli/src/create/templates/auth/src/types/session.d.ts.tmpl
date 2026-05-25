@@ -1,8 +1,10 @@
 declare module 'koa-session' {
   interface Session {
     user?: {
-      username: string;
-      loggedInAt: string;
+      id: number;
+      email: string;
+      role?: string;
     };
+    messages?: string[];
   }
 }
