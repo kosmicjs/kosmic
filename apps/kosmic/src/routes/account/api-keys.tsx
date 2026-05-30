@@ -26,7 +26,6 @@ export const post: Middleware = async (ctx, next) => {
         key_hash: keyHash,
         key_prefix: keyPrefix,
         is_active: true,
-        created_at: new Date(),
       })
       .executeTakeFirstOrThrow();
 

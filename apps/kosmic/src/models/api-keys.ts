@@ -11,7 +11,7 @@ export const schema = zod.object({
   last_used_at: zod.date().nullable(),
   expires_at: zod.date().nullable(),
   is_active: zod.boolean(),
-  permissions: zod.any().nullable(),
+  permissions: zod.string().nullable().optional(),
   created_at: zod.date().optional(),
   updated_at: zod.date().optional(),
 });

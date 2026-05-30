@@ -5,13 +5,14 @@ import process from 'node:process';
 import path from 'node:path';
 import {parseArgs} from 'node:util';
 import {execa} from 'execa';
-import {NO_MIGRATIONS, type Kysely} from 'kysely';
+import type {Kysely} from 'kysely';
+import {NO_MIGRATIONS} from 'kysely/migration';
 import {pino} from 'pino';
 import {createMigrator} from './migrator.ts';
 
 const HELP_TEXT = `
 Usage
-  $ migrate <command> [options]
+  $ migrate <command> [options]p
 
 Commands
   up       Run all pending migrations (default)

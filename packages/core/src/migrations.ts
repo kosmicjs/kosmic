@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import process from 'node:process';
-import {type Kysely, sql, type Migration} from 'kysely';
+import {type Kysely, sql} from 'kysely';
+import type {Migration} from 'kysely/migration';
 import argon2 from 'argon2';
 import {logger} from '@kosmic/logger';
 import {

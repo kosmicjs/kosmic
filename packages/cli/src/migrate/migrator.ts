@@ -3,12 +3,12 @@
 
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import type {Kysely} from 'kysely';
 import {
-  type Kysely,
   type Migration,
   type MigrationProvider,
   Migrator,
-} from 'kysely';
+} from 'kysely/migration';
 
 export type KosmicMigration = Migration & {
   sequence: string;

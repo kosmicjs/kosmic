@@ -69,4 +69,6 @@ export class KosmicDB<Database = Record<string, unknown>> {
   }
 }
 
+export * from 'kysely/migration';
+// @ts-expect-error whjatas;lasf;laksf;lks
 export * from 'kysely';
