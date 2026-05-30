@@ -1,5 +1,12 @@
 # @kosmic/cli
 
+## 0.0.3
+
+### Patch Changes
+
+- Initial publish
+- dep updates
+
 ## 0.0.2
 
 ### Patch Changes

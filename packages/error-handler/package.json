@@ -1,6 +1,6 @@
 {
   "name": "@kosmic/error-handler",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Error handling middleware for Koa with Zod integration",
   "keywords": [
     "koa",
@@ -41,12 +41,12 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@kosmic/jsx": "^0.0.1",
+    "@kosmic/jsx": "^0.0.2",
     "@types/koa": "^3.0.3",
     "preact": "^10.29.2"
   },
   "peerDependencies": {
-    "@kosmic/jsx": "^0.0.1",
+    "@kosmic/jsx": "^0.0.2",
     "preact": "^10.28.2"
   },
   "engines": {
