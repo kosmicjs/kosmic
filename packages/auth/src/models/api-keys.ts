@@ -12,7 +12,7 @@ export const apiKeySchema = zod.object({
   last_used_at: zod.date().nullable(),
   expires_at: zod.date().nullable(),
   is_active: zod.boolean(),
-  permissions: zod.any().nullable(),
+  permissions: zod.unknown().nullable().optional(),
   created_at: zod.date().optional(),
   updated_at: zod.date().optional(),
 });

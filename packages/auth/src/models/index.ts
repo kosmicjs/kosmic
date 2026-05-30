@@ -3,7 +3,6 @@ import type {SessionRow} from './sessions.ts';
 import type {User} from './users.ts';
 
 export type AuthDatabase = {
-  [key: string]: unknown;
   users: User;
   api_keys: ApiKey;
   sessions: SessionRow;

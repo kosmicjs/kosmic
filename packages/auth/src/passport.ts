@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-restricted-types */
 import passport from 'koa-passport';
 import argon2 from 'argon2';
 import {Strategy as LocalStrategy} from 'passport-local';
 import {Strategy as BearerStrategy} from 'passport-http-bearer';
-import type {Generated, Kysely} from '@kosmic/db';
+import type {Kysely} from '@kosmic/db';
 import type {Logger} from '@kosmic/logger';
 import {
   type AuthDatabase,
@@ -11,27 +10,10 @@ import {
   type SelectableUser,
 } from './models/index.ts';
 
+type AuthPassportDb = Pick<Kysely<AuthDatabase>, 'selectFrom' | 'updateTable'>;
+
 export type Options = {
-  db: Kysely<{
-    users: {
-      id: Generated<number>;
-      email: string;
-      first_name: string | null | undefined;
-      last_name: string | null | undefined;
-      role: 'user' | 'admin';
-      hash: string | null | undefined;
-      is_active: boolean;
-    };
-    api_keys: {
-      id: Generated<number>;
-      user_id: number;
-      key_hash: string;
-      key_prefix: string;
-      is_active: boolean;
-      expires_at: Date | null | undefined;
-      last_used_at: Date | null | undefined;
-    };
-  }>;
+  db: AuthPassportDb;
   logger: Logger;
 };
 

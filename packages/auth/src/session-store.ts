@@ -3,18 +3,19 @@ import type {Kysely} from '@kosmic/db';
 import type {SessionStore, Session} from '@kosmic/server';
 import type {AuthDatabase} from './models/index.ts';
 
-export type KyselySessionStoreDb = Kysely<AuthDatabase>;
+export type KyselySessionStoreDb = Pick<
+  Kysely<AuthDatabase>,
+  'selectFrom' | 'insertInto' | 'deleteFrom'
+>;
 
 /**
  * Persists Koa sessions using a Kysely database connection.
  */
-export class KyselySessionStore<
-  DB extends Kysely<AuthDatabase>,
-> implements SessionStore {
-  readonly #db: DB;
+export class KyselySessionStore implements SessionStore {
+  readonly #db: KyselySessionStoreDb;
   readonly #logger: Logger;
 
-  constructor(db: DB, logger: Logger) {
+  constructor(db: KyselySessionStoreDb, logger: Logger) {
     this.#db = db;
     this.#logger = logger;
   }

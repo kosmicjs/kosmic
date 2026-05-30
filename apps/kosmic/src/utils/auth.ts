@@ -1,27 +1,14 @@
-import {
-  createPassport,
-  KyselySessionStore,
-  type KyselySessionStoreDb,
-  type Passport,
-} from '@kosmic/auth';
+import {createPassport, KyselySessionStore, type Passport} from '@kosmic/auth';
 import type {Context} from '@kosmic/server';
 import {db} from '#db/index.js';
 import logger from '#utils/logger.js';
 
-type PassportDb = Parameters<typeof createPassport>[0]['db'];
-
-// Kysely is invariant on its schema generic, so we bridge the app schema to auth's subset at the boundary.
-// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-const passportDb = db as unknown as PassportDb;
-// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-const sessionStoreDb = db as unknown as KyselySessionStoreDb;
-
 export const passport: Passport = createPassport({
-  db: passportDb,
+  db,
   logger,
 });
 
-export const sessionStore = new KyselySessionStore(sessionStoreDb, logger);
+export const sessionStore = new KyselySessionStore(db, logger);
 
 /**
  * Ensures the current request has an authenticated user id.
