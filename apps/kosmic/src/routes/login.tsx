@@ -8,6 +8,11 @@ export async function post(ctx: Context, next: Next) {
 
   await authenticateLocal(ctx, next);
 
+  if (ctx.status === 401 || !ctx.isAuthenticated()) {
+    ctx.status = 401;
+    return;
+  }
+
   // successful login
   ctx.set('HX-Redirect', '/account');
   ctx.status = 200;
