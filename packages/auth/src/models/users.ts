@@ -43,7 +43,7 @@ if (config.kosmicEnv !== 'development') {
 }
 
 export type User = GeneratedId<zod.infer<typeof userSchema>>;
-export type SelectableUser = Selectable<User>;
+export type SelectableUser = Selectable<Partial<User>>;
 export type InsertableUser = Insertable<User>;
 export type UpdatedableUser = Updateable<User>;
 

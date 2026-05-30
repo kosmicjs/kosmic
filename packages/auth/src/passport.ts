@@ -1,83 +1,58 @@
-/* eslint-disable @typescript-eslint/no-unsafe-type-assertion */
+/* eslint-disable @typescript-eslint/no-restricted-types */
 import passport from 'koa-passport';
 import argon2 from 'argon2';
 import {Strategy as LocalStrategy} from 'passport-local';
 import {Strategy as BearerStrategy} from 'passport-http-bearer';
-import {Strategy as GithubStrategy} from 'passport-github2';
-import type {Middleware} from 'koa';
-import type {Kysely} from '@kosmic/db';
+import type {Generated, Kysely} from '@kosmic/db';
 import type {Logger} from '@kosmic/logger';
-import type {PassportLike} from '@kosmic/server';
-import {extractKeyPrefix} from './models/api-keys.ts';
-import type {AuthDatabase} from './models/index.ts';
+import {
+  type AuthDatabase,
+  extractKeyPrefix,
+  type SelectableUser,
+} from './models/index.ts';
 
-type StrategyUser = {
-  id: number;
-  email: string;
-  first_name: string | undefined;
-  last_name: string | undefined;
-  role: 'admin' | 'user';
-};
-
-type GithubConfig = {
-  clientID?: string;
-  clientSecret?: string;
-  callbackURL?: string;
-};
-
-type GithubProfile = {
-  emails?: Array<{value: string}>;
-  displayName?: string;
-};
-
-export type AuthPassport = PassportLike & {
-  authenticate: (
-    strategy: string,
-    options?: Record<string, unknown>,
-  ) => Middleware;
-  use: (...arguments_: unknown[]) => void;
-  serializeUser: (...arguments_: unknown[]) => void;
-  deserializeUser: (...arguments_: unknown[]) => void;
-};
-
-export type CreatePassportOptions = {
-  db: Kysely<AuthDatabase>;
+export type Options = {
+  db: Kysely<{
+    users: {
+      id: Generated<number>;
+      email: string;
+      first_name: string | null | undefined;
+      last_name: string | null | undefined;
+      role: 'user' | 'admin';
+      hash: string | null | undefined;
+      is_active: boolean;
+    };
+    api_keys: {
+      id: Generated<number>;
+      user_id: number;
+      key_hash: string;
+      key_prefix: string;
+      is_active: boolean;
+      expires_at: Date | null | undefined;
+      last_used_at: Date | null | undefined;
+    };
+  }>;
   logger: Logger;
-  github?: GithubConfig;
-  /** Creates a user when a github account does not already exist. */
-  createGithubUser?: (input: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    accessToken: string;
-    refreshToken: string;
-  }) => Promise<StrategyUser>;
 };
 
-export type CreateAuthMiddlewareResult = {
-  authenticateLocal: Middleware;
-  authenticateBearer: Middleware;
-};
-
-/**
- * Converts unknown thrown values into Error instances.
- */
-function toError(error: unknown): Error {
-  if (error instanceof Error) {
-    return error;
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    interface User extends Pick<
+      SelectableUser,
+      'id' | 'email' | 'first_name' | 'last_name' | 'role'
+    > {}
   }
-
-  return new Error('Unknown auth error');
 }
 
 /**
  * Creates and configures a passport instance with local, bearer, and optional github strategies.
  */
-export function createPassport(options: CreatePassportOptions): AuthPassport {
+export function createPassport(options: Options): typeof passport {
   const {db, logger} = options;
 
-  // @ts-expect-error third-party type is too loose
-  passport.serializeUser((user: StrategyUser, done) => {
+  passport.serializeUser((user, done) => {
     logger.debug({user}, 'serializing user');
     done(null, user.id);
   });
@@ -102,7 +77,8 @@ export function createPassport(options: CreatePassportOptions): AuthPassport {
         done(null, false);
       } catch (error: unknown) {
         logger.error(error);
-        done(toError(error), {message: 'User not found'});
+        // @ts-expect-error - done expects an error as the first argument, but we want to pass a message
+        done(error, {message: 'User not found'});
       }
     })();
   });
@@ -225,123 +201,15 @@ export function createPassport(options: CreatePassportOptions): AuthPassport {
             return;
           }
 
-          const strategyUser: StrategyUser = {
-            id: user.id,
-            email: user.email,
-            first_name: user.first_name ?? undefined,
-            last_name: user.last_name ?? undefined,
-            role: user.role,
-          };
-
-          logger.trace({user: strategyUser}, 'found user by bearer token');
-          done(null, strategyUser);
+          logger.trace({user}, 'found user by bearer token');
+          done(null, user);
         } catch (error: unknown) {
           logger.error(error);
-          done(toError(error));
+          done(error);
         }
       })();
     }),
   );
 
-  if (
-    options.github?.clientID &&
-    options.github.clientSecret &&
-    options.github.callbackURL
-  ) {
-    passport.use(
-      new GithubStrategy(
-        {
-          clientID: options.github.clientID,
-          clientSecret: options.github.clientSecret,
-          callbackURL: options.github.callbackURL,
-          scope: ['user:email'],
-        },
-        (
-          accessToken: string,
-          refreshToken: string,
-          profile: GithubProfile,
-          done: (error?: Error, user?: StrategyUser | false) => void,
-        ) => {
-          void (async () => {
-            try {
-              logger.debug({profile}, 'github profile response');
-
-              const email = profile.emails?.[0]?.value;
-
-              if (!email) {
-                done(new Error('No email found in profile'));
-                return;
-              }
-
-              const existingUser = await db
-                .selectFrom('users')
-                .select(['id', 'email', 'first_name', 'last_name', 'role'])
-                .where('email', '=', email)
-                .executeTakeFirst();
-
-              if (existingUser) {
-                done(undefined, {
-                  id: existingUser.id,
-                  email: existingUser.email,
-                  first_name: existingUser.first_name ?? undefined,
-                  last_name: existingUser.last_name ?? undefined,
-                  role: existingUser.role,
-                });
-                return;
-              }
-
-              const firstName = profile.displayName?.split(' ')[0] ?? '';
-              const lastName =
-                profile.displayName?.split(' ').slice(1).join(' ') ?? '';
-
-              if (!options.createGithubUser) {
-                done(
-                  new Error('createGithubUser is required for github strategy'),
-                );
-                return;
-              }
-
-              const createdUser = await options.createGithubUser({
-                email,
-                firstName,
-                lastName,
-                accessToken,
-                refreshToken,
-              });
-
-              done(undefined, createdUser);
-            } catch (error: unknown) {
-              logger.error(error);
-              done(toError(error));
-            }
-          })();
-        },
-      ),
-    );
-  }
-
-  return passport as AuthPassport;
-}
-
-/**
- * Creates route middleware helpers bound to a configured passport instance.
- */
-export function createAuthMiddleware(
-  configuredPassport: AuthPassport,
-): CreateAuthMiddlewareResult {
-  return {
-    async authenticateLocal(ctx, next) {
-      await configuredPassport.authenticate('local', {
-        failWithError: true,
-        failureMessage: 'Invalid email or password',
-        successMessage: 'Logged in',
-      })(ctx, next);
-    },
-    async authenticateBearer(ctx, next) {
-      await configuredPassport.authenticate('bearer', {session: false})(
-        ctx,
-        next,
-      );
-    },
-  };
+  return passport;
 }

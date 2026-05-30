@@ -36,11 +36,6 @@ export type PassportLike = {
   session: () => Middleware;
 };
 
-export type RouterLoadedRoute = {
-  method: string;
-  path: string;
-};
-
 declare module 'koa' {
   interface DefaultState {
     manifest?: Manifest;

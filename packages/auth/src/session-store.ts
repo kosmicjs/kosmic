@@ -8,11 +8,13 @@ export type KyselySessionStoreDb = Kysely<AuthDatabase>;
 /**
  * Persists Koa sessions using a Kysely database connection.
  */
-export class KyselySessionStore implements SessionStore {
-  readonly #db: KyselySessionStoreDb;
+export class KyselySessionStore<
+  DB extends Kysely<AuthDatabase>,
+> implements SessionStore {
+  readonly #db: DB;
   readonly #logger: Logger;
 
-  constructor(db: KyselySessionStoreDb, logger: Logger) {
+  constructor(db: DB, logger: Logger) {
     this.#db = db;
     this.#logger = logger;
   }

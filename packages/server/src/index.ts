@@ -19,7 +19,7 @@ import {
   type Logger,
   logger as defaultLogger,
 } from '@kosmic/logger';
-import type {Manifest, PassportLike, RouterLoadedRoute} from './types.ts';
+import type {Manifest, PassportLike} from './types.ts';
 
 export type * from './types.ts';
 
@@ -41,8 +41,6 @@ export type KosmicServerOptions = {
   passport?: PassportLike;
   /** Helmet options — merged with sensible defaults for CSP. */
   helmetOptions?: HelmetOptions;
-  /** Extra session options (the `store` field is set automatically). */
-  sessionOptions?: Omit<session.opts, 'store'>;
 };
 
 /**
@@ -163,8 +161,7 @@ export class KosmicServer {
     const manifestPath =
       this.options.manifestPath ??
       path.join(publicDir, '.vite', 'manifest.json');
-    const {sessionStore, passport, helmetOptions, sessionOptions} =
-      this.options;
+    const {sessionStore, passport, helmetOptions} = this.options;
 
     const {koa} = this;
 
@@ -213,7 +210,6 @@ export class KosmicServer {
           {
             secure: config.kosmicEnv === 'production',
             sameSite: 'lax',
-            ...sessionOptions,
             store: sessionStore,
           },
           koa,
@@ -226,7 +222,7 @@ export class KosmicServer {
       koa.use(passport.session());
     }
 
-    koa.on('router:loaded', (ev: {routes: RouterLoadedRoute[]}) => {
+    koa.on('router:loaded', (ev: {routes: unknown[]}) => {
       logger.debug({routes: ev.routes}, 'router:loaded');
     });
 
