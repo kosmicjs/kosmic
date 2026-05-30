@@ -42,8 +42,14 @@
     "@kosmic/db": "^0.0.1",
     "@kosmic/logger": "^0.0.1",
     "@kosmic/server": "^0.1.0",
+    "@types/koa": "^3.0.3",
+    "@types/koa-passport": "^6.0.3",
+    "@types/passport-github2": "^1.2.9",
+    "@types/passport-google-oauth20": "^2.0.17",
+    "@types/passport-http-bearer": "^1.0.42",
+    "@types/passport-local": "^1.0.38",
     "argon2": "^0.44.0",
-    "koa": "^3.2.0",
+    "koa": "^3.2.1",
     "koa-passport": "^6",
     "koa-session": "^7.0.2",
     "passport-github2": "^0.1.12",
@@ -51,15 +57,7 @@
     "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
     "type-fest": "^5.6.0",
-    "zod": "^4.3.6"
-  },
-  "devDependencies": {
-    "@types/koa": "^3.0.2",
-    "@types/koa-passport": "^6.0.3",
-    "@types/passport-github2": "^1.2.9",
-    "@types/passport-google-oauth20": "^2.0.17",
-    "@types/passport-http-bearer": "^1.0.42",
-    "@types/passport-local": "^1.0.38"
+    "zod": "^4.4.3"
   },
   "engines": {
     "node": ">=22"

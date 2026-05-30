@@ -37,11 +37,11 @@
     "test:coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
-    "helmet": "^8.1.0",
-    "koa": "^3.2.0"
+    "helmet": "^8.2.0",
+    "koa": "^3.2.1"
   },
   "devDependencies": {
-    "@types/koa": "^3.0.2"
+    "@types/koa": "^3.0.3"
   },
   "engines": {
     "node": ">=22"
