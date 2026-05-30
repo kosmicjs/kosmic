@@ -47,12 +47,16 @@ export type SelectableUser = Selectable<User>;
 
 export type InsertableUser = Insertable<User>;
 
-export const insertSchema = schema.partial().required({
-  role: true,
-  email: true,
-  is_verified: true,
-  is_active: true,
-});
+export const insertSchema = schema
+  .partial()
+  .required({
+    email: true,
+  })
+  .extend({
+    role: zod.enum(['admin', 'user']).optional().default('user'),
+    is_verified: zod.boolean().optional().default(false),
+    is_active: zod.boolean().optional().default(true),
+  });
 
 export type UpdatedableUser = Updateable<User>;
 

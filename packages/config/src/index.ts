@@ -33,6 +33,9 @@ const baseConfig: PartialDeep<z.infer<typeof configSchema>> = {
     callbackURL: env.GOOGLE_CALLBACK_URL,
     geminiApiKey: env.GEMINI_API_KEY,
   },
+  openAi: {
+    apiKey: env.OPENAI_API_KEY,
+  },
   nodeMailer: {
     host: env.SMTP_HOST,
     port: Number(env.SMTP_PORT),

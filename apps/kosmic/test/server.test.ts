@@ -1,6 +1,7 @@
 import type {Server} from 'node:http';
 import {describe, test, before, after} from 'node:test';
 import path from 'node:path';
+import {inspect} from 'node:util';
 import assert from 'node:assert';
 import _got from 'got';
 import * as cheerio from 'cheerio';
@@ -9,6 +10,17 @@ import {CookieJar} from 'tough-cookie';
 import {createMigrator} from '@kosmic/cli/migrate';
 import {db} from '#db/index.js';
 import {logger} from '#utils/logger.js';
+
+/**
+ * Throws with migration details when Kysely reports a migration error.
+ */
+function assertNoMigrationError(result: {error?: unknown}): void {
+  if (result.error) {
+    throw result.error instanceof Error
+      ? result.error
+      : new Error(`Migration failed: ${inspect(result.error)}`);
+  }
+}
 
 const migrator = createMigrator({
   db,
@@ -33,7 +45,12 @@ await describe('server integration', async () => {
   });
 
   before(async () => {
-    await migrator.migrateToLatest();
+    const resetResult = await migrator.migrateTo(NO_MIGRATIONS);
+    assertNoMigrationError(resetResult);
+
+    const migrateResult = await migrator.migrateToLatest();
+    assertNoMigrationError(migrateResult);
+
     const {kosmicServer} = await import('../src/server.ts');
     server = await kosmicServer.listen(4567);
   });
@@ -253,6 +270,7 @@ await describe('server integration', async () => {
 
   after(async () => {
     server.close();
-    await migrator.migrateTo(NO_MIGRATIONS);
+    const resetResult = await migrator.migrateTo(NO_MIGRATIONS);
+    assertNoMigrationError(resetResult);
   });
 });
