@@ -1,11 +1,14 @@
 import type {Middleware} from '@kosmic/server';
 import Layout from '#components/layout.js';
 import {db} from '#db/index.js';
+import {requireUserId} from '#utils/auth.js';
 
 export const get: Middleware = async (ctx, next) => {
   if (!ctx.state.user) {
     throw new Error('Unauthorized');
   }
+
+  const userId = requireUserId(ctx);
 
   ctx.log.debug({user: ctx.state.user}, 'verifying user...');
 
@@ -23,7 +26,7 @@ export const get: Middleware = async (ctx, next) => {
     .set({
       is_verified: true,
     })
-    .where('id', '=', ctx.state.user.id)
+    .where('id', '=', userId)
     .execute();
 
   await ctx.render(

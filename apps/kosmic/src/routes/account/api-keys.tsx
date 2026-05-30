@@ -2,6 +2,7 @@ import type {Middleware} from '@kosmic/server';
 import {z} from 'zod';
 import {db} from '#db/index.js';
 import * as ApiKey from '#models/api-keys.js';
+import {requireUserId} from '#utils/auth.js';
 
 export const post: Middleware = async (ctx, next) => {
   if (!ctx.state.user) {
@@ -9,6 +10,8 @@ export const post: Middleware = async (ctx, next) => {
     ctx.body = {error: 'Unauthorized'};
     return;
   }
+
+  const userId = requireUserId(ctx);
 
   const body = z.object({name: z.string().optional()}).parse(ctx.request.body);
 
@@ -21,7 +24,7 @@ export const post: Middleware = async (ctx, next) => {
     await db
       .insertInto('api_keys')
       .values({
-        user_id: ctx.state.user.id,
+        user_id: userId,
         name: keyName ?? 'Unnamed',
         key_hash: keyHash,
         key_prefix: keyPrefix,
