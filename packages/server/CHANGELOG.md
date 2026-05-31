@@ -1,5 +1,11 @@
 # @kosmic/server
 
+## 0.2.2
+
+### Patch Changes
+
+- fix exports
+
 ## 0.2.1
 
 ### Patch Changes
