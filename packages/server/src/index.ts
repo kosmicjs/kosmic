@@ -4,12 +4,14 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import Koa, {type Context} from 'koa';
 import bodyParser from 'koa-bodyparser';
+import type {Passport} from '@kosmic/auth';
 import conditional from 'koa-conditional-get';
 import responseTime from 'koa-response-time';
 import session, {type stores as SessionStore} from 'koa-session';
 import serve from 'koa-static';
 import etag from '@koa/etag';
 import {config} from '@kosmic/config';
+import type {Kysely} from '@kosmic/db';
 import {errorHandler} from '@kosmic/error-handler';
 import {createHelmetMiddleware, type HelmetOptions} from '@kosmic/helmet';
 import {renderMiddleware} from '@kosmic/jsx';
@@ -19,26 +21,55 @@ import {
   type Logger,
   logger as defaultLogger,
 } from '@kosmic/logger';
-import type {Manifest, PassportLike} from './types.ts';
 
-export type * from './types.ts';
+export type Manifest = Record<
+  string,
+  {
+    css: string[];
+    file: string;
+    isEntry: boolean;
+    src: string;
+  }
+>;
 
-type AuthDb = {
-  selectFrom(from: unknown): unknown;
-  insertInto(table: unknown): unknown;
-  deleteFrom(table: unknown): unknown;
-  updateTable(table: unknown): unknown;
-};
+declare module 'koa' {
+  interface DefaultState {
+    manifest?: Manifest;
+  }
+  interface DefaultContext {
+    log: Logger;
+  }
 
-type AuthModule = {
-  createPassport: (options: {db: AuthDb}) => PassportLike;
-  KyselySessionStore: new (db: AuthDb) => SessionStore;
-};
+  interface Request {
+    body?: unknown;
+    rawBody: string;
+    log: Logger;
+  }
+
+  interface Response {
+    log: Logger;
+  }
+}
+
+declare module 'node:http' {
+  interface IncomingMessage {
+    log: Logger;
+  }
+
+  interface ServerResponse {
+    log: Logger;
+  }
+}
+
+type AuthDb<Database = Record<string, unknown>> = Pick<
+  Kysely<Database>,
+  'selectFrom' | 'insertInto' | 'deleteFrom' | 'updateTable'
+>;
 
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
-export type KosmicServerOptions = {
+export type KosmicServerOptions<Database = Record<string, unknown>> = {
   /** Database connection used for built-in auth/session integration. */
-  db: AuthDb;
+  db: AuthDb<Database>;
   /** Enables built-in auth/session setup with a dynamic `@kosmic/auth` import. */
   auth?: boolean;
   /** Pino-compatible logger instance. Defaults to a console-based logger. */
@@ -91,7 +122,7 @@ export class KosmicServer {
    *
    * @throws When auth is disabled or server bootstrap has not initialized passport yet.
    */
-  static getPassport(): PassportLike {
+  static getPassport(): Passport {
     if (!KosmicServer.#instance) {
       throw new Error('No KosmicServer instance has been created');
     }
@@ -111,7 +142,7 @@ export class KosmicServer {
   koa: Koa;
   options: KosmicServerOptions;
   server: Server | undefined;
-  #passport: PassportLike | undefined;
+  #passport: Passport | undefined;
 
   constructor(options: KosmicServerOptions) {
     this.koa = new Koa({asyncLocalStorage: true});
@@ -225,8 +256,7 @@ export class KosmicServer {
     koa.proxy = config.kosmicEnv === 'production';
 
     if (auth) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-      const authModule = (await import('@kosmic/auth')) as AuthModule;
+      const authModule = await import('@kosmic/auth');
       const passport = authModule.createPassport({db: this.options.db});
       const sessionStore = new authModule.KyselySessionStore(this.options.db);
 
@@ -290,6 +320,6 @@ export function getCtx(): Context {
 /**
  * Convenience wrapper around `KosmicServer.getPassport()`.
  */
-export function getPassport(): PassportLike {
+export function getPassport(): Passport {
   return KosmicServer.getPassport();
 }

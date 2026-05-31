@@ -1,6 +1,6 @@
 import {type Logger, loggerStorage} from '@kosmic/logger';
 import type {Kysely} from '@kosmic/db';
-import type {SessionStore, Session} from '@kosmic/server';
+import type {Session, stores as SessionStore} from 'koa-session';
 import type {AuthDatabase} from './models/index.ts';
 
 export type KyselySessionStoreDb = Pick<
