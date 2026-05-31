@@ -3,6 +3,7 @@ import {pino, type LoggerOptions, type Logger} from 'pino';
 
 export {
   createPinoMiddleware,
+  loggerStorage,
   type PinoHttpOptions,
   type CreatePinoMiddlewareConfig,
 } from './http.ts';

@@ -3,7 +3,7 @@ import argon2 from 'argon2';
 import {Strategy as LocalStrategy} from 'passport-local';
 import {Strategy as BearerStrategy} from 'passport-http-bearer';
 import type {Kysely} from '@kosmic/db';
-import type {Logger} from '@kosmic/logger';
+import {loggerStorage, type Logger, logger as _logger} from '@kosmic/logger';
 import {
   type AuthDatabase,
   extractKeyPrefix,
@@ -14,7 +14,6 @@ type AuthPassportDb = Pick<Kysely<AuthDatabase>, 'selectFrom' | 'updateTable'>;
 
 export type Options = {
   db: AuthPassportDb;
-  logger: Logger;
 };
 
 declare global {
@@ -32,15 +31,18 @@ declare global {
  * Creates and configures a passport instance with local, bearer, and optional github strategies.
  */
 export function createPassport(options: Options): typeof passport {
-  const {db, logger} = options;
+  const {db} = options;
 
   passport.serializeUser((user, done) => {
+    const logger = loggerStorage.getStore() ?? _logger;
     logger.debug({user}, 'serializing user');
     done(null, user.id);
   });
 
   passport.deserializeUser((id: number, done) => {
     void (async () => {
+      const logger = loggerStorage.getStore() ?? _logger;
+
       try {
         const user = await db
           .selectFrom('users')
@@ -74,6 +76,7 @@ export function createPassport(options: Options): typeof passport {
       },
       (email, password, done) => {
         void (async () => {
+          const logger = loggerStorage.getStore() ?? _logger;
           try {
             if (!email) {
               throw new Error('Username is required');
@@ -122,6 +125,7 @@ export function createPassport(options: Options): typeof passport {
     'bearer',
     new BearerStrategy((token, done) => {
       void (async () => {
+        const logger = loggerStorage.getStore() ?? _logger;
         try {
           logger.debug({token}, 'bearer token received');
           const keyPrefix = extractKeyPrefix(token);

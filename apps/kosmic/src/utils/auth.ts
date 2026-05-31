@@ -1,14 +1,12 @@
 import {createPassport, KyselySessionStore, type Passport} from '@kosmic/auth';
 import type {Context} from '@kosmic/server';
 import {db} from '#db/index.js';
-import logger from '#utils/logger.js';
 
 export const passport: Passport = createPassport({
   db,
-  logger,
 });
 
-export const sessionStore = new KyselySessionStore(db, logger);
+export const sessionStore = new KyselySessionStore(db);
 
 /**
  * Ensures the current request has an authenticated user id.

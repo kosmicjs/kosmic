@@ -1,10 +1,6 @@
 import {Kysely, PostgresDialect, type PostgresDialectConfig} from 'kysely';
 import pg, {type PoolConfig} from 'pg';
-import {createLogger} from '@kosmic/logger';
-
-const logger = createLogger({
-  name: 'db',
-});
+import {loggerStorage} from '@kosmic/logger';
 
 const {Pool} = pg;
 
@@ -29,36 +25,42 @@ export class KosmicDB<Database = Record<string, unknown>> {
     this.dialect = dialect;
 
     pool.on('connect', () => {
-      logger.trace('postgres connected');
+      const logger = loggerStorage.getStore();
+      logger?.trace('postgres connected');
     });
 
     pool.on('error', (error) => {
-      logger.error(error);
+      const logger = loggerStorage.getStore();
+      logger?.error(error);
     });
 
     pool.on('release', () => {
-      logger.trace('postgres release');
+      const logger = loggerStorage.getStore();
+      logger?.trace('postgres release');
     });
 
     pool.on('remove', () => {
-      logger.trace('postgres removed');
+      const logger = loggerStorage.getStore();
+      logger?.trace('postgres removed');
     });
 
     pool.on('acquire', () => {
-      logger.trace('postgres acquired');
+      const logger = loggerStorage.getStore();
+      logger?.trace('postgres acquired');
     });
 
     this.db = new Kysely<Database>({
       dialect,
       log(event) {
+        const logger = loggerStorage.getStore();
         if (event.level === 'error') {
-          logger.error({
+          logger?.error({
             err: event.error,
             durationMs: event.queryDurationMillis,
             sql: event.query.sql,
           });
         } else {
-          logger.trace({
+          logger?.trace({
             msg: 'postgres query executed',
             durationMs: event.queryDurationMillis,
             sql: event.query.sql.replaceAll('"', "'"),

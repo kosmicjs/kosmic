@@ -1,4 +1,4 @@
-import type {Logger} from '@kosmic/logger';
+import {type Logger, loggerStorage} from '@kosmic/logger';
 import type {Kysely} from '@kosmic/db';
 import type {SessionStore, Session} from '@kosmic/server';
 import type {AuthDatabase} from './models/index.ts';
@@ -13,11 +13,19 @@ export type KyselySessionStoreDb = Pick<
  */
 export class KyselySessionStore implements SessionStore {
   readonly #db: KyselySessionStoreDb;
-  readonly #logger: Logger;
 
-  constructor(db: KyselySessionStoreDb, logger: Logger) {
+  constructor(db: KyselySessionStoreDb) {
     this.#db = db;
-    this.#logger = logger;
+  }
+
+  get #logger(): Logger {
+    const logger = loggerStorage.getStore();
+
+    if (!logger) {
+      throw new Error('No logger found in async local storage');
+    }
+
+    return logger;
   }
 
   /**

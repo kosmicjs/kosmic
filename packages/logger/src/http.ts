@@ -1,7 +1,12 @@
 import {type UUID, randomUUID} from 'node:crypto';
+import {AsyncLocalStorage} from 'node:async_hooks';
 import {pinoHttp, type Options} from 'pino-http';
 import type {DestinationStream, Logger} from 'pino';
 import type {Middleware} from 'koa';
+/**
+ * Associates a logger with the current asynchronous execution context, allowing it to be accessed from anywhere in the call stack.
+ */
+export const loggerStorage = new AsyncLocalStorage<Logger>();
 
 declare module 'koa' {
   interface DefaultContext {
@@ -75,6 +80,9 @@ export function createPinoMiddleware(
     middleware(ctx.req, ctx.res);
     // eslint-disable-next-line no-multi-assign
     ctx.log = ctx.request.log = ctx.response.log = ctx.req.log;
-    await next();
+
+    await loggerStorage.run(ctx.log, async () => {
+      await next();
+    });
   };
 }
