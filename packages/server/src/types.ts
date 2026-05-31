@@ -33,6 +33,7 @@ export type Manifest = Record<
 
 /** Duck-typed Passport instance for session-based auth. */
 export type PassportLike = {
+  authenticate: (strategy: string, options?: {session?: boolean}) => Middleware;
   initialize: (options?: {userProperty: string}) => Middleware;
   session: () => Middleware;
 };

@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@koa/etag": "^5.0.2",
+    "@kosmic/auth": "^0.0.3",
     "@kosmic/config": "^0.0.2",
     "@kosmic/error-handler": "^0.0.2",
     "@kosmic/helmet": "^0.0.2",

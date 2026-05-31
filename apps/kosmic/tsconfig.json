@@ -12,7 +12,6 @@
   },
   "exclude": ["node_modules", "dist", "scripts"],
   "references": [
-    { "path": "../../packages/auth" },
     { "path": "../../packages/server" },
     { "path": "../../packages/core" },
     { "path": "../../packages/logger" },

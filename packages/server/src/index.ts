@@ -23,8 +23,24 @@ import type {Manifest, PassportLike} from './types.ts';
 
 export type * from './types.ts';
 
+type AuthDb = {
+  selectFrom(from: unknown): unknown;
+  insertInto(table: unknown): unknown;
+  deleteFrom(table: unknown): unknown;
+  updateTable(table: unknown): unknown;
+};
+
+type AuthModule = {
+  createPassport: (options: {db: AuthDb}) => PassportLike;
+  KyselySessionStore: new (db: AuthDb) => SessionStore;
+};
+
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
 export type KosmicServerOptions = {
+  /** Database connection used for built-in auth/session integration. */
+  db: AuthDb;
+  /** Enables built-in auth/session setup with a dynamic `@kosmic/auth` import. */
+  auth?: boolean;
   /** Pino-compatible logger instance. Defaults to a console-based logger. */
   logger?: Logger;
   /** Keys used for cookie signing / session encryption. Defaults to `config.sessionKeys`. */
@@ -35,10 +51,6 @@ export type KosmicServerOptions = {
   publicDir?: string;
   /** Override the default Vite manifest path (`<publicDir>/.vite/manifest.json`). */
   manifestPath?: string;
-  /** Session store implementation (e.g. a database-backed store). */
-  sessionStore?: SessionStore;
-  /** Passport instance for authentication. */
-  passport?: PassportLike;
   /** Helmet options — merged with sensible defaults for CSP. */
   helmetOptions?: HelmetOptions;
 };
@@ -74,12 +86,32 @@ export class KosmicServer {
     return ctx as Context;
   }
 
+  /**
+   * Retrieve the configured Passport instance.
+   *
+   * @throws When auth is disabled or server bootstrap has not initialized passport yet.
+   */
+  static getPassport(): PassportLike {
+    if (!KosmicServer.#instance) {
+      throw new Error('No KosmicServer instance has been created');
+    }
+
+    const passport = KosmicServer.#instance.#passport;
+
+    if (!passport) {
+      throw new Error('Auth is not enabled on this KosmicServer instance');
+    }
+
+    return passport;
+  }
+
   /** Singleton */
   static #instance: KosmicServer | undefined;
 
   koa: Koa;
   options: KosmicServerOptions;
   server: Server | undefined;
+  #passport: PassportLike | undefined;
 
   constructor(options: KosmicServerOptions) {
     this.koa = new Koa({asyncLocalStorage: true});
@@ -161,7 +193,7 @@ export class KosmicServer {
     const manifestPath =
       this.options.manifestPath ??
       path.join(publicDir, '.vite', 'manifest.json');
-    const {sessionStore, passport, helmetOptions} = this.options;
+    const {auth = false, helmetOptions} = this.options;
 
     const {koa} = this;
 
@@ -192,7 +224,14 @@ export class KosmicServer {
     koa.keys = sessionKeys;
     koa.proxy = config.kosmicEnv === 'production';
 
-    if (sessionStore) {
+    if (auth) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+      const authModule = (await import('@kosmic/auth')) as AuthModule;
+      const passport = authModule.createPassport({db: this.options.db});
+      const sessionStore = new authModule.KyselySessionStore(this.options.db);
+
+      this.#passport = passport;
+
       koa.on('session:missed', (...ev) => {
         logger.warn({...ev}, 'session:missed');
       });
@@ -215,9 +254,6 @@ export class KosmicServer {
           koa,
         ),
       );
-    }
-
-    if (passport) {
       koa.use(passport.initialize({userProperty: 'email'}));
       koa.use(passport.session());
     }
@@ -249,4 +285,11 @@ export class KosmicServer {
  */
 export function getCtx(): Context {
   return KosmicServer.getCtx();
+}
+
+/**
+ * Convenience wrapper around `KosmicServer.getPassport()`.
+ */
+export function getPassport(): PassportLike {
+  return KosmicServer.getPassport();
 }
