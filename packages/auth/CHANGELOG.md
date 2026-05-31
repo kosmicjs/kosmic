@@ -1,5 +1,16 @@
 # @kosmic/auth
 
+## 0.0.3
+
+### Patch Changes
+
+- mostly logging improvements in http context
+- Updated dependencies
+  - @kosmic/db@0.0.3
+  - @kosmic/logger@0.0.3
+  - @kosmic/server@0.2.1
+  - @kosmic/core@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @kosmic/server
 
+## 0.2.1
+
+### Patch Changes
+
+- mostly logging improvements in http context
+- Updated dependencies
+  - @kosmic/logger@0.0.3
+
 ## 0.2.0
 
 ### Minor Changes
