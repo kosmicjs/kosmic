@@ -4,6 +4,7 @@ import type {Middleware} from 'koa';
 export type {stores as SessionStore, Session} from 'koa-session';
 export type {RouteDefinition} from '@kosmic/router';
 export type {HelmetOptions} from '@kosmic/helmet';
+export type * from '@kosmic/jsx';
 
 export type {
   Context,
