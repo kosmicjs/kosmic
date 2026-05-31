@@ -1,6 +1,6 @@
-import {getPassport, type Context} from '@kosmic/server';
+import {type Passport, getPassport, type Context} from '@kosmic/server';
 
-export const passport = getPassport();
+export const passport: Passport = getPassport();
 
 /**
  * Ensures the current request has an authenticated user id.

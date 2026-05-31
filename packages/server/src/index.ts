@@ -22,6 +22,25 @@ import {
   logger as defaultLogger,
 } from '@kosmic/logger';
 
+export * from '@kosmic/auth';
+export type {stores as SessionStore, Session} from 'koa-session';
+export type {RouteDefinition} from '@kosmic/router';
+export type {HelmetOptions} from '@kosmic/helmet';
+export type {
+  Context,
+  Next,
+  Middleware,
+  Parameters_,
+  DefaultContext,
+  ParameterizedContext,
+  DefaultStateExtends,
+  BaseContext,
+  DefaultState,
+  Request,
+  Response,
+  default as Koa,
+} from 'koa';
+
 export type Manifest = Record<
   string,
   {
