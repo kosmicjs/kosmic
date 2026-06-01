@@ -1,6 +1,6 @@
 import {Kysely, PostgresDialect, type PostgresDialectConfig} from 'kysely';
 import pg, {type PoolConfig} from 'pg';
-import {loggerStorage} from '@kosmic/logger';
+import {getLogger} from '@kosmic/logger';
 
 const {Pool} = pg;
 
@@ -25,34 +25,34 @@ export class KosmicDB<Database = Record<string, unknown>> {
     this.dialect = dialect;
 
     pool.on('connect', () => {
-      const logger = loggerStorage.getStore();
+      const logger = getLogger();
       logger?.trace('postgres connected');
     });
 
     pool.on('error', (error) => {
-      const logger = loggerStorage.getStore();
+      const logger = getLogger();
       logger?.error(error);
     });
 
     pool.on('release', () => {
-      const logger = loggerStorage.getStore();
+      const logger = getLogger();
       logger?.trace('postgres release');
     });
 
     pool.on('remove', () => {
-      const logger = loggerStorage.getStore();
+      const logger = getLogger();
       logger?.trace('postgres removed');
     });
 
     pool.on('acquire', () => {
-      const logger = loggerStorage.getStore();
+      const logger = getLogger();
       logger?.trace('postgres acquired');
     });
 
     this.db = new Kysely<Database>({
       dialect,
       log(event) {
-        const logger = loggerStorage.getStore();
+        const logger = getLogger();
         if (event.level === 'error') {
           logger?.error({
             err: event.error,

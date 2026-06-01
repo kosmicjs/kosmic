@@ -1,5 +1,6 @@
 import process from 'node:process';
 import {pino, type LoggerOptions, type Logger} from 'pino';
+import {loggerStorage} from './http.ts';
 
 export {
   createPinoMiddleware,
@@ -24,5 +25,7 @@ export function createLogger(options: LoggerOptions = {}) {
 }
 
 export const logger = createLogger();
+
+export const getLogger = () => loggerStorage.getStore() ?? logger;
 
 export type {Logger, LoggerOptions} from 'pino';
