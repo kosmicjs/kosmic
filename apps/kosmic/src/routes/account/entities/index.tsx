@@ -4,14 +4,13 @@ import * as Entity from '#models/entities.js';
 import Layout from '#components/layout.js';
 import {ModalButton} from '#components/modal-button.js';
 import {EntityCard} from '#components/entities/entity-card.js';
-import {requireUserId} from '#utils/auth.js';
 
 export const get: Middleware = async (ctx, next) => {
-  if (!ctx.state.user) {
+  if (!ctx.state.user?.id) {
     throw new Error('Not logged in');
   }
 
-  const userId = requireUserId(ctx);
+  const userId = ctx.state.user.id;
 
   const entities = await db
     .selectFrom('entities')
@@ -47,11 +46,11 @@ export const get: Middleware = async (ctx, next) => {
 };
 
 export const post: Middleware = async (ctx, next) => {
-  if (!ctx.state.user) {
+  if (!ctx.state.user?.id) {
     throw new Error('Not logged in');
   }
 
-  const userId = requireUserId(ctx);
+  const userId = ctx.state.user.id;
 
   const {name, description} = await Entity.insertSchema.parseAsync(
     ctx.request.body,

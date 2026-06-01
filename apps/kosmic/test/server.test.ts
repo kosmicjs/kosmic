@@ -9,7 +9,6 @@ import {NO_MIGRATIONS} from '@kosmic/db';
 import {CookieJar} from 'tough-cookie';
 import {createMigrator} from '@kosmic/cli/migrate';
 import {db} from '#db/index.js';
-import {logger} from '#utils/logger.js';
 
 /**
  * Throws with migration details when Kysely reports a migration error.
@@ -24,7 +23,6 @@ function assertNoMigrationError(result: {error?: unknown}): void {
 
 const migrator = createMigrator({
   db,
-  logger,
   migrationsPath: path.resolve(
     import.meta.dirname,
     '..',

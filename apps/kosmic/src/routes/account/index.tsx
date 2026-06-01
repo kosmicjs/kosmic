@@ -2,7 +2,6 @@ import type {Middleware} from '@kosmic/server';
 import type {Use} from '@kosmic/router';
 import Layout from '#components/layout.js';
 import {db} from '#db/index.js';
-import {requireUserId} from '#utils/auth.js';
 
 export const use: Use = async (ctx, next) => {
   if (!ctx.isAuthenticated()) {
@@ -18,15 +17,13 @@ export const use: Use = async (ctx, next) => {
 };
 
 export const get: Middleware = async (ctx, next) => {
-  if (!ctx.state.user) {
+  if (!ctx.state.user?.id) {
     throw new Error('Unauthorized');
   }
 
-  const userId = requireUserId(ctx);
-
   const apiKeys = await db
     .selectFrom('api_keys')
-    .where('user_id', '=', userId)
+    .where('user_id', '=', ctx.state.user.id)
     .select(['id', 'name', 'last_used_at', 'is_active', 'created_at'])
     .execute();
 

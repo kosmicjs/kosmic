@@ -1,16 +1,12 @@
 import type {Middleware} from '@kosmic/server';
 import {db} from '#db/index.js';
-import {requireUserId} from '#utils/auth.js';
-// import * as ApiKey from '#models/api-keys.js';
 
 export const del: Middleware = async (ctx, next) => {
-  if (!ctx.state.user) {
+  if (!ctx.state.user?.id) {
     ctx.status = 401;
     ctx.body = {error: 'Unauthorized'};
     return;
   }
-
-  const userId = requireUserId(ctx);
 
   const keyIdRaw = ctx.params?.id;
   const keyId = keyIdRaw ? Number(keyIdRaw) : undefined;
@@ -24,7 +20,7 @@ export const del: Middleware = async (ctx, next) => {
   const deleted = await db
     .deleteFrom('api_keys')
     .where('id', '=', keyId)
-    .where('user_id', '=', userId)
+    .where('user_id', '=', ctx.state.user.id)
     .executeTakeFirst();
 
   if (deleted && deleted.numDeletedRows > 0) {

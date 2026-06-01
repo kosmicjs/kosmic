@@ -2,16 +2,15 @@ import type {Middleware} from '@kosmic/server';
 import {z} from 'zod';
 import {db} from '#db/index.js';
 import * as ApiKey from '#models/api-keys.js';
-import {requireUserId} from '#utils/auth.js';
 
 export const post: Middleware = async (ctx, next) => {
-  if (!ctx.state.user) {
+  if (!ctx.state.user?.id) {
     ctx.status = 401;
     ctx.body = {error: 'Unauthorized'};
     return;
   }
 
-  const userId = requireUserId(ctx);
+  const userId = ctx.state.user.id;
 
   const body = z.object({name: z.string().optional()}).parse(ctx.request.body);
   const keyName = body.name?.trim();
@@ -82,13 +81,13 @@ export const post: Middleware = async (ctx, next) => {
 };
 
 export const del: Middleware = async (ctx, next) => {
-  if (!ctx.state.user) {
+  if (!ctx.state.user?.id) {
     ctx.status = 401;
     ctx.body = {error: 'Unauthorized'};
     return;
   }
 
-  const userId = requireUserId(ctx);
+  const userId = ctx.state.user.id;
 
   const keyIdRaw = ctx.params?.id;
   const keyId = keyIdRaw ? Number(keyIdRaw) : undefined;
