@@ -18,19 +18,36 @@ import * as apiKeysModel from './api-keys.ts';
  * Implement this interface for migrations that should be discovered and run by
  * the Kosmic CLI.
  */
-export interface KosmicMigration extends Migration {
+export class KosmicMigration implements Migration {
   /**
    * Ordering token used by migration runners to sort migrations.
    */
-  sequence: number | string;
+  sequence: string;
+  up: (db: Kysely<any>) => Promise<void>;
+  down?: (db: Kysely<any>) => Promise<void>;
+
+  constructor({
+    sequence,
+    up,
+    down,
+  }: {
+    sequence: string;
+    up: (db: Kysely<any>) => Promise<void>;
+    down?: (db: Kysely<any>) => Promise<void>;
+  }) {
+    this.sequence = sequence;
+    this.up = up;
+    if (down) {
+      this.down = down;
+    }
+  }
 }
 
 /**
  * Create a trigger function to update the updated_at column
  * on every update of the table.
  */
-export const triggers: KosmicMigration = {
-  sequence: '2025-01-01',
+const timestampTriggersKyselyMigration: Migration = {
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating trigger function update_timestamp...');
     await sql`
@@ -52,11 +69,18 @@ export const triggers: KosmicMigration = {
   },
 };
 
+export class TriggerMigration extends KosmicMigration {
+  constructor({sequence}: {sequence: string}) {
+    super({
+      sequence,
+      ...timestampTriggersKyselyMigration,
+    });
+  }
+}
 /**
  * Create the users table
  */
-export const users: KosmicMigration = {
-  sequence: '2025-01-02',
+const usersKyselyMigration: Migration = {
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table users...');
 
@@ -136,11 +160,19 @@ export const users: KosmicMigration = {
   },
 };
 
+export class UsersMigration extends KosmicMigration {
+  constructor({sequence}: {sequence: string}) {
+    super({
+      sequence,
+      ...usersKyselyMigration,
+    });
+  }
+}
+
 /**
  * Create the entities table
  */
-export const entities: KosmicMigration = {
-  sequence: '2025-01-03',
+const entitiesKyselyMigration: Migration = {
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table entity...');
     await db.schema
@@ -166,11 +198,19 @@ export const entities: KosmicMigration = {
   },
 };
 
+export class EntitiesMigration extends KosmicMigration {
+  constructor({sequence}: {sequence: string}) {
+    super({
+      sequence,
+      ...entitiesKyselyMigration,
+    });
+  }
+}
+
 /**
  * Create the emails table
  */
-export const emails: KosmicMigration = {
-  sequence: '2025-01-04',
+const emailsKyselyMigration: Migration = {
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table emails...');
     await db.schema
@@ -217,8 +257,16 @@ export const emails: KosmicMigration = {
   },
 };
 
-export const sessions: KosmicMigration = {
-  sequence: '2025-01-05',
+export class EmailsMigration extends KosmicMigration {
+  constructor({sequence}: {sequence: string}) {
+    super({
+      sequence,
+      ...emailsKyselyMigration,
+    });
+  }
+}
+
+const sessionsKyselyMigration: Migration = {
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table sessions...');
     await db.schema
@@ -242,11 +290,19 @@ export const sessions: KosmicMigration = {
   },
 };
 
+export class SessionsMigration extends KosmicMigration {
+  constructor({sequence}: {sequence: string}) {
+    super({
+      sequence,
+      ...sessionsKyselyMigration,
+    });
+  }
+}
+
 /**
  * Create the api_keys table for OWASP-compliant API key management
  */
-export const apiKeys: KosmicMigration = {
-  sequence: '2025-01-06',
+const apiKeysKyselyMigration: Migration = {
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating table api_keys...');
     await db.schema
@@ -321,8 +377,17 @@ export const apiKeys: KosmicMigration = {
     logger.info('Dropped table api_keys');
   },
 };
-export const auditLog: KosmicMigration = {
-  sequence: '2025-01-07',
+
+export class ApiKeysMigration extends KosmicMigration {
+  constructor({sequence}: {sequence: string}) {
+    super({
+      sequence,
+      ...apiKeysKyselyMigration,
+    });
+  }
+}
+
+const auditLogKyselyMigration: Migration = {
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Creating audit_log table...');
 
@@ -460,8 +525,16 @@ export const auditLog: KosmicMigration = {
   },
 };
 
-export const addAuditTriggers: KosmicMigration = {
-  sequence: '2025-01-08',
+export class AuditLogMigration extends KosmicMigration {
+  constructor({sequence}: {sequence: string}) {
+    super({
+      sequence,
+      ...auditLogKyselyMigration,
+    });
+  }
+}
+
+const addAuditTriggersKyselyMigration: Migration = {
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Adding audit triggers to tables...');
 
@@ -495,3 +568,12 @@ export const addAuditTriggers: KosmicMigration = {
     logger.info('Dropped audit triggers from all tables');
   },
 };
+
+export class AddAuditTriggersMigration extends KosmicMigration {
+  constructor({sequence}: {sequence: string}) {
+    super({
+      sequence,
+      ...addAuditTriggersKyselyMigration,
+    });
+  }
+}

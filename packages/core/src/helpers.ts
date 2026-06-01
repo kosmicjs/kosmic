@@ -1,9 +1,4 @@
-import {
-  type Migration,
-  type Kysely,
-  sql,
-  type CreateTableBuilder,
-} from 'kysely';
+import {type Kysely, sql, type CreateTableBuilder} from 'kysely';
 
 /**
  * Creates a per-table trigger that updates the `updated_at` column before each
