@@ -1,7 +1,7 @@
 import type {Middleware} from '@kosmic/server';
 import {z} from 'zod';
+import {generateApiKey} from '@kosmic/auth';
 import {db} from '#db/index.js';
-import * as ApiKey from '#models/api-keys.js';
 
 export const post: Middleware = async (ctx, next) => {
   if (!ctx.state.user?.id) {
@@ -15,7 +15,7 @@ export const post: Middleware = async (ctx, next) => {
   const keyName = body.name?.trim();
 
   try {
-    const {apiKey, keyPrefix, keyHash} = await ApiKey.generateApiKey();
+    const {apiKey, keyPrefix, keyHash} = await generateApiKey();
 
     // Insert the API key into the database
     await db

@@ -1,7 +1,7 @@
 import type {Context, Next} from '@kosmic/server';
 import argon2 from 'argon2';
 import z, {string} from 'zod/v4';
-import * as User from '#models/users.js';
+import * as User from '@kosmic/auth/models';
 import {SignupForm} from '#components/signup-form.js';
 import Layout from '#components/layout.js';
 import * as Emails from '#models/emails.js';

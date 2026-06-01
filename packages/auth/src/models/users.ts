@@ -47,11 +47,11 @@ export type SelectableUser = Selectable<Partial<User>>;
 export type InsertableUser = Insertable<User>;
 export type UpdatedableUser = Updateable<User>;
 
-export const userInsertSchema = userSchema.partial().required({
+export const insertSchema = userSchema.partial().required({
   role: true,
   email: true,
   is_verified: true,
   is_active: true,
 });
 
-export const userUpdateSchema = userSchema.partial();
+export const updateSchema = userSchema.partial();

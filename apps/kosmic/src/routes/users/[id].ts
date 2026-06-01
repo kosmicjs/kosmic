@@ -1,6 +1,6 @@
 import type {Middleware, Context, Next} from '@kosmic/server';
+import * as User from '@kosmic/auth/models';
 import {db} from '#db/index.js';
-import * as User from '#models/users.js';
 
 export const use: Middleware[] = [
   async (ctx, next) => {
