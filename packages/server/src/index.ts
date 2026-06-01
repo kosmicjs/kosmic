@@ -81,24 +81,25 @@ declare module 'node:http' {
 }
 
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
-export type KosmicServerOptions<Database = Record<string, unknown>> = {
-  /** Database connection used for built-in auth/session integration. */
-  db: Kysely<Database>;
-  /** Enables built-in auth/session setup with a dynamic `@kosmic/auth` import. */
-  auth?: boolean;
-  /** Pino-compatible logger instance. Defaults to a console-based logger. */
-  logger?: Logger;
-  /** Keys used for cookie signing / session encryption. Defaults to `config.sessionKeys`. */
-  sessionKeys?: string[];
-  /** Absolute path to the file-system routes directory. Defaults to `<cwd>/src/routes`. */
-  routesDir?: string;
-  /** Absolute path to the public / static assets directory. Defaults to `<cwd>/src/public`. */
-  publicDir?: string;
-  /** Override the default Vite manifest path (`<publicDir>/.vite/manifest.json`). */
-  manifestPath?: string;
-  /** Helmet options — merged with sensible defaults for CSP. */
-  helmetOptions?: HelmetOptions;
-};
+export type KosmicServerOptions<Database extends AuthDatabase = AuthDatabase> =
+  {
+    /** Database connection used for built-in auth/session integration. */
+    db: Kysely<Database>;
+    /** Enables built-in auth/session setup with a dynamic `@kosmic/auth` import. */
+    auth?: boolean;
+    /** Pino-compatible logger instance. Defaults to a console-based logger. */
+    logger?: Logger;
+    /** Keys used for cookie signing / session encryption. Defaults to `config.sessionKeys`. */
+    sessionKeys?: string[];
+    /** Absolute path to the file-system routes directory. Defaults to `<cwd>/src/routes`. */
+    routesDir?: string;
+    /** Absolute path to the public / static assets directory. Defaults to `<cwd>/src/public`. */
+    publicDir?: string;
+    /** Override the default Vite manifest path (`<publicDir>/.vite/manifest.json`). */
+    manifestPath?: string;
+    /** Helmet options — merged with sensible defaults for CSP. */
+    helmetOptions?: HelmetOptions;
+  };
 
 /**
  * Opinionated, Koa server for Kosmic apps.
@@ -109,7 +110,7 @@ export type KosmicServerOptions<Database = Record<string, unknown>> = {
  * await server.listen(3000);
  * ```
  */
-export class KosmicServer<Database extends Kysely<AuthDatabase>> {
+export class KosmicServer<Database extends AuthDatabase = AuthDatabase> {
   /**
    * Retrieve the current Koa `Context` via async-local-storage.
    *
@@ -151,17 +152,19 @@ export class KosmicServer<Database extends Kysely<AuthDatabase>> {
   }
 
   /** Singleton */
-  static #instance: KosmicServer<Kysely<AuthDatabase>> | undefined;
+  static #instance: KosmicServer | undefined;
 
   koa: Koa;
-  options: KosmicServerOptions<Kysely<AuthDatabase>>;
+  options: KosmicServerOptions<Database>;
   server: Server | undefined;
   #passport: Passport | undefined;
 
-  constructor(options: KosmicServerOptions<Kysely<AuthDatabase>>) {
+  constructor(options: KosmicServerOptions<Database>) {
     this.koa = new Koa({asyncLocalStorage: true});
     this.options = options;
-    KosmicServer.#instance = this;
+    // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+    KosmicServer.#instance = this as unknown as KosmicServer;
   }
 
   /** The underlying Koa application. */
@@ -271,12 +274,16 @@ export class KosmicServer<Database extends Kysely<AuthDatabase>> {
 
     if (auth) {
       const authModule = await import('@kosmic/auth');
+      // `@kosmic/auth` requires the auth table subset; apps can still pass extended DBs.
+      // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+      const authDb = this.options.db as unknown as Kysely<AuthDatabase>;
       const passport = authModule.createPassport<Kysely<AuthDatabase>>({
-        db: this.options.db,
+        db: authDb,
       });
       const sessionStore = new authModule.KyselySessionStore<
         Kysely<AuthDatabase>
-      >(this.options.db);
+      >(authDb);
 
       this.#passport = passport;
 

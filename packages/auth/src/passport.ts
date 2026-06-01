@@ -21,14 +21,14 @@ declare global {
   }
 }
 
+export type Options<Database extends AuthPassportDb> = {
+  db: Database;
+};
+
 type AuthPassportDb = Pick<
   Kysely<AuthDatabase>,
   'selectFrom' | 'updateTable' | 'deleteFrom'
 >;
-
-export type Options<Database extends AuthPassportDb> = {
-  db: Database;
-};
 
 /**
  * Creates and configures a passport instance with local, bearer, and optional github strategies.
