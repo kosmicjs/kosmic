@@ -21,21 +21,14 @@ declare global {
   }
 }
 
-export type Options<Database extends AuthPassportDb> = {
-  db: Database;
+export type Options = {
+  db: Kysely<AuthDatabase>;
 };
-
-type AuthPassportDb = Pick<
-  Kysely<AuthDatabase>,
-  'selectFrom' | 'updateTable' | 'deleteFrom'
->;
 
 /**
  * Creates and configures a passport instance with local, bearer, and optional github strategies.
  */
-export function createPassport<Database extends AuthPassportDb>(
-  options: Options<Database>,
-): typeof passport {
+export function createPassport(options: Options): typeof passport {
   const {db} = options;
 
   passport.serializeUser((user, done) => {

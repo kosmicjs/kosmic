@@ -21,6 +21,12 @@
         "types": "./dist/src/index.d.ts",
         "default": "./dist/src/index.js"
       }
+    },
+    "./migrations": {
+      "import": {
+        "types": "./dist/src/migrations/index.d.ts",
+        "default": "./dist/src/migrations/index.js"
+      }
     }
   },
   "main": "dist/src/index.js",
@@ -52,6 +58,7 @@
     "koa": "^3.2.1",
     "koa-passport": "^6",
     "koa-session": "^6.4.0",
+    "kysely": "^0.29.2",
     "passport-github2": "^0.1.12",
     "passport-google-oauth20": "^2.0.0",
     "passport-http-bearer": "^1.0.1",

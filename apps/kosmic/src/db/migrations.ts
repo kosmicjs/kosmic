@@ -1,13 +1,15 @@
 import {
   AddAuditTriggersMigration,
-  ApiKeysMigration,
   AuditLogMigration,
   EmailsMigration,
   EntitiesMigration,
-  SessionsMigration,
   TriggerMigration,
+} from '@kosmic/core/migrations';
+import {
+  ApiKeysMigration,
+  SessionsMigration,
   UsersMigration,
-} from '@kosmic/core';
+} from '@kosmic/auth/migrations';
 
 /**
  * Create a trigger function to update the updated_at column

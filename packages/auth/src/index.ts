@@ -7,10 +7,7 @@ import type {SelectableUser} from './models/users.ts';
 
 export * from './models/index.ts';
 export {createPassport} from './passport.ts';
-export {
-  KyselySessionStore,
-  type KyselySessionStoreDb,
-} from './session-store.ts';
+export {KyselySessionStore} from './session-store.ts';
 
 declare module 'koa' {
   interface DefaultState {

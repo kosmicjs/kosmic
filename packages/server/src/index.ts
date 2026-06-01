@@ -51,6 +51,55 @@ export type Manifest = Record<
   }
 >;
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === 'string')
+  );
+}
+
+function parseManifest(value: unknown): Manifest {
+  if (!isRecord(value)) {
+    throw new TypeError('Invalid Vite manifest: expected an object');
+  }
+
+  const manifest: Manifest = {};
+
+  for (const key of Object.keys(value)) {
+    const entry = value[key];
+
+    if (!isRecord(entry)) {
+      throw new TypeError(`Invalid Vite manifest entry for "${key}"`);
+    }
+
+    const {css, file, isEntry, src} = entry;
+
+    if (
+      !isStringArray(css) ||
+      typeof file !== 'string' ||
+      typeof isEntry !== 'boolean' ||
+      typeof src !== 'string'
+    ) {
+      throw new TypeError(`Invalid Vite manifest shape for "${key}"`);
+    }
+
+    manifest[key] = {css, file, isEntry, src};
+  }
+
+  return manifest;
+}
+
+function isKoaContext(value: unknown): value is Context {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return 'app' in value && 'request' in value && 'response' in value;
+}
+
 declare module 'koa' {
   interface DefaultState {
     manifest?: Manifest;
@@ -81,25 +130,24 @@ declare module 'node:http' {
 }
 
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
-export type KosmicServerOptions<Database extends AuthDatabase = AuthDatabase> =
-  {
-    /** Database connection used for built-in auth/session integration. */
-    db: Kysely<Database>;
-    /** Enables built-in auth/session setup with a dynamic `@kosmic/auth` import. */
-    auth?: boolean;
-    /** Pino-compatible logger instance. Defaults to a console-based logger. */
-    logger?: Logger;
-    /** Keys used for cookie signing / session encryption. Defaults to `config.sessionKeys`. */
-    sessionKeys?: string[];
-    /** Absolute path to the file-system routes directory. Defaults to `<cwd>/src/routes`. */
-    routesDir?: string;
-    /** Absolute path to the public / static assets directory. Defaults to `<cwd>/src/public`. */
-    publicDir?: string;
-    /** Override the default Vite manifest path (`<publicDir>/.vite/manifest.json`). */
-    manifestPath?: string;
-    /** Helmet options — merged with sensible defaults for CSP. */
-    helmetOptions?: HelmetOptions;
-  };
+export type KosmicServerOptions = {
+  /** Database connection used for built-in auth/session integration. */
+  db: Kysely<AuthDatabase>;
+  /** Enables built-in auth/session setup with a dynamic `@kosmic/auth` import. */
+  auth?: boolean;
+  /** Pino-compatible logger instance. Defaults to a console-based logger. */
+  logger?: Logger;
+  /** Keys used for cookie signing / session encryption. Defaults to `config.sessionKeys`. */
+  sessionKeys?: string[];
+  /** Absolute path to the file-system routes directory. Defaults to `<cwd>/src/routes`. */
+  routesDir?: string;
+  /** Absolute path to the public / static assets directory. Defaults to `<cwd>/src/public`. */
+  publicDir?: string;
+  /** Override the default Vite manifest path (`<publicDir>/.vite/manifest.json`). */
+  manifestPath?: string;
+  /** Helmet options — merged with sensible defaults for CSP. */
+  helmetOptions?: HelmetOptions;
+};
 
 /**
  * Opinionated, Koa server for Kosmic apps.
@@ -110,7 +158,7 @@ export type KosmicServerOptions<Database extends AuthDatabase = AuthDatabase> =
  * await server.listen(3000);
  * ```
  */
-export class KosmicServer<Database extends AuthDatabase = AuthDatabase> {
+export class KosmicServer {
   /**
    * Retrieve the current Koa `Context` via async-local-storage.
    *
@@ -127,9 +175,11 @@ export class KosmicServer<Database extends AuthDatabase = AuthDatabase> {
       throw new Error('No context found');
     }
 
-    // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-    return ctx as Context;
+    if (!isKoaContext(ctx)) {
+      throw new Error('Current context is not a valid Koa Context');
+    }
+
+    return ctx;
   }
 
   /**
@@ -155,16 +205,14 @@ export class KosmicServer<Database extends AuthDatabase = AuthDatabase> {
   static #instance: KosmicServer | undefined;
 
   koa: Koa;
-  options: KosmicServerOptions<Database>;
+  options: KosmicServerOptions;
   server: Server | undefined;
   #passport: Passport | undefined;
 
-  constructor(options: KosmicServerOptions<Database>) {
+  constructor(options: KosmicServerOptions) {
     this.koa = new Koa({asyncLocalStorage: true});
     this.options = options;
-    // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-    KosmicServer.#instance = this as unknown as KosmicServer;
+    KosmicServer.#instance = this;
   }
 
   /** The underlying Koa application. */
@@ -250,11 +298,9 @@ export class KosmicServer<Database extends AuthDatabase = AuthDatabase> {
 
     if (config.kosmicEnv === 'production') {
       koa.use(async (ctx, next) => {
-        // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-        const manifest = JSON.parse(
-          await fs.readFile(manifestPath, 'utf8'),
-        ) as Manifest;
+        const manifest = parseManifest(
+          JSON.parse(await fs.readFile(manifestPath, 'utf8')),
+        );
         ctx.state.manifest = manifest;
         await next();
       });
@@ -274,16 +320,10 @@ export class KosmicServer<Database extends AuthDatabase = AuthDatabase> {
 
     if (auth) {
       const authModule = await import('@kosmic/auth');
-      // `@kosmic/auth` requires the auth table subset; apps can still pass extended DBs.
-      // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-      const authDb = this.options.db as unknown as Kysely<AuthDatabase>;
-      const passport = authModule.createPassport<Kysely<AuthDatabase>>({
-        db: authDb,
+      const passport = authModule.createPassport({
+        db: this.options.db,
       });
-      const sessionStore = new authModule.KyselySessionStore<
-        Kysely<AuthDatabase>
-      >(authDb);
+      const sessionStore = new authModule.KyselySessionStore(this.options.db);
 
       this.#passport = passport;
 

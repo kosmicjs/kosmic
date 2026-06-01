@@ -19,6 +19,12 @@
         "types": "./dist/src/index.d.ts",
         "default": "./dist/src/index.js"
       }
+    },
+    "./migrations": {
+      "import": {
+        "types": "./dist/src/migrations.d.ts",
+        "default": "./dist/src/migrations.js"
+      }
     }
   },
   "main": "dist/src/index.js",
