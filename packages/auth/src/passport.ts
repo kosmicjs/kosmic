@@ -3,18 +3,12 @@ import argon2 from 'argon2';
 import {Strategy as LocalStrategy} from 'passport-local';
 import {Strategy as BearerStrategy} from 'passport-http-bearer';
 import type {Kysely} from '@kosmic/db';
-import {loggerStorage, type Logger, logger as _logger} from '@kosmic/logger';
+import {getLogger} from '@kosmic/logger';
 import {
   type AuthDatabase,
   extractKeyPrefix,
   type SelectableUser,
 } from './models/index.ts';
-
-type AuthPassportDb = Pick<Kysely<AuthDatabase>, 'selectFrom' | 'updateTable'>;
-
-export type Options = {
-  db: AuthPassportDb;
-};
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -27,21 +21,32 @@ declare global {
   }
 }
 
+type AuthPassportDb = Pick<
+  Kysely<AuthDatabase>,
+  'selectFrom' | 'updateTable' | 'deleteFrom'
+>;
+
+export type Options<Database extends AuthPassportDb> = {
+  db: Database;
+};
+
 /**
  * Creates and configures a passport instance with local, bearer, and optional github strategies.
  */
-export function createPassport(options: Options): typeof passport {
+export function createPassport<Database extends AuthPassportDb>(
+  options: Options<Database>,
+): typeof passport {
   const {db} = options;
 
   passport.serializeUser((user, done) => {
-    const logger = loggerStorage.getStore() ?? _logger;
+    const logger = getLogger();
     logger.debug({user}, 'serializing user');
     done(null, user.id);
   });
 
   passport.deserializeUser((id: number, done) => {
     void (async () => {
-      const logger = loggerStorage.getStore() ?? _logger;
+      const logger = getLogger();
 
       try {
         const user = await db
@@ -76,7 +81,7 @@ export function createPassport(options: Options): typeof passport {
       },
       (email, password, done) => {
         void (async () => {
-          const logger = loggerStorage.getStore() ?? _logger;
+          const logger = getLogger();
           try {
             if (!email) {
               throw new Error('Username is required');
@@ -125,7 +130,7 @@ export function createPassport(options: Options): typeof passport {
     'bearer',
     new BearerStrategy((token, done) => {
       void (async () => {
-        const logger = loggerStorage.getStore() ?? _logger;
+        const logger = getLogger();
         try {
           logger.debug({token}, 'bearer token received');
           const keyPrefix = extractKeyPrefix(token);

@@ -11,10 +11,12 @@ export type KyselySessionStoreDb = Pick<
 /**
  * Persists Koa sessions using a Kysely database connection.
  */
-export class KyselySessionStore implements SessionStore {
-  readonly #db: KyselySessionStoreDb;
+export class KyselySessionStore<
+  Database extends KyselySessionStoreDb,
+> implements SessionStore {
+  readonly #db: Database;
 
-  constructor(db: KyselySessionStoreDb) {
+  constructor(db: Database) {
     this.#db = db;
   }
 

@@ -82,12 +82,6 @@ switch (command) {
     break;
   }
 
-  case COMMANDS.buildVitePlugin: {
-    await import('./build-vite-plugin/cli.ts');
-
-    break;
-  }
-
   case COMMANDS.check: {
     await import('./check/cli.ts');
 

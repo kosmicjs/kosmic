@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import Koa, {type Context} from 'koa';
 import bodyParser from 'koa-bodyparser';
-import type {Passport} from '@kosmic/auth';
+import type {Passport, AuthDatabase} from '@kosmic/auth';
 import conditional from 'koa-conditional-get';
 import responseTime from 'koa-response-time';
 import session, {type stores as SessionStore} from 'koa-session';
@@ -80,15 +80,10 @@ declare module 'node:http' {
   }
 }
 
-type AuthDb<Database = Record<string, unknown>> = Pick<
-  Kysely<Database>,
-  'selectFrom' | 'insertInto' | 'deleteFrom' | 'updateTable'
->;
-
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
 export type KosmicServerOptions<Database = Record<string, unknown>> = {
   /** Database connection used for built-in auth/session integration. */
-  db: AuthDb<Database>;
+  db: Kysely<Database>;
   /** Enables built-in auth/session setup with a dynamic `@kosmic/auth` import. */
   auth?: boolean;
   /** Pino-compatible logger instance. Defaults to a console-based logger. */
@@ -114,7 +109,7 @@ export type KosmicServerOptions<Database = Record<string, unknown>> = {
  * await server.listen(3000);
  * ```
  */
-export class KosmicServer {
+export class KosmicServer<Database extends Kysely<AuthDatabase>> {
   /**
    * Retrieve the current Koa `Context` via async-local-storage.
    *
@@ -156,14 +151,14 @@ export class KosmicServer {
   }
 
   /** Singleton */
-  static #instance: KosmicServer | undefined;
+  static #instance: KosmicServer<Kysely<AuthDatabase>> | undefined;
 
   koa: Koa;
-  options: KosmicServerOptions;
+  options: KosmicServerOptions<Kysely<AuthDatabase>>;
   server: Server | undefined;
   #passport: Passport | undefined;
 
-  constructor(options: KosmicServerOptions) {
+  constructor(options: KosmicServerOptions<Kysely<AuthDatabase>>) {
     this.koa = new Koa({asyncLocalStorage: true});
     this.options = options;
     KosmicServer.#instance = this;
@@ -276,8 +271,12 @@ export class KosmicServer {
 
     if (auth) {
       const authModule = await import('@kosmic/auth');
-      const passport = authModule.createPassport({db: this.options.db});
-      const sessionStore = new authModule.KyselySessionStore(this.options.db);
+      const passport = authModule.createPassport<Kysely<AuthDatabase>>({
+        db: this.options.db,
+      });
+      const sessionStore = new authModule.KyselySessionStore<
+        Kysely<AuthDatabase>
+      >(this.options.db);
 
       this.#passport = passport;
 

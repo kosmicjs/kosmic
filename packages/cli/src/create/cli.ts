@@ -2,10 +2,9 @@
 
 import path from 'node:path';
 import process from 'node:process';
-import readline from 'node:readline/promises';
+import type readline from 'node:readline/promises';
 import {parseArgs} from 'node:util';
 import {execa} from 'execa';
-import {directoryHasFiles, scaffoldKosmicProject} from './scaffold.ts';
 
 const HELP_TEXT = `
 Bootstrap a new Kosmic app template.
@@ -125,96 +124,4 @@ if (cli.values.auth && cli.values['no-auth']) {
 if (cli.values.install && cli.values['no-install']) {
   console.error('Choose either --install or --no-install, not both.');
   process.exit(1);
-}
-
-const providedName = cli.positionals.slice(1)[0];
-const cwd = cli.values.cwd ?? process.cwd();
-const useDefaults = cli.values.yes === true;
-
-let projectName = normalizeProjectName(providedName ?? '');
-let withAuth = cli.values.auth === true;
-let installDependencies = cli.values.install === true;
-
-const authWasExplicit =
-  cli.values.auth === true || cli.values['no-auth'] === true;
-const installWasExplicit =
-  cli.values.install === true || cli.values['no-install'] === true;
-
-if (cli.values['no-auth']) {
-  withAuth = false;
-}
-
-if (cli.values['no-install']) {
-  installDependencies = false;
-}
-
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-try {
-  if (!providedName && !useDefaults) {
-    projectName = normalizeProjectName(
-      await promptText(rl, 'Project name', {defaultValue: 'kosmic-app'}),
-    );
-  }
-
-  if (!authWasExplicit && !useDefaults) {
-    withAuth = await promptYesNo(
-      rl,
-      'Include auth routes (login/account)?',
-      false,
-    );
-  }
-
-  if (!installWasExplicit && !useDefaults) {
-    installDependencies = await promptYesNo(rl, 'Install dependencies?', true);
-  } else if (!installWasExplicit && useDefaults) {
-    installDependencies = true;
-  }
-
-  const targetDirectory = path.resolve(cwd, projectName);
-  let forceWrite = cli.values.force === true;
-
-  if (!forceWrite && (await directoryHasFiles(targetDirectory))) {
-    if (useDefaults) {
-      console.error(`Target directory is not empty: ${targetDirectory}`);
-      process.exit(1);
-    }
-
-    forceWrite = await promptYesNo(
-      rl,
-      `Directory ${projectName} is not empty. Overwrite it?`,
-      false,
-    );
-
-    if (!forceWrite) {
-      console.error('Aborted.');
-      process.exit(1);
-    }
-  }
-
-  await scaffoldKosmicProject({
-    projectName,
-    targetDirectory,
-    withAuth,
-    force: forceWrite,
-  });
-
-  if (installDependencies) {
-    const $$ = execa({cwd: targetDirectory, stdio: 'inherit'});
-    await $$`npm install`;
-  }
-
-  console.log(`\nCreated ${projectName} at ${targetDirectory}`);
-  console.log('\nNext steps:');
-  console.log(`  cd ${projectName}`);
-  if (!installDependencies) {
-    console.log('  npm install');
-  }
-
-  console.log('  npm run dev');
-} finally {
-  rl.close();
 }
