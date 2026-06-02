@@ -1,6 +1,6 @@
 {
   "name": "@kosmic/auth",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Auth for kobo apps, including authentication and authorization middleware",
   "keywords": [
     "kosmic",
@@ -50,9 +50,9 @@
   },
   "dependencies": {
     "@kosmic/config": "^0.0.2",
-    "@kosmic/core": "^0.0.3",
-    "@kosmic/db": "^0.0.3",
-    "@kosmic/logger": "^0.0.3",
+    "@kosmic/core": "^0.0.4",
+    "@kosmic/db": "^0.0.4",
+    "@kosmic/logger": "^0.0.4",
     "@types/koa": "^3.0.3",
     "@types/koa-passport": "^6.0.3",
     "@types/koa-session": "^6.4.5",
