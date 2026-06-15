@@ -6,7 +6,5 @@
  * Note: order does matter here if you set some type of global functionallity
  */
 import 'vite/modulepreload-polyfill';
-// Import all of Bootstrap's JS
-import '../styles/styles.scss';
-// We can then use query syntax in other scripts
+import '../styles/styles.css';
 import './htmx.ts';
