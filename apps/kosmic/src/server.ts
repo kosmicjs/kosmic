@@ -5,6 +5,7 @@ import {db} from '#db/index.js';
 const routesDir = path.join(import.meta.dirname, 'routes');
 
 export const kosmicServer = new KosmicServer({
+  // @ts-expect-error - need to fix all this
   db,
   auth: true,
   routesDir,
