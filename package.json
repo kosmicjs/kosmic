@@ -62,7 +62,6 @@
     "type-fest": "^5.7.0",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.60.0",
-    "wait-on": "^9.0.10",
     "xo": "^2.0.2"
   },
   "engines": {
