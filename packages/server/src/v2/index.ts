@@ -2,7 +2,7 @@ import process from 'node:process';
 import type {Server} from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import Koa from 'koa';
+import Koa, {type Context} from 'koa';
 import bodyParser from 'koa-bodyparser';
 import conditional from 'koa-conditional-get';
 import responseTime from 'koa-response-time';
@@ -91,6 +91,8 @@ export type KosmicServerOptions = {
 /**
  * Opinionated, Koa server for Kosmic apps.
  *
+ * V2
+ *
  * @example
  * ```ts
  * const server = new KosmicServer({ logger, nodeEnv: 'production', ... });
@@ -110,6 +112,26 @@ export class KosmicServer {
   /** The underlying Koa application. */
   get app(): Koa {
     return this.koa;
+  }
+
+  /**
+   * Retrieve the current Koa `Context` via async-local-storage.
+   *
+   * @throws When called outside of a request lifecycle.
+   */
+  get ctx(): Context {
+    if (!this.app.context) {
+      throw new Error('No KosmicServer instance has been created');
+    }
+
+    const ctx = this.koa.currentContext;
+
+    if (!ctx) {
+      throw new Error('No context found');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+    return ctx as Context;
   }
 
   /**

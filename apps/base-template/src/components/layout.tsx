@@ -1,12 +1,12 @@
 import type {ComponentChildren} from 'preact';
-import {getCtx} from '@kosmic/server';
 import {config} from '@kosmic/config';
+import {kosmicServer} from '../server.ts';
 
 export type Props = {
   readonly children: ComponentChildren;
   readonly title?: string;
   readonly env?: string;
-  readonly ctx?: ReturnType<typeof getCtx>;
+  readonly ctx?: typeof kosmicServer.ctx;
   readonly scripts?: Array<{
     readonly src: string;
     readonly type?: string;
@@ -34,7 +34,7 @@ export function Layout({
   title,
   scripts,
   env = config.nodeEnv ?? 'development',
-  ctx = getCtx(),
+  ctx = kosmicServer.ctx,
 }: Props) {
   const foundManifest = ctx.state.manifest?.['scripts/index.ts'];
 
