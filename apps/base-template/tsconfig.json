@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "outDir": "./dist",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "allowJs": true,
+    "types": ["vite/client", "typed-htmx"],
+    "erasableSyntaxOnly": false
+  },
+  "exclude": ["node_modules", "dist", "scripts"],
+  "references": [
+    { "path": "../../packages/server" },
+    { "path": "../../packages/core" },
+    { "path": "../../packages/logger" },
+    { "path": "../../packages/jsx" },
+    { "path": "../../packages/cli" },
+    { "path": "../../packages/core" },
+    { "path": "../../packages/config" },
+    { "path": "../../packages/db" }
+  ]
+}

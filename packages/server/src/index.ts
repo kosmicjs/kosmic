@@ -130,9 +130,9 @@ declare module 'node:http' {
 }
 
 /** Options accepted by the KosmicServer constructor. All fields are optional. */
-export type KosmicServerOptions = {
+export type KosmicServerOptions<Database = Record<string, unknown>> = {
   /** Database connection used for built-in auth/session integration. */
-  db: Kysely<AuthDatabase>;
+  db: Kysely<Database>;
   /** Enables built-in auth/session setup with a dynamic `@kosmic/auth` import. */
   auth?: boolean;
   /** Pino-compatible logger instance. Defaults to a console-based logger. */
@@ -321,9 +321,13 @@ export class KosmicServer {
     if (auth) {
       const authModule = await import('@kosmic/auth');
       const passport = authModule.createPassport({
-        db: this.options.db,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+        db: this.options.db as unknown as Kysely<AuthDatabase>,
       });
-      const sessionStore = new authModule.KyselySessionStore(this.options.db);
+      const sessionStore = new authModule.KyselySessionStore(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+        this.options.db as unknown as Kysely<AuthDatabase>,
+      );
 
       this.#passport = passport;
 
