@@ -59,7 +59,6 @@
     "copy-to-clipboard": "^4.0.2",
     "cron": "^4.4.0",
     "dedent": "^1.7.2",
-    "execa": "^9.6.1",
     "got": "^15.0.5",
     "highlight.js": "^11.11.1",
     "htmx.org": "^2.0.10",

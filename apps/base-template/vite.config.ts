@@ -4,7 +4,6 @@ import {type UserConfig, createLogger} from 'vite'; // eslint-disable-line impor
 import {logger as viteLogger} from '@kosmic/logger';
 
 const config: UserConfig = {
-  // plugins: [kosmic({port: kosmicConfig.port})],
   root: path.join(__dirname, 'src', 'client'),
   build: {
     manifest: true,
