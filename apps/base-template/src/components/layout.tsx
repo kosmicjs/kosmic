@@ -38,13 +38,7 @@ export function Layout({
 }: Props) {
   const foundManifest = ctx.state.manifest?.['scripts/index.ts'];
 
-  const sessionMessages = ctx.session?.messages ?? [];
-
   scripts ??= [];
-
-  if (ctx.session && sessionMessages.length > 0) {
-    ctx.session.messages = [];
-  }
 
   return (
     <html lang="en">
@@ -90,9 +84,7 @@ export function Layout({
           </>
         )}
       </head>
-      <body hx-boost="true">
-        <div class="container-fluid">{children}</div>
-      </body>
+      <body hx-boost="true">{children}</body>
     </html>
   );
 }
