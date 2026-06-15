@@ -120,10 +120,6 @@ export class KosmicServer {
    * @throws When called outside of a request lifecycle.
    */
   get ctx(): Context {
-    if (!this.app.context) {
-      throw new Error('No KosmicServer instance has been created');
-    }
-
     const ctx = this.koa.currentContext;
 
     if (!ctx) {
