@@ -11,7 +11,7 @@ import {
   addIdColumn,
   KosmicMigration,
 } from '@kosmic/core';
-import * as apiKeysModel from '../models/api-keys.ts';
+import {generateApiKey} from '../generate-api-key.ts';
 
 /**
  * Create the users table
@@ -185,7 +185,7 @@ const apiKeysKyselyMigration: Migration = {
       .columns(['key_prefix'])
       .execute();
 
-    const {apiKey, keyPrefix, keyHash} = await apiKeysModel.generateApiKey();
+    const {apiKey, keyPrefix, keyHash} = await generateApiKey();
 
     if (process.env.KOSMIC_ENV !== 'test') {
       await fs.writeFile(

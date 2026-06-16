@@ -2,38 +2,19 @@ import passport from 'koa-passport';
 import argon2 from 'argon2';
 import {Strategy as LocalStrategy} from 'passport-local';
 import {Strategy as BearerStrategy} from 'passport-http-bearer';
-import type {Kysely} from '@kosmic/db';
 import {getLogger} from '@kosmic/logger';
-import {
-  type AuthDatabase,
-  extractKeyPrefix,
-  type SelectableUser,
-} from './models/index.ts';
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express {
-    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    interface User extends Pick<
-      SelectableUser,
-      'id' | 'email' | 'first_name' | 'last_name' | 'role'
-    > {}
-  }
-}
-
-export type Options = {
-  db: Kysely<AuthDatabase>;
-};
-
+import {extractKeyPrefix} from './generate-api-key.ts';
+import type {AbstractStorageAdapter} from './abstract-storage-adapter.ts';
 /**
  * Creates and configures a passport instance with local, bearer, and optional github strategies.
  */
-export function createPassport(options: Options): typeof passport {
-  const {db} = options;
-
+export function createPassport(
+  storage: AbstractStorageAdapter,
+): typeof passport {
   passport.serializeUser((user, done) => {
     const logger = getLogger();
     logger.debug({user}, 'serializing user');
+    // @ts-expect-error - types here are weirdly tied to express
     done(null, user.id);
   });
 
@@ -42,12 +23,7 @@ export function createPassport(options: Options): typeof passport {
       const logger = getLogger();
 
       try {
-        const user = await db
-          .selectFrom('users')
-          .select(['id', 'email', 'first_name', 'last_name', 'role'])
-          .where('id', '=', id)
-          .where('is_active', '=', true)
-          .executeTakeFirst();
+        const user = await storage.getUserById(id);
 
         logger.trace({user}, 'deserialized user');
 
@@ -59,7 +35,6 @@ export function createPassport(options: Options): typeof passport {
         done(null, false);
       } catch (error: unknown) {
         logger.error(error);
-        // @ts-expect-error - done expects an error as the first argument, but we want to pass a message
         done(error, {message: 'User not found'});
       }
     })();
@@ -84,32 +59,17 @@ export function createPassport(options: Options): typeof passport {
               throw new Error('Password is required');
             }
 
-            const user = await db
-              .selectFrom('users')
-              .select([
-                'id',
-                'email',
-                'first_name',
-                'last_name',
-                'role',
-                'hash',
-              ])
-              .where('email', '=', email)
-              .where('is_active', '=', true)
-              .executeTakeFirst();
+            const user = await storage.getUserByEmail(email);
 
-            if (!user?.hash || !(await argon2.verify(user.hash, password))) {
+            if (
+              !user?.hash ||
+              !(await storage.verifyUserPassword(user.hash, password))
+            ) {
               done(null, false);
               return;
             }
 
-            done(null, {
-              id: user.id,
-              email: user.email,
-              first_name: user.first_name ?? undefined,
-              last_name: user.last_name ?? undefined,
-              role: user.role,
-            });
+            done(null, user);
           } catch (error: unknown) {
             logger.error(error);
             done(null, false);
@@ -134,12 +94,7 @@ export function createPassport(options: Options): typeof passport {
             return;
           }
 
-          const apiKeys = await db
-            .selectFrom('api_keys')
-            .select(['user_id', 'is_active', 'expires_at', 'id', 'key_hash'])
-            .where('key_prefix', '=', keyPrefix)
-            .where('is_active', '=', true)
-            .execute();
+          const apiKeys = await storage.getApiKeysByPrefix(keyPrefix);
 
           let validApiKey: (typeof apiKeys)[number] | undefined;
 
@@ -166,18 +121,9 @@ export function createPassport(options: Options): typeof passport {
             return;
           }
 
-          await db
-            .updateTable('api_keys')
-            .set({last_used_at: new Date()})
-            .where('id', '=', validApiKey.id)
-            .execute();
+          await storage.updateApiKeyLastUsedAt(new Date());
 
-          const user = await db
-            .selectFrom('users')
-            .select(['id', 'email', 'first_name', 'last_name', 'role'])
-            .where('id', '=', validApiKey.user_id)
-            .where('is_active', '=', true)
-            .executeTakeFirst();
+          const user = await storage.getUserById(validApiKey.user_id);
 
           if (!user) {
             logger.warn('No active user found for API key');

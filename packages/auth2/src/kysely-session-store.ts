@@ -1,7 +1,7 @@
 import {type Logger, loggerStorage} from '@kosmic/logger';
-import type {Kysely} from '@kosmic/db';
+import type {Kysely} from 'kysely';
 import type {Session, stores as SessionStore} from 'koa-session';
-import type {AuthDatabase} from './models/index.ts';
+import type {AuthDatabase} from './types.ts';
 
 /**
  * Persists Koa sessions using a Kysely database connection.
