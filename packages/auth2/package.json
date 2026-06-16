@@ -1,0 +1,72 @@
+{
+  "name": "@kosmic/auth",
+  "version": "0.0.4",
+  "description": "Auth for kobo apps, including authentication and authorization middleware",
+  "keywords": [
+    "kosmic",
+    "auth",
+    "authentication",
+    "authorization"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Spencer Snyder",
+    "email": "sasnyde2@gmail.com",
+    "url": "https://spencersnyder.io"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.js"
+      }
+    },
+    "./migrations": {
+      "import": {
+        "types": "./dist/src/migrations/index.d.ts",
+        "default": "./dist/src/migrations/index.js"
+      }
+    }
+  },
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "build:watch": "tsc -p tsconfig.json --watch",
+    "check": "tsc --noEmit",
+    "lint": "xo",
+    "test": "node --test **/*.test.ts",
+    "test:coverage": "node --test --experimental-test-coverage"
+  },
+  "dependencies": {
+    "@kosmic/config": "^0.0.2",
+    "@kosmic/core": "^0.0.4",
+    "@kosmic/db": "^0.0.4",
+    "@kosmic/logger": "^0.0.4",
+    "@types/koa": "^3.0.3",
+    "@types/koa-passport": "^6.0.3",
+    "@types/koa-session": "^6.4.5",
+    "@types/passport-github2": "^1.2.9",
+    "@types/passport-google-oauth20": "^2.0.17",
+    "@types/passport-http-bearer": "^1.0.42",
+    "@types/passport-local": "^1.0.38",
+    "argon2": "^0.44.0",
+    "koa": "^3.2.1",
+    "koa-passport": "^6",
+    "koa-session": "^6.4.0",
+    "kysely": "^0.29.2",
+    "passport-github2": "^0.1.12",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-http-bearer": "^1.0.1",
+    "passport-local": "^1.0.0",
+    "type-fest": "^5.7.0",
+    "zod": "^4.4.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
