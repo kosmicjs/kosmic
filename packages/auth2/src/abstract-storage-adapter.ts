@@ -8,11 +8,9 @@ type SelectedUser = Pick<User, 'id' | 'email' | 'hash'>;
 export abstract class AbstractStorageAdapter {
   abstract getUserById(userId: string | number): Promise<SelectedUser>;
   abstract getUserByEmail(email: string): Promise<SelectedUser>;
-  abstract getUserByApiKey(apiKey: string): Promise<SelectedUser>;
-  abstract getApiKeysByPrefix(keyPrefix: string): Promise<ApiKey[]>;
-  abstract verifyUserPassword(
-    hash: string,
-    password: string,
-  ): Promise<SelectedUser>;
+  abstract getApiKeysByPrefix(
+    keyPrefix: string,
+  ): Promise<Array<Pick<ApiKey, 'user_id' | 'key_hash'>>>;
+  abstract verifyUserPassword(hash: string, password: string): Promise<boolean>;
   abstract updateApiKeyLastUsedAt(lastUsedAt: Date): Promise<void>;
 }
