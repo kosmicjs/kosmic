@@ -19,8 +19,8 @@ export interface ApiKey {
   key_prefix: string;
   key_hash: string;
   is_active: boolean;
-  expires_at?: Date;
-  last_used_at?: Date;
+  expires_at: Date;
+  last_used_at: Date;
 }
 
 export interface AuthDatabase {

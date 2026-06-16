@@ -10,7 +10,7 @@ export abstract class AbstractStorageAdapter {
   abstract getUserByEmail(email: string): Promise<SelectedUser>;
   abstract getApiKeysByPrefix(
     keyPrefix: string,
-  ): Promise<Array<Pick<ApiKey, 'user_id' | 'key_hash'>>>;
+  ): Promise<Array<Pick<ApiKey, 'user_id' | 'key_hash' | 'expires_at'>>>;
   abstract verifyUserPassword(hash: string, password: string): Promise<boolean>;
   abstract updateApiKeyLastUsedAt(lastUsedAt: Date): Promise<void>;
 }

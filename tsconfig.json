@@ -7,6 +7,7 @@
 {
   "references": [
     { "path": "./packages/auth" },
+    { "path": "./packages/auth2" },
     { "path": "./packages/config" },
     { "path": "./packages/router" },
     { "path": "./packages/helmet" },
@@ -16,7 +17,8 @@
     { "path": "./packages/server" },
     { "path": "./packages/core" },
     { "path": "./packages/cli" },
-    { "path": "./apps/kosmic" }
+    { "path": "./apps/kosmic" },
+    { "path": "./apps/base-template" }
   ],
   "compilerOptions": {
     "outDir": "dist",

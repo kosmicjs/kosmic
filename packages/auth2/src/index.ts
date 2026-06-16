@@ -1,5 +1,5 @@
 import process from 'node:process';
-import type {Context} from '@kosmic/server/v2';
+import type {Context} from 'koa';
 import session from 'koa-session';
 import type {AbstractSessionStore} from './abstract-session-store.ts';
 import type {AbstractStorageAdapter} from './abstract-storage-adapter.ts';
