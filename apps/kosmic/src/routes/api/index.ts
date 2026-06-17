@@ -1,4 +1,4 @@
-import type {Middleware} from '@kosmic/server/v2';
+import type {Middleware} from '@kosmic/server';
 import {auth} from '#auth';
 
 export const use: Middleware = async (ctx, next) => {

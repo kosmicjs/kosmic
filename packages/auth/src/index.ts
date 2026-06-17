@@ -1,7 +1,7 @@
 import process from 'node:process';
 import type {Context, Next} from 'koa';
 import type Koa from 'koa';
-import type {KosmicServer} from '@kosmic/server/v2';
+import type {KosmicServer} from '@kosmic/server';
 import session from 'koa-session';
 import type passport from 'koa-passport';
 import {getLogger} from '@kosmic/logger';

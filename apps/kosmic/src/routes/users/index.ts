@@ -1,4 +1,4 @@
-import type {Context, Next} from '@kosmic/server/v2';
+import type {Context, Next} from '@kosmic/server';
 import * as User from '@kosmic/auth/models';
 import {db} from '#db/index.js';
 
