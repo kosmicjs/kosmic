@@ -7,11 +7,7 @@ export const get = async (ctx: Context, next: Next) => {
     <Layout title="Kosmic">
       <main className="home">
         <div className="hero">
-          <img
-            className="logo"
-            src="/android-chrome-192x192.png"
-            alt="Kosmic logo"
-          />
+          <img className="logo" src="/favicon-32x32.png" alt="Kosmic logo" />
           <div className="hero-copy">
             <h1>Welcome to Kosmic</h1>
             <p>
