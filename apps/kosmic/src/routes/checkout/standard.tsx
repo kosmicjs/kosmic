@@ -1,4 +1,4 @@
-import type {Middleware} from '@kosmic/server';
+import type {Middleware} from '@kosmic/server/v2';
 
 export const get: Middleware = async function (ctx) {
   if (!ctx.state.session?.url) {

@@ -1,16 +1,21 @@
 import {type Logger, loggerStorage} from '@kosmic/logger';
-import type {Kysely} from 'kysely';
+import {Kysely, PostgresDialect, type PostgresDialectConfig} from 'kysely';
+import type {Pool} from 'pg';
 import type {Session, stores as SessionStore} from 'koa-session';
 import type {AuthDatabase} from './types.ts';
 
 /**
  * Persists Koa sessions using a Kysely database connection.
  */
-export class KyselySessionStore implements SessionStore {
+export class PostgresSessionStore implements SessionStore {
   readonly #db: Kysely<AuthDatabase>;
 
-  constructor(db: Kysely<AuthDatabase>) {
-    this.#db = db;
+  constructor(config: PostgresDialectConfig | PostgresDialect) {
+    const dialect =
+      typeof config === 'object' && config !== null && 'pool' in config
+        ? new PostgresDialect(config)
+        : config;
+    this.#db = new Kysely<AuthDatabase>({dialect});
   }
 
   get #logger(): Logger {

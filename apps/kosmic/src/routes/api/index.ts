@@ -1,9 +1,6 @@
-import {type Middleware, getPassport} from '@kosmic/server';
-
-const passport = getPassport();
+import type {Middleware} from '@kosmic/server/v2';
+import {auth} from '#auth';
 
 export const use: Middleware = async (ctx, next) => {
-  await passport.authenticate('bearer', {
-    session: false,
-  })(ctx, next);
+  await auth.authenticateBearer(ctx, next);
 };

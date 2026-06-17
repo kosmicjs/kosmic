@@ -1,13 +1,12 @@
-import {type Context, type Next, getPassport} from '@kosmic/server';
+import type {Context, Next} from '@kosmic/server/v2';
 import {Layout} from '#components/layout.js';
 import {LoginForm} from '#components/login-form.js';
-
-const passport = getPassport();
+import {auth} from '#auth';
 
 export async function post(ctx: Context, next: Next) {
   ctx.set('HX-Redirect', '/login');
 
-  await passport.authenticate('local')(ctx, next);
+  await auth.authenticateLocal(ctx, next);
 
   if (ctx.status === 401 || !ctx.isAuthenticated()) {
     ctx.status = 401;

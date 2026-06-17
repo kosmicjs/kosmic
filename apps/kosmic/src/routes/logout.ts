@@ -1,4 +1,4 @@
-import type {Context, Next} from '@kosmic/server';
+import type {Context, Next} from '@kosmic/server/v2';
 
 export async function get(ctx: Context, next: Next) {
   ctx.log.debug('logging out');

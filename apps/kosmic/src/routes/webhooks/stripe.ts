@@ -1,4 +1,4 @@
-import type {Middleware} from '@kosmic/server';
+import type {Middleware} from '@kosmic/server/v2';
 import Stripe from 'stripe';
 import {config} from '@kosmic/config';
 

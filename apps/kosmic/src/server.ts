@@ -1,12 +1,8 @@
 import path from 'node:path';
-import {KosmicServer} from '@kosmic/server';
-import {db} from '#db/index.js';
+import {KosmicServer} from '@kosmic/server/v2';
 
 const routesDir = path.join(import.meta.dirname, 'routes');
 
 export const kosmicServer = new KosmicServer({
-  // @ts-expect-error - need to fix all this
-  db,
-  auth: true,
   routesDir,
 });

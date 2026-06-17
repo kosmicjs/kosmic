@@ -100,6 +100,28 @@ export type KosmicServerOptions = {
  * ```
  */
 export class KosmicServer {
+  /**
+   * Retrieve the current Koa `Context` via async-local-storage.
+   *
+   * @throws When called outside of a request lifecycle.
+   */
+  static getCtx(): Context {
+    if (!KosmicServer.#instance) {
+      throw new Error('No KosmicServer instance has been created');
+    }
+
+    const ctx = KosmicServer.#instance.koa.currentContext;
+
+    if (!ctx) {
+      throw new Error('No context found');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+    return ctx as Context;
+  }
+
+  static #instance: KosmicServer | undefined;
+
   koa: Koa;
   options: KosmicServerOptions;
   server: Server | undefined;
@@ -107,6 +129,7 @@ export class KosmicServer {
   constructor(options: KosmicServerOptions) {
     this.koa = new Koa({asyncLocalStorage: true});
     this.options = options;
+    KosmicServer.#instance = this;
   }
 
   /** The underlying Koa application. */
@@ -244,4 +267,13 @@ export class KosmicServer {
       ),
     );
   }
+}
+
+/**
+ * Convenience wrapper around `KosmicServer.getCtx()`.
+ *
+ * Retrieves the current Koa `Context` via async-local-storage.
+ */
+export function getCtx(): Context {
+  return KosmicServer.getCtx();
 }
