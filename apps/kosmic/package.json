@@ -84,7 +84,7 @@
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
     "@types/bootstrap": "^5.2.10",
-    "@types/node": "~25.9.1",
+    "@types/node": "~25.9.3",
     "@types/nodemailer": "^8.0.0",
     "@types/postcss-css-variables": "^0.18.3",
     "@types/pretty": "^2.0.3",
