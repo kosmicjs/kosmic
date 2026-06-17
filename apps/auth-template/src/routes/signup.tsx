@@ -4,7 +4,7 @@ import * as User from '@kosmic/auth/models';
 import type {Context, Next} from '@kosmic/server';
 import Layout from '#components/layout.js';
 import {SignupForm} from '#components/signup-form.js';
-import {kosmicDb} from '#db/index.js';
+import {db} from '#db/index.js';
 
 /**
  * Render the signup page.
@@ -112,7 +112,7 @@ export async function post(ctx: Context, next: Next) {
   const hash = await argon2.hash(passwords.password);
 
   try {
-    const user = await kosmicDb.db
+    const user = await db
       .insertInto('users')
       .values({
         ...userData,
