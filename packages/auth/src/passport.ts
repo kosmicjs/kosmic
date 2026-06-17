@@ -23,10 +23,12 @@ export function createPassport(storage: AbstractDataStorage): typeof passport {
       try {
         const user = await storage.getUserById(id);
 
-        logger.trace({user}, 'deserialized user');
+        const {hash, ...safeUser} = user;
+
+        logger.trace({user: safeUser}, 'deserialized user');
 
         if (user) {
-          done(null, user);
+          done(null, safeUser);
           return;
         }
 
@@ -67,7 +69,14 @@ export function createPassport(storage: AbstractDataStorage): typeof passport {
               return;
             }
 
-            done(null, user);
+            const {hash, ...safeUser} = user;
+
+            logger.trace(
+              {user: safeUser},
+              'authenticated user with local strategy',
+            );
+
+            done(null, safeUser);
           } catch (error: unknown) {
             logger.error(error);
             done(null, false);
@@ -129,8 +138,11 @@ export function createPassport(storage: AbstractDataStorage): typeof passport {
             return;
           }
 
-          logger.trace({user}, 'found user by bearer token');
-          done(null, user);
+          const {hash, ...safeUser} = user;
+
+          logger.trace({user: safeUser}, 'found user by bearer token');
+
+          done(null, safeUser);
         } catch (error: unknown) {
           logger.error(error);
           done(error);
