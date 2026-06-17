@@ -22,8 +22,7 @@
     "#emails/*": "./dist/src/emails/*",
     "#utils/*": "./dist/src/utils/*",
     "#islands/*": "./dist/src/client/islands/*",
-    "#server": "./dist/src/server.js",
-    "#auth": "./dist/src/auth.js"
+    "#server": "./dist/src/server.js"
   },
   "main": "dist/src/index.js",
   "source": "./src/app/client/main.ts",

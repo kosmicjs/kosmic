@@ -2,7 +2,7 @@ import type {Context, Next} from '@kosmic/server';
 import {object, string} from 'zod';
 import Layout from '#components/layout.js';
 import {LoginForm} from '#components/login-form.js';
-import {auth} from '#auth';
+import {auth} from '#server';
 
 /**
  * Render the login page.
