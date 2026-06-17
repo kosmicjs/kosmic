@@ -86,6 +86,8 @@ export type KosmicServerOptions = {
   manifestPath?: string | undefined;
   /** Helmet options — merged with sensible defaults for CSP. */
   helmetOptions?: HelmetOptions | undefined;
+  /** Keys used for cookie signing / session encryption. Defaults to `config.sessionKeys`. */
+  sessionKeys?: string[];
   preRegisterRoutes?: ((server: Koa) => Promise<void>) | undefined;
 };
 
@@ -225,7 +227,7 @@ export class KosmicServer {
       this.options.manifestPath ??
       path.join(publicDir, '.vite', 'manifest.json');
     const {helmetOptions} = this.options;
-
+    const sessionKeys = this.options.sessionKeys ?? config.sessionKeys;
     const {koa} = this;
 
     koa.use(responseTime());
@@ -251,6 +253,7 @@ export class KosmicServer {
     koa.use(renderMiddleware);
     koa.use(errorHandler({logger}));
 
+    koa.keys = sessionKeys;
     koa.proxy = config.kosmicEnv === 'production';
 
     if (this.preRegisterRoutes) {
