@@ -9,7 +9,7 @@ import {
   ApiKeysMigration,
   SessionsMigration,
   UsersMigration,
-} from '@kosmic/auth2/migrations';
+} from '@kosmic/auth/migrations';
 
 /**
  * Create a trigger function to update the updated_at column

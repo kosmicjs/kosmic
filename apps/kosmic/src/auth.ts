@@ -2,7 +2,7 @@ import {
   KosmicAuth,
   PostgresSessionStore,
   PostgresStorageAdapter,
-} from '@kosmic/auth2';
+} from '@kosmic/auth';
 import {dialect} from '#db/index.js';
 import {kosmicServer} from '#server';
 

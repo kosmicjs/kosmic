@@ -86,6 +86,7 @@ export type KosmicServerOptions = {
   manifestPath?: string | undefined;
   /** Helmet options — merged with sensible defaults for CSP. */
   helmetOptions?: HelmetOptions | undefined;
+  preRegisterRoutes?: ((server: Koa) => Promise<void>) | undefined;
 };
 
 /**
@@ -124,11 +125,13 @@ export class KosmicServer {
 
   koa: Koa;
   options: KosmicServerOptions;
-  server: Server | undefined;
+  server?: Server | undefined;
+  preRegisterRoutes?: ((server: Koa) => Promise<void>) | undefined;
 
   constructor(options: KosmicServerOptions) {
     this.koa = new Koa({asyncLocalStorage: true});
     this.options = options;
+    this.preRegisterRoutes = options.preRegisterRoutes;
     KosmicServer.#instance = this;
   }
 
@@ -249,6 +252,8 @@ export class KosmicServer {
     koa.use(errorHandler({logger}));
 
     koa.proxy = config.kosmicEnv === 'production';
+
+    await this.preRegisterRoutes?.(koa);
 
     koa.on('router:loaded', (ev: {routes: unknown[]}) => {
       logger.debug({routes: ev.routes}, 'router:loaded');

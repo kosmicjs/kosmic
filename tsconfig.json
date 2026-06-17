@@ -7,7 +7,6 @@
 {
   "references": [
     { "path": "./packages/auth" },
-    { "path": "./packages/auth2" },
     { "path": "./packages/config" },
     { "path": "./packages/router" },
     { "path": "./packages/helmet" },

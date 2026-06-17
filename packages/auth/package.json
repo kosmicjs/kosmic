@@ -1,5 +1,5 @@
 {
-  "name": "@kosmic/auth2",
+  "name": "@kosmic/auth",
   "version": "0.0.1",
   "description": "Auth for kobo apps, including authentication and authorization middleware",
   "keywords": [
