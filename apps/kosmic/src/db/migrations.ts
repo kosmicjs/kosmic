@@ -4,7 +4,7 @@ import {
   EmailsMigration,
   EntitiesMigration,
   TriggerMigration,
-} from '@kosmic/core/migrations';
+} from '@kosmic/db/migrations';
 import {
   ApiKeysMigration,
   SessionsMigration,

@@ -15,7 +15,6 @@
     { "path": "../helmet" },
     { "path": "../logger" },
     { "path": "../jsx" },
-    { "path": "../core" },
     { "path": "../cli" },
     { "path": "../error-handler" }
   ]

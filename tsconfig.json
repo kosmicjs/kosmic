@@ -14,7 +14,6 @@
     { "path": "./packages/jsx" },
     { "path": "./packages/error-handler" },
     { "path": "./packages/server" },
-    { "path": "./packages/core" },
     { "path": "./packages/cli" },
     { "path": "./apps/kosmic" },
     { "path": "./apps/base-template" }

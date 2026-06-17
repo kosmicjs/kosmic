@@ -1,6 +1,5 @@
 import {type Kysely, sql} from 'kysely';
 import type {Migration} from 'kysely/migration';
-import argon2 from 'argon2';
 import {logger} from '@kosmic/logger';
 import {
   createTimestampTrigger,
@@ -8,6 +7,8 @@ import {
   addTimestampsColumns,
   addIdColumn,
 } from './helpers.ts';
+
+export * from './helpers.ts';
 
 /**
  * Describes a Kosmic migration with an explicit execution order.

@@ -44,7 +44,6 @@
     "@kosmic/auth": "^0.0.4",
     "@kosmic/cli": "^0.0.4",
     "@kosmic/config": "^0.0.2",
-    "@kosmic/core": "^0.0.4",
     "@kosmic/db": "^0.0.4",
     "@kosmic/logger": "^0.0.4",
     "@kosmic/router": "^0.0.2",

@@ -10,7 +10,7 @@ import {
   addTimestampsColumns,
   addIdColumn,
   KosmicMigration,
-} from '@kosmic/core';
+} from '@kosmic/db/migrations';
 import {generateApiKey} from '../generate-api-key.ts';
 
 /**

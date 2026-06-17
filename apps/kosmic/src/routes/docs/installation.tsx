@@ -9,7 +9,7 @@ export const get: Middleware = async (ctx) => {
         To get started, install Kosmic by running the following command in your
         terminal:
       </p>
-      <CodeBlock code="npm install @kosmic/core" />
+      <CodeBlock code="npm install @kosmic/server" />
     </DocsLayout>,
   );
 };
