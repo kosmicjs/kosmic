@@ -1,7 +1,7 @@
-import type {Insertable, Selectable, Updateable, Generated} from '@kosmic/db';
+import process from 'node:process';
+import type {Insertable, Selectable, Updateable, Generated} from 'kysely';
 import type {Simplify} from 'type-fest';
 import zod from 'zod/v4';
-import {config} from '@kosmic/config';
 
 type GeneratedId<T> = Simplify<Omit<T, 'id'> & {id: Generated<number>}>;
 
@@ -26,7 +26,7 @@ export const userSchema = zod.object({
 
 export const passwordSchema = zod.string().min(8).max(255);
 
-if (config.kosmicEnv !== 'development') {
+if (process.env.KOSMIC_ENV !== 'development') {
   passwordSchema
     .refine((password) => /[A-Z]/v.test(password), {
       message: 'Password must contain an uppercase letter',

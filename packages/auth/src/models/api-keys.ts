@@ -1,4 +1,4 @@
-import type {Insertable, Selectable, Generated} from '@kosmic/db';
+import type {Insertable, Selectable, Generated} from 'kysely';
 import type {Simplify} from 'type-fest';
 import {z as zod} from 'zod';
 import argon2 from 'argon2';
