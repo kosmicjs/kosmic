@@ -6,6 +6,13 @@ export interface User {
   role: string;
   hash: string;
   is_active: boolean;
+  is_verified: boolean;
+  verification_token?: string;
+  verification_token_expires_at?: Date;
+  google_access_token?: string;
+  google_refresh_token?: string;
+  github_access_token?: string;
+  github_refresh_token?: string;
 }
 
 export interface Session {

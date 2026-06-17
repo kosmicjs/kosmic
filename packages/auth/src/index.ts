@@ -8,10 +8,17 @@ import {getLogger} from '@kosmic/logger';
 import type {AbstractSessionStore} from './abstract-session-store.ts';
 import type {AbstractDataStorage} from './abstract-storage-adapter.ts';
 import {createPassport} from './passport.ts';
+import type {User} from './types.ts';
 
 export {PostgresSessionStore} from './postgres-session-store.ts';
 export {PostgresStorageAdapter} from './postgres-storage-adapter.ts';
 export * from './models/index.ts';
+
+declare module 'koa' {
+  interface DefaultState {
+    user?: User;
+  }
+}
 
 export class KosmicAuth {
   storage: AbstractDataStorage;
