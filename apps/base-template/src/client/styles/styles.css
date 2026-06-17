@@ -1,7 +1,7 @@
 :root {
   color-scheme: dark;
-  color: #f5f7ff;
-  background: #090b18;
+  color: #0f172a;
+  background: #f8fafc;
   font-family:
     Inter,
     ui-sans-serif,
@@ -10,7 +10,7 @@
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  line-height: 1.75;
+  line-height: 1.6;
   text-rendering: optimizeLegibility;
 }
 
@@ -25,9 +25,12 @@ body {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at top, rgba(84, 105, 255, 0.2), transparent 28%),
-    linear-gradient(180deg, #060717 0%, #090b18 46%, #0f1223 100%);
+  background: radial-gradient(
+    circle at top,
+    #ffffff,
+    #f1f5f9 45%,
+    #e2e8f0 100%
+  );
 }
 
 body,
@@ -42,155 +45,77 @@ a {
 }
 
 .home {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 5rem 1.5rem 4rem;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
 }
 
 .hero {
+  text-align: center;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
   gap: 2rem;
   align-items: center;
-  padding: 1rem 0 3rem;
 }
 
-.hero-copy {
-  padding: 2.5rem 2.5rem 2.5rem 0;
+.logo {
+  width: 112px;
+  height: 112px;
+  margin: 0 auto;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 24px 80px rgba(92, 107, 192, 0.18);
+  animation: rotate 12s linear infinite;
 }
 
-.eyebrow {
-  display: inline-flex;
-  margin-bottom: 1.25rem;
-  color: #8b93c3;
-  text-transform: uppercase;
-  letter-spacing: 0.24em;
-  font-size: 0.78rem;
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 h1 {
   margin: 0;
-  font-size: clamp(2.8rem, 4vw, 4.5rem);
-  line-height: 0.95;
-  letter-spacing: -0.05em;
-  max-width: 14ch;
-  color: #ffffff;
+  font-size: clamp(2.25rem, 4vw, 3.2rem);
+  line-height: 1.05;
+  color: #0f172a;
 }
 
 .hero-copy p {
-  margin: 1.75rem 0 2.2rem;
-  max-width: 46rem;
-  color: #c6c9e7;
-  font-size: 1.1rem;
+  margin: 0;
+  color: #475569;
+  font-size: 1rem;
+  max-width: 38rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.9rem;
+  margin-top: 1.75rem;
 }
 
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 3rem;
-  padding: 0 1.4rem;
+.hero-actions button {
+  padding: 0.95rem 1.5rem;
+  border: none;
   border-radius: 999px;
-  border: 1px solid transparent;
+  background: linear-gradient(135deg, #5b8cff, #7c6cff);
+  color: #ffffff;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 20px 50px rgba(91, 140, 255, 0.18);
   transition:
     transform 180ms ease,
-    background-color 180ms ease,
-    border-color 180ms ease;
+    filter 180ms ease;
 }
 
-.button:hover {
+.hero-actions button:hover {
   transform: translateY(-1px);
+  filter: brightness(1.02);
 }
 
-.primary {
-  background: linear-gradient(135deg, #5968ff, #2b63ff);
-  color: #fff;
-}
-
-.secondary {
-  background: rgba(255, 255, 255, 0.07);
-  color: #f5f7ff;
-  border-color: rgba(255, 255, 255, 0.16);
-}
-
-.hero-panel {
-  display: grid;
-  place-items: center;
-}
-
-.panel-card {
-  width: 100%;
-  padding: 2rem;
-  border-radius: 2rem;
-  background: rgba(16, 20, 45, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 28px 80px rgba(10, 12, 32, 0.24);
-}
-
-.panel-card h2 {
-  margin: 0 0 0.75rem;
-  font-size: 1.45rem;
-  color: #fff;
-}
-
-.panel-card p {
-  margin: 0 0 1.75rem;
-  color: #b7bbd1;
-}
-
-.counter-shell {
-  padding: 1.2rem;
-  border-radius: 1.5rem;
-  background: linear-gradient(
-    180deg,
-    rgba(53, 64, 197, 0.14),
-    rgba(15, 19, 53, 0.9)
-  );
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.features {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem;
-}
-
-.feature-card {
-  padding: 1.75rem;
-  border-radius: 1.5rem;
-  background: rgba(12, 16, 35, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.feature-card h3 {
-  margin: 0 0 0.75rem;
-  color: #f8fbff;
-  font-size: 1.15rem;
-}
-
-.feature-card p {
-  margin: 0;
-  color: #b7bbd1;
-}
-
-@media (max-width: 860px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-copy {
-    padding-right: 0;
-  }
-
-  .features {
-    grid-template-columns: 1fr;
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
   }
 }
