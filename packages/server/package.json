@@ -17,8 +17,8 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/src/v2/index.d.ts",
-        "default": "./dist/src/v2/index.js"
+        "types": "./dist/src/index.d.ts",
+        "default": "./dist/src/index.js"
       }
     },
     "./v2": {
@@ -28,8 +28,8 @@
       }
     }
   },
-  "main": "dist/src/v2/index.js",
-  "types": "dist/src/v2/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "files": [
     "dist"
   ],
