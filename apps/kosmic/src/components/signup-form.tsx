@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import type z from 'zod/v4';
+import type z from 'zod';
 
 export function SignupForm({
   errors,

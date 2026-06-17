@@ -1,5 +1,5 @@
 import type {Middleware} from '@kosmic/server';
-import {z} from 'zod/v4';
+import {z} from 'zod';
 // import {GoogleGenAI} from '@google/genai';
 import Layout from '#components/layout.js';
 // import {config} from '@kosmic/config';

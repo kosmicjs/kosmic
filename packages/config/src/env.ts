@@ -1,7 +1,7 @@
 import process from 'node:process';
 import path from 'node:path';
 import dotenv from 'dotenv';
-import z from 'zod/v4';
+import z from 'zod';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

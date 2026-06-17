@@ -1,5 +1,5 @@
 import type {Insertable, Selectable, Updateable} from 'kysely';
-import zod from 'zod/v4';
+import zod from 'zod';
 
 export const sessionSchema = zod.object({
   key: zod.string().min(1).max(255),

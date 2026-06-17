@@ -1,4 +1,4 @@
-import {z} from 'zod/v4';
+import {z} from 'zod';
 import type {Middleware as KoaMiddleware} from 'koa';
 import type {MatchFunction} from 'path-to-regexp';
 

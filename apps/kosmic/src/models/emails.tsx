@@ -1,5 +1,5 @@
 import type {Insertable, Selectable, Updateable} from '@kosmic/db';
-import zod from 'zod/v4';
+import zod from 'zod';
 import type {GeneratedId} from './types.ts';
 import {db} from '#db/index.js';
 import {renderToString as emailRenderToString} from '#emails/helpers/index.js';

@@ -1,5 +1,5 @@
 import type {Middleware, Next, Context} from 'koa';
-import z from 'zod/v4';
+import z from 'zod';
 
 /**
  * Generic render function type that accepts any component

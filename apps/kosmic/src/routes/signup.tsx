@@ -1,6 +1,6 @@
 import type {Context, Next} from '@kosmic/server';
 import argon2 from 'argon2';
-import z, {string} from 'zod/v4';
+import z, {string} from 'zod';
 import * as User from '@kosmic/auth/models';
 import {SignupForm} from '#components/signup-form.js';
 import Layout from '#components/layout.js';

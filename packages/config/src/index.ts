@@ -1,4 +1,4 @@
-import z from 'zod/v4';
+import z from 'zod';
 import type {PartialDeep} from 'type-fest';
 import {env} from './env.ts';
 import {configSchema} from './schema.ts';

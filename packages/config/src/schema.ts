@@ -1,4 +1,4 @@
-import z from 'zod/v4';
+import z from 'zod';
 import type {PoolConfig} from 'pg';
 import type JSONTransport from 'nodemailer/lib/json-transport/index.ts';
 import type SMTPTransport from 'nodemailer/lib/smtp-transport/index.ts';

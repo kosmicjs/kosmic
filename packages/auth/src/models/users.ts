@@ -1,23 +1,23 @@
 import process from 'node:process';
 import type {Insertable, Selectable, Updateable, Generated} from 'kysely';
 import type {Simplify} from 'type-fest';
-import zod from 'zod/v4';
+import zod from 'zod';
 
 type GeneratedId<T> = Simplify<Omit<T, 'id'> & {id: Generated<number>}>;
 
 export const userSchema = zod.object({
   id: zod.number().int().positive(),
-  role: zod.enum(['admin', 'user']).prefault('user'),
+  role: zod.enum(['admin', 'user']).default('user'),
   first_name: zod.string().max(255).nullable(),
   last_name: zod.string().max(255).nullable(),
   phone: zod.string().max(255).nullable(),
   email: zod.email().max(255),
   hash: zod.string().max(255).nullable(),
   api_key: zod.string().max(255).nullable(),
-  is_verified: zod.boolean().prefault(false),
+  is_verified: zod.boolean().default(false),
   verification_token: zod.uuid().nullable(),
   verification_token_expires_at: zod.date().nullable(),
-  is_active: zod.boolean().prefault(true),
+  is_active: zod.boolean().default(true),
   google_access_token: zod.string().max(255).nullable(),
   google_refresh_token: zod.string().max(255).nullable(),
   github_access_token: zod.string().max(255).nullable(),
