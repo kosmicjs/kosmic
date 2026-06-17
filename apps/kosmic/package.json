@@ -41,7 +41,7 @@
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^8.0.0",
     "@google/genai": "^2.7.0",
-    "@kosmic/auth": "^0.0.4",
+    "@kosmic/auth": "^0.0.1",
     "@kosmic/auth2": "^0.0.1",
     "@kosmic/cli": "^0.0.4",
     "@kosmic/config": "^0.0.2",

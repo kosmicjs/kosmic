@@ -13,6 +13,7 @@
   "exclude": ["node_modules", "dist", "scripts"],
   "references": [
     { "path": "../../packages/server" },
+    { "path": "../../packages/auth" },
     { "path": "../../packages/core" },
     { "path": "../../packages/logger" },
     { "path": "../../packages/jsx" },
