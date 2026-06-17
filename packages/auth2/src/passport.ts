@@ -4,13 +4,11 @@ import {Strategy as LocalStrategy} from 'passport-local';
 import {Strategy as BearerStrategy} from 'passport-http-bearer';
 import {getLogger} from '@kosmic/logger';
 import {extractKeyPrefix} from './generate-api-key.ts';
-import type {AbstractStorageAdapter} from './abstract-storage-adapter.ts';
+import type {AbstractDataStorage} from './abstract-storage-adapter.ts';
 /**
  * Creates and configures a passport instance with local, bearer, and optional github strategies.
  */
-export function createPassport(
-  storage: AbstractStorageAdapter,
-): typeof passport {
+export function createPassport(storage: AbstractDataStorage): typeof passport {
   passport.serializeUser((user, done) => {
     const logger = getLogger();
     logger.debug({user}, 'serializing user');

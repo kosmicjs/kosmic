@@ -1,9 +1,9 @@
 import {PostgresDialect, Kysely, type PostgresDialectConfig} from 'kysely';
 import argon2 from 'argon2';
-import type {AbstractStorageAdapter} from './abstract-storage-adapter.ts';
+import type {AbstractDataStorage} from './abstract-storage-adapter.ts';
 import type {AuthDatabase} from './types.ts';
 
-export class PostgresStorageAdapter implements AbstractStorageAdapter {
+export class PostgresStorageAdapter implements AbstractDataStorage {
   readonly #db: Kysely<AuthDatabase>;
 
   constructor(config: PostgresDialectConfig | PostgresDialect) {

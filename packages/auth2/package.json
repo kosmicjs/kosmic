@@ -27,6 +27,12 @@
         "types": "./dist/src/migrations/index.d.ts",
         "default": "./dist/src/migrations/index.js"
       }
+    },
+    "./models": {
+      "import": {
+        "types": "./dist/src/models/index.d.ts",
+        "default": "./dist/src/models/index.js"
+      }
     }
   },
   "main": "dist/src/index.js",

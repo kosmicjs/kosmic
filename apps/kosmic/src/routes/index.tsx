@@ -1,25 +1,12 @@
 import type {Middleware} from '@kosmic/server/v2';
-import {
-  KosmicAuth,
-  PostgresSessionStore,
-  PostgresStorageAdapter,
-} from '@kosmic/auth2';
 import {CounterIsland} from '#islands/counter.js';
 import Layout from '#components/layout.js';
-import {dialect} from '#db/index.js';
 
 declare module 'koa-session' {
   interface Session {
     messages: string[];
   }
 }
-
-const auth = new KosmicAuth(
-  new PostgresStorageAdapter(dialect),
-  new PostgresSessionStore(dialect),
-);
-
-export const use = [auth.authMiddleware];
 
 export const get: Middleware = async function (ctx) {
   await ctx.render(

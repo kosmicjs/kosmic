@@ -1,5 +1,5 @@
 import type {Context, Next} from '@kosmic/server/v2';
-import * as User from '@kosmic/auth/models';
+import * as User from '@kosmic/auth2/models';
 import {db} from '#db/index.js';
 
 export async function post(ctx: Context, next: Next) {
