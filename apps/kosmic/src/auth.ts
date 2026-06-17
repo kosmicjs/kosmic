@@ -7,7 +7,7 @@ import {dialect} from '#db/index.js';
 import {kosmicServer} from '#server';
 
 export const auth = new KosmicAuth(
-  kosmicServer.app,
+  kosmicServer,
   new PostgresStorageAdapter(dialect),
   new PostgresSessionStore(dialect),
 );
