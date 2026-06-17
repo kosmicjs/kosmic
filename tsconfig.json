@@ -16,7 +16,8 @@
     { "path": "./packages/server" },
     { "path": "./packages/cli" },
     { "path": "./apps/kosmic" },
-    { "path": "./apps/base-template" }
+    { "path": "./apps/base-template" },
+    { "path": "./apps/auth-template" }
   ],
   "compilerOptions": {
     "outDir": "dist",
@@ -51,5 +52,10 @@
     "noErrorTruncation": true,
     "rewriteRelativeImportExtensions": true
   },
-  "exclude": ["node_modules", "dist", "apps/kosmic/scripts"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "apps/kosmic/scripts",
+    "apps/auth-template"
+  ]
 }

@@ -1,23 +1,45 @@
 import type {Context, Next} from '@kosmic/server';
 import Layout from '#components/layout.js';
-import {CounterIsland} from '#islands/counter.js';
 
+/**
+ * Render a tiny landing page with auth links.
+ */
 export const get = async (ctx: Context, next: Next) => {
+  const loggedIn = ctx.isAuthenticated();
+
   return ctx.render(
-    <Layout title="Kosmic">
-      <main className="home">
-        <div className="hero">
-          <img className="logo" src="/favicon-32x32.png" alt="Kosmic logo" />
-          <div className="hero-copy">
-            <h1>Welcome to Kosmic</h1>
-            <p>
-              A minimal server-rendered starter with islands and fast routing.
-            </p>
-            <div className="hero-actions">
-              <CounterIsland initialCount={0} />
-            </div>
+    <Layout title="Auth Template">
+      <main className="page-shell">
+        <section className="card">
+          <p className="eyebrow">auth-template</p>
+          <h1>Simple auth starter</h1>
+          <p className="lead">
+            Sign up, log in, and view your account details. Bare minimum setup,
+            ready for customization.
+          </p>
+
+          <div className="button-row">
+            {loggedIn ? (
+              <>
+                <a className="primary-button" href="/account">
+                  Go to account
+                </a>
+                <a className="ghost-button" href="/logout">
+                  Log out
+                </a>
+              </>
+            ) : (
+              <>
+                <a className="primary-button" href="/signup">
+                  Sign up
+                </a>
+                <a className="ghost-button" href="/login">
+                  Log in
+                </a>
+              </>
+            )}
           </div>
-        </div>
+        </section>
       </main>
     </Layout>,
   );
