@@ -61,7 +61,7 @@
     "swagger-ui-dist": "^5.32.6",
     "type-fest": "^5.7.0",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.60.0",
+    "typescript-eslint": "^8.61.1",
     "xo": "^2.0.2"
   },
   "engines": {
