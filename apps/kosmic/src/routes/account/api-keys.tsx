@@ -1,4 +1,4 @@
-import type {Middleware} from '@kosmic/server/v2';
+import type {Middleware} from '@kosmic/server';
 import {z} from 'zod';
 import {generateApiKey} from '@kosmic/auth';
 import {db} from '#db/index.js';

@@ -1,4 +1,4 @@
-import type {Middleware} from '@kosmic/server/v2';
+import type {Middleware} from '@kosmic/server';
 import Layout from '#components/layout.js';
 import {db} from '#db/index.js';
 

@@ -1,4 +1,4 @@
-import type {Middleware} from '@kosmic/server/v2';
+import type {Middleware} from '@kosmic/server';
 import type {JSX} from 'preact';
 
 export const get: Middleware = async (ctx) => {

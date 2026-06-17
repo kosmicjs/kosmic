@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import {getCtx} from '@kosmic/server/v2';
+import {getCtx} from '@kosmic/server';
 import {ThemeSwitchIsland} from '#islands/theme-switch.js';
 
 type NavItem = {

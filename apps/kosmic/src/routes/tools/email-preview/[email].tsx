@@ -1,4 +1,4 @@
-import type {Middleware} from '@kosmic/server/v2';
+import type {Middleware} from '@kosmic/server';
 import type {VNode} from 'preact';
 import {renderToStringAsync} from 'preact-render-to-string';
 import pretty from 'pretty';

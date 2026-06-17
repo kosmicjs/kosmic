@@ -1,4 +1,4 @@
-import type {Context, Next} from '@kosmic/server/v2';
+import type {Context, Next} from '@kosmic/server';
 import {Layout} from '#components/layout.js';
 import {LoginForm} from '#components/login-form.js';
 import {auth} from '#auth';

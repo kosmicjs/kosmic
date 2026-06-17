@@ -1,4 +1,4 @@
-import type {Context, Next} from '@kosmic/server/v2';
+import type {Context, Next} from '@kosmic/server';
 import Layout from '#components/layout.js';
 import {CounterIsland} from '#islands/counter.js';
 

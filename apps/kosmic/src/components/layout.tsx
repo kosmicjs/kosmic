@@ -1,5 +1,5 @@
 import type {ComponentChildren} from 'preact';
-import {getCtx} from '@kosmic/server/v2';
+import {getCtx} from '@kosmic/server';
 import {config} from '@kosmic/config';
 import Footer from './footer.tsx';
 import Header from './header.tsx';

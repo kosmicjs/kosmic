@@ -253,7 +253,9 @@ export class KosmicServer {
 
     koa.proxy = config.kosmicEnv === 'production';
 
-    await this.preRegisterRoutes?.(koa);
+    if (this.preRegisterRoutes) {
+      await this.preRegisterRoutes(koa);
+    }
 
     koa.on('router:loaded', (ev: {routes: unknown[]}) => {
       logger.debug({routes: ev.routes}, 'router:loaded');

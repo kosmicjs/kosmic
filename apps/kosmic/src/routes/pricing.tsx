@@ -1,4 +1,4 @@
-import type {Middleware} from '@kosmic/server/v2';
+import type {Middleware} from '@kosmic/server';
 // import clsx from 'clsx';
 // import Layout from '../../src/components/layout.js';
 

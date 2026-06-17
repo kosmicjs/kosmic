@@ -1,4 +1,4 @@
-import type {Middleware} from '@kosmic/server/v2';
+import type {Middleware} from '@kosmic/server';
 import DocsLayout from '#components/docs/docs-layout.js';
 import CodeBlock from '#components/code-block.js';
 

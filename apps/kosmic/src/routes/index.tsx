@@ -1,4 +1,4 @@
-import type {Middleware} from '@kosmic/server/v2';
+import type {Middleware} from '@kosmic/server';
 import {CounterIsland} from '#islands/counter.js';
 import Layout from '#components/layout.js';
 
