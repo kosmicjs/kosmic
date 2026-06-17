@@ -1,7 +1,6 @@
 import process from 'node:process';
 import type {Context, Next} from 'koa';
 import type Koa from 'koa';
-import type {KosmicServer} from '@kosmic/server';
 import session from 'koa-session';
 import type passport from 'koa-passport';
 import {getLogger} from '@kosmic/logger';
@@ -23,10 +22,9 @@ declare module 'koa' {
 export class KosmicAuth {
   storage: AbstractDataStorage;
   sessionStore: AbstractSessionStore;
-  passport: typeof passport;
-  isInitialized = false;
 
-  server?: KosmicServer | undefined;
+  #isInitialized = false;
+  readonly #passport: typeof passport;
 
   constructor(
     storage: AbstractDataStorage,
@@ -34,7 +32,7 @@ export class KosmicAuth {
   ) {
     this.storage = storage;
     this.sessionStore = sessionStore;
-    this.passport = createPassport(this.storage);
+    this.#passport = createPassport(this.storage);
   }
 
   initialize = async (koa: Koa): Promise<void> => {
@@ -65,29 +63,29 @@ export class KosmicAuth {
       ),
     );
 
-    koa.use(this.passport.initialize({userProperty: 'email'}));
+    koa.use(this.#passport.initialize({userProperty: 'email'}));
 
-    koa.use(this.passport.session());
+    koa.use(this.#passport.session());
 
-    this.isInitialized = true;
+    this.#isInitialized = true;
   };
 
   authenticateLocal = async (ctx: Context, next: Next): Promise<void> => {
-    if (!this.isInitialized) {
+    if (!this.#isInitialized) {
       throw new Error('KosmicAuth must be initialized before use');
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.passport.authenticate('local')(ctx, next);
+    return this.#passport.authenticate('local')(ctx, next);
   };
 
   authenticateBearer = async (ctx: Context, next: Next): Promise<void> => {
-    if (!this.isInitialized) {
+    if (!this.#isInitialized) {
       throw new Error('KosmicAuth must be initialized before use');
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.passport.authenticate('bearer', {
+    return this.#passport.authenticate('bearer', {
       session: false,
     })(ctx, next);
   };
