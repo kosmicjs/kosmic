@@ -1,5 +1,11 @@
 # @kosmic/db
 
+## 0.1.0
+
+### Minor Changes
+
+- Lots of updates
+
 ## 0.0.4
 
 ### Patch Changes

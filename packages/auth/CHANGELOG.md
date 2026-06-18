@@ -1,5 +1,16 @@
 # @kosmic/auth
 
+## 0.1.0
+
+### Minor Changes
+
+- Lots of updates
+
+### Patch Changes
+
+- Updated dependencies
+  - @kosmic/db@0.1.0
+
 ## 0.0.4
 
 ### Patch Changes

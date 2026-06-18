@@ -1,6 +1,6 @@
 {
   "name": "@kosmic/server",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Reusable Koa server bootstrap for Kosmic apps",
   "keywords": [
     "koa",

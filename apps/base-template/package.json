@@ -1,6 +1,6 @@
 {
   "name": "base-template",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A highly opinionated and strongly typed Koa web and api template.",
   "bugs": {
     "url": "https://github.com/spence-s/kosmic/issues"
@@ -38,12 +38,12 @@
     "test:watch": "kosmic test:watch"
   },
   "dependencies": {
-    "@kosmic/cli": "^0.0.4",
+    "@kosmic/cli": "^0.1.0",
     "@kosmic/config": "^0.0.2",
-    "@kosmic/db": "^0.0.4",
+    "@kosmic/db": "^0.1.0",
     "@kosmic/logger": "^0.0.4",
     "@kosmic/router": "^0.0.2",
-    "@kosmic/server": "^0.2.3",
+    "@kosmic/server": "^0.3.0",
     "@popperjs/core": "^2.11.8",
     "argon2": "^0.44.0",
     "camelcase": "^9.0.0",

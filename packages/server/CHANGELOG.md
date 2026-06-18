@@ -1,5 +1,11 @@
 # @kosmic/server
 
+## 0.3.0
+
+### Minor Changes
+
+- Lots of updates
+
 ## 0.2.3
 
 ### Patch Changes
