@@ -17,8 +17,8 @@
     },
     "./migrate": {
       "import": {
-        "types": "./dist/src/migrate/index.d.ts",
-        "default": "./dist/src/migrate/index.js"
+        "types": "./dist/src/migrate/migrator.d.ts",
+        "default": "./dist/src/migrate/migrator.js"
       }
     }
   },
