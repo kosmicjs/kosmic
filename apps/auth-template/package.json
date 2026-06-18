@@ -1,6 +1,7 @@
 {
   "name": "auth-template",
   "version": "0.0.1",
+  "private": true,
   "description": "A highly opinionated and strongly typed Koa web and api template.",
   "bugs": {
     "url": "https://github.com/spence-s/kosmic/issues"
