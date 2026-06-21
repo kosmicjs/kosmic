@@ -2,13 +2,13 @@ import type {Context, Next} from 'koa';
 import {renderToStringAsync} from 'preact-render-to-string';
 import type {VNode} from 'preact';
 
-declare module 'koa' {
-  /**
-   * render a jsx component template
-   */
-  type Render = (component: VNode) => Promise<void>;
-  type PartialRender = (component: VNode) => Promise<void>;
+/**
+ * render a jsx component template
+ */
+export type Render = (component: VNode) => Promise<void>;
+export type PartialRender = (component: VNode) => Promise<void>;
 
+declare module 'koa' {
   interface DefaultContext {
     /**
      * Render jsx and set the response body to the rendered HTML.

@@ -94,30 +94,6 @@ switch (command) {
     break;
   }
 
-  case COMMANDS.compile: {
-    await import('./compile/cli.ts');
-
-    break;
-  }
-
-  case COMMANDS.compileCp: {
-    await import('./compile-cp/cli.ts');
-
-    break;
-  }
-
-  case COMMANDS.compileTsc: {
-    await import('./compile-tsc/cli.ts');
-
-    break;
-  }
-
-  case COMMANDS.compileVite: {
-    await import('./compile-vite/cli.ts');
-
-    break;
-  }
-
   case COMMANDS.create: {
     await import('./create/cli.ts');
 

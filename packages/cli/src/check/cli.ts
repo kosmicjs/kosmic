@@ -36,4 +36,8 @@ if (cli.values.help) {
 const cwd = cli.values.cwd ?? process.cwd();
 const $$ = execa({cwd, stdio: 'inherit'});
 
-await $$`tsc -p tsconfig.json --noEmit`;
+try {
+  await $$`tsc -p tsconfig.json --noEmit`;
+} catch {
+  process.exit(1);
+}

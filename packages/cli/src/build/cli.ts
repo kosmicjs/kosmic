@@ -34,21 +34,25 @@ if (cli.values.help) {
   process.exit(0);
 }
 
-const cwd = cli.values.cwd ?? process.cwd();
-const $$ = execa({cwd, stdio: 'inherit'});
+try {
+  const cwd = cli.values.cwd ?? process.cwd();
+  const $$ = execa({cwd, stdio: 'inherit'});
 
-// clean
-await fs.rm(path.resolve(cwd, 'dist'), {recursive: true, force: true});
+  // clean
+  await fs.rm(path.resolve(cwd, 'dist'), {recursive: true, force: true});
 
-// compile:tsc
-await $$`tsc --build tsconfig.json`;
+  // compile:tsc
+  await $$`tsc --build tsconfig.json`;
 
-// compile:vite
-await $$`vite build`;
+  // compile:vite
+  await $$`vite build`;
 
-// compile:cp
-await fs.cp(
-  path.resolve(cwd, 'src', 'public'),
-  path.resolve(cwd, 'dist', 'src', 'public'),
-  {recursive: true},
-);
+  // compile:cp
+  await fs.cp(
+    path.resolve(cwd, 'dist', 'src', 'public'),
+    path.resolve(cwd, 'src', 'public'),
+    {recursive: true},
+  );
+} catch {
+  process.exit(1);
+}

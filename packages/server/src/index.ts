@@ -19,6 +19,9 @@ import {
   logger as defaultLogger,
 } from '@kosmic/logger';
 
+export {renderMiddleware} from '@kosmic/jsx';
+export * from '@kosmic/router';
+
 export type {RouteDefinition} from '@kosmic/router';
 export type {HelmetOptions} from '@kosmic/helmet';
 export type {

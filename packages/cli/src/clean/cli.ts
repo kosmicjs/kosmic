@@ -34,6 +34,10 @@ if (cli.values.help) {
   process.exit(0);
 }
 
-const cwd = cli.values.cwd ?? process.cwd();
+try {
+  const cwd = cli.values.cwd ?? process.cwd();
 
-await fs.rm(path.resolve(cwd, 'dist'), {recursive: true, force: true});
+  await fs.rm(path.resolve(cwd, 'dist'), {recursive: true, force: true});
+} catch {
+  process.exit(1);
+}

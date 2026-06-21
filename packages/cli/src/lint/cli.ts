@@ -33,7 +33,11 @@ if (cli.values.help) {
   process.exit(0);
 }
 
-const cwd = cli.values.cwd ?? process.cwd();
-const $$ = execa({cwd, stdio: 'inherit'});
+try {
+  const cwd = cli.values.cwd ?? process.cwd();
+  const $$ = execa({cwd, stdio: 'inherit'});
 
-await $$`xo`;
+  await $$`xo`;
+} catch {
+  process.exit(1);
+}

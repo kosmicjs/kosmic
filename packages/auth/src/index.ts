@@ -90,3 +90,5 @@ export class KosmicAuth {
     })(ctx, next);
   };
 }
+
+export {type default as passport} from 'koa-passport';

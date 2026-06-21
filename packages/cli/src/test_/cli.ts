@@ -35,11 +35,14 @@ if (cli.values.help) {
   process.exit(0);
 }
 
-const cwd = cli.values.cwd ?? process.cwd();
-const $$ = execa({cwd, stdio: 'inherit'});
-
-await fs.rm(path.resolve(cwd, 'dist'), {recursive: true, force: true});
-await $$`tsc -p tsconfig.json`;
-await $$({
-  env: {...process.env, NODE_ENV: 'test', KOSMIC_ENV: 'test'},
-})`node --test ${path.join('dist', 'test', 'server.test.js')}`;
+try {
+  const cwd = cli.values.cwd ?? process.cwd();
+  const $$ = execa({cwd, stdio: 'inherit'});
+  await fs.rm(path.resolve(cwd, 'dist'), {recursive: true, force: true});
+  await $$`tsc -p tsconfig.json`;
+  await $$({
+    env: {...process.env, NODE_ENV: 'test', KOSMIC_ENV: 'test'},
+  })`node --test ${path.join('dist', 'test', 'server.test.js')}`;
+} catch {
+  process.exit(1);
+}
