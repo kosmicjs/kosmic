@@ -39,12 +39,14 @@
   "dependencies": {
     "execa": "^9.6.1",
     "kysely": "^0.29.2",
+    "kysely-codegen": "^0.20.0",
     "p-wait-for": "^6.0.0",
     "path-exists": "^5.0.0",
     "pino": "^10.3.1",
-    "pino-princess": "^1.6.1",
+    "pino-princess": "^1.6.3",
+    "ts-to-zod": "^5.1.0",
     "typescript": "~6.0.3",
-    "vite": "^8.0.16"
+    "vite": "^8.1.0"
   },
   "engines": {
     "node": ">=22"
