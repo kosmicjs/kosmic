@@ -4,18 +4,13 @@ import {parseArgs} from 'node:util';
 
 const COMMANDS = {
   build: 'build',
-  buildVitePlugin: 'build:vite-plugin',
   check: 'check',
   clean: 'clean',
-  compile: 'compile',
-  compileCp: 'compile:cp',
-  compileTsc: 'compile:tsc',
-  compileVite: 'compile:vite',
   create: 'create',
+  generate: 'generate',
   dev: 'dev',
   lint: 'lint',
   migrate: 'migrate',
-  prepublishOnly: 'prepublishOnly',
   start: 'start',
   test: 'test',
   testWatch: 'test:watch',
@@ -30,22 +25,7 @@ Usage
   $ kos <command> [options]
 
 Commands
-  build
-  build:vite-plugin
-  check
-  clean
-  compile
-  compile:cp
-  compile:tsc
-  compile:vite
-  create
-  dev
-  lint
-  migrate
-  prepublishOnly
-  start
-  test
-  test:watch
+  ${Object.values(COMMANDS).join('\n  ')}
 
 Options
   --help, -h          Show this help message
@@ -132,6 +112,12 @@ switch (command) {
 
   case COMMANDS.testWatch: {
     await import('./test-watch/cli.ts');
+
+    break;
+  }
+
+  case COMMANDS.generate: {
+    await import('./generate/cli.ts');
 
     break;
   }

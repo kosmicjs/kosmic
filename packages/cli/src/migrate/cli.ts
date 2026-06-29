@@ -1,10 +1,7 @@
 #!/usr/bin/env node
-
-import fs from 'node:fs/promises';
 import process from 'node:process';
 import path from 'node:path';
 import {parseArgs} from 'node:util';
-import {execa} from 'execa';
 import type {Kysely} from 'kysely';
 import {NO_MIGRATIONS} from 'kysely/migration';
 import {pino} from 'pino';
@@ -20,10 +17,9 @@ Commands
   reset    Rollback all migrations
 
 Options
-  --db, -d     Path to the module exporting the kysely db instance, resolved from the cwd argument
+  --db, -d            Path to the module exporting the kysely db instance, resolved from the cwd argument
   --migrations, -m    Path to the migrations directory, resolved from the cwd argument
   --cwd               The working directory to resolve the db-module and migrations paths from (default: process.cwd())
-  This command cleans dist and runs tsc --build before executing migrations.
   --help, -h          Show this help message
 `.trim();
 

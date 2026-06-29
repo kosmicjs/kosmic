@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+import process from 'node:process';
+import {parseArgs} from 'node:util';
+import {execa} from 'execa';
+
+const HELP_TEXT = `
+Generate types and schemas from your database for a kosmic application.
+
+Usage
+  $ kosmic generate [options]
+
+Options
+  --cwd               Working directory (default: process.cwd())
+  --help, -h          Show this help message
+`.trim();
+
+const cli = parseArgs({
+  allowPositionals: true,
+  options: {
+    cwd: {
+      type: 'string',
+    },
+    help: {
+      type: 'boolean',
+      short: 'h',
+    },
+  },
+});
+
+if (cli.values.help) {
+  console.log(HELP_TEXT);
+  process.exit(0);
+}
+
+try {
+  const cwd = cli.values.cwd ?? process.cwd();
+
+  const $$kosmic = execa({
+    cwd: import.meta.dirname,
+    stdio: 'inherit',
+    preferLocal: true,
+  });
+
+  await $$kosmic`kysely-codegen --url=postgresql://postgres:postgres@localhost:5432/spencer`;
+} catch (error) {
+  console.error('Error generating types and schemas:', error);
+  process.exit(1);
+}
