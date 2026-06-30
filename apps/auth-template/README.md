@@ -1,1 +1,0 @@
-# The Kosmic Base Template
