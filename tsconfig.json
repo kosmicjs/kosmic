@@ -15,9 +15,7 @@
     { "path": "./packages/error-handler" },
     { "path": "./packages/server" },
     { "path": "./packages/cli" },
-    { "path": "./apps/kosmic" },
-    { "path": "./apps/base-template" },
-    { "path": "./apps/auth-template" }
+    { "path": "./apps/kosmic" }
   ],
   "compilerOptions": {
     "outDir": "dist",
