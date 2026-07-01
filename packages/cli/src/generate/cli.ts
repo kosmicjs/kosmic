@@ -34,15 +34,16 @@ if (cli.values.help) {
 
 try {
   const cwd = cli.values.cwd ?? process.cwd();
-
   const $$kosmic = execa({
     cwd: import.meta.dirname,
     stdio: 'inherit',
     preferLocal: true,
   });
 
-  await $$kosmic`kysely-codegen --url=postgresql://postgres:postgres@localhost:5432/spencer`;
-} catch (error) {
-  console.error('Error generating types and schemas:', error);
+  const outfile = `${cwd}/src/db/generated.ts`;
+
+  await $$kosmic`kysely-codegen --url=postgresql://postgres:postgres@localhost:5432/spencer --out-file=${outfile}`;
+} catch {
+  // console.error('Error generating types and schemas:', error);
   process.exit(1);
 }

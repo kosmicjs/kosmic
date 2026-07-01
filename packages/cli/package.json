@@ -37,6 +37,7 @@
     "test:coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
+    "@kosmic/config": "^0.0.2",
     "execa": "^9.6.1",
     "kysely": "^0.29.2",
     "kysely-codegen": "^0.20.0",
