@@ -611,8 +611,7 @@ void describe('@kosmic/router - App Event Emission', async () => {
     );
 
     let emittedEvent:
-      | {routes: Array<{method: string; path: string}>}
-      | undefined;
+      {routes: Array<{method: string; path: string}>} | undefined;
 
     const mockApp = {
       emit(event: string, data: unknown) {

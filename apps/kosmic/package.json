@@ -50,7 +50,7 @@
     "@kosmic/router": "^0.0.2",
     "@kosmic/server": "^0.3.0",
     "@popperjs/core": "^2.11.8",
-    "@stripe/stripe-js": "^9.8.0",
+    "@stripe/stripe-js": "^9.9.0",
     "argon2": "^0.44.0",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
@@ -81,7 +81,7 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.11",
-    "@types/node": "~26.0.1",
+    "@types/node": "~26.1.0",
     "@types/nodemailer": "^8.0.1",
     "@types/postcss-css-variables": "^0.18.3",
     "@types/pretty": "^2.0.3",
