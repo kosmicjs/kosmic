@@ -1,6 +1,6 @@
 {
   "name": "@kosmic/router",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "File-system based router for Koa",
   "keywords": [
     "koa",

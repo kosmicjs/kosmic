@@ -1,5 +1,23 @@
 # @kosmic/server
 
+## 0.4.0
+
+### Minor Changes
+
+- Lots of changes still
+
+### Patch Changes
+
+- IDK
+- Updated dependencies
+- Updated dependencies
+  - @kosmic/config@0.1.0
+  - @kosmic/error-handler@0.1.0
+  - @kosmic/helmet@0.0.3
+  - @kosmic/jsx@0.0.3
+  - @kosmic/logger@0.1.0
+  - @kosmic/router@0.1.0
+
 ## 0.3.0
 
 ### Minor Changes

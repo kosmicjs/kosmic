@@ -1,6 +1,6 @@
 {
   "name": "@kosmic/db",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "keywords": [],
   "license": "MIT",
@@ -38,8 +38,8 @@
     "test:coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
-    "@kosmic/config": "^0.0.2",
-    "@kosmic/logger": "^0.0.4",
+    "@kosmic/config": "^0.1.0",
+    "@kosmic/logger": "^0.1.0",
     "@types/pg": "^8.20.0",
     "kysely": "^0.29.2",
     "pg": "^8.22.0"

@@ -1,6 +1,6 @@
 {
   "name": "@kosmic/jsx",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Preact JSX rendering middleware for Koa",
   "keywords": [
     "koa",

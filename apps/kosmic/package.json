@@ -1,6 +1,6 @@
 {
   "name": "kosmic",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "description": "A highly opinionated and strongly typed Koa web and api template.",
   "bugs": {
@@ -42,13 +42,13 @@
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^8.0.0",
     "@google/genai": "^2.10.0",
-    "@kosmic/auth": "^0.1.0",
-    "@kosmic/cli": "^0.1.0",
-    "@kosmic/config": "^0.0.2",
-    "@kosmic/db": "^0.1.0",
-    "@kosmic/logger": "^0.0.4",
-    "@kosmic/router": "^0.0.2",
-    "@kosmic/server": "^0.3.0",
+    "@kosmic/auth": "^0.2.0",
+    "@kosmic/cli": "^0.2.0",
+    "@kosmic/config": "^0.1.0",
+    "@kosmic/db": "^0.2.0",
+    "@kosmic/logger": "^0.1.0",
+    "@kosmic/router": "^0.1.0",
+    "@kosmic/server": "^0.4.0",
     "@popperjs/core": "^2.11.8",
     "@stripe/stripe-js": "^9.9.0",
     "argon2": "^0.44.0",

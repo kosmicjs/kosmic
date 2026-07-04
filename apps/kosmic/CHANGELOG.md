@@ -1,5 +1,19 @@
 # kosmic
 
+## 0.0.7
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @kosmic/auth@0.2.0
+  - @kosmic/cli@0.2.0
+  - @kosmic/config@0.1.0
+  - @kosmic/db@0.2.0
+  - @kosmic/logger@0.1.0
+  - @kosmic/router@0.1.0
+  - @kosmic/server@0.4.0
+
 ## 0.0.6
 
 ### Patch Changes
