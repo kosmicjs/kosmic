@@ -5,7 +5,7 @@ import {join} from 'node:path';
 import {createFsRouter} from '../src/index.ts';
 import {createMockContext, createMockNext, createTestRoute} from './helpers.ts';
 
-describe('@kosmic/router - Path Transformation', async () => {
+describe('@kosmic/router - Path Transformation', () => {
   const testDir = join(import.meta.dirname, '.test-routes-path');
 
   before(() => {
@@ -20,7 +20,7 @@ describe('@kosmic/router - Path Transformation', async () => {
     }
   });
 
-  await test('converts [param] syntax to :param', async () => {
+  test('converts [param] syntax to :param', async () => {
     const routesDir = join(testDir, 'param-syntax');
     createTestRoute(
       routesDir,
@@ -34,7 +34,7 @@ describe('@kosmic/router - Path Transformation', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('strips index from path', async () => {
+  test('strips index from path', async () => {
     const routesDir = join(testDir, 'index-strip');
     createTestRoute(
       routesDir,
@@ -49,7 +49,7 @@ describe('@kosmic/router - Path Transformation', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('strips nested index from path', async () => {
+  test('strips nested index from path', async () => {
     const routesDir = join(testDir, 'nested-index');
     createTestRoute(
       routesDir,
@@ -63,7 +63,7 @@ describe('@kosmic/router - Path Transformation', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('handles multiple path parameters', async () => {
+  test('handles multiple path parameters', async () => {
     const routesDir = join(testDir, 'multi-param');
     createTestRoute(
       routesDir,
@@ -77,7 +77,7 @@ describe('@kosmic/router - Path Transformation', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('handles nested paths correctly', async () => {
+  test('handles nested paths correctly', async () => {
     const routesDir = join(testDir, 'nested-paths');
     createTestRoute(
       routesDir,
@@ -92,7 +92,7 @@ describe('@kosmic/router - Path Transformation', async () => {
   });
 });
 
-void describe('@kosmic/router - Route Sorting', async () => {
+void describe('@kosmic/router - Route Sorting', () => {
   const testDir = join(import.meta.dirname, '.test-routes-sorting');
 
   after(() => {
@@ -101,7 +101,7 @@ void describe('@kosmic/router - Route Sorting', async () => {
     }
   });
 
-  await test('sorts routes alphabetically', async () => {
+  test('sorts routes alphabetically', async () => {
     const routesDir = join(testDir, 'alphabetical');
     createTestRoute(
       routesDir,
@@ -127,7 +127,7 @@ void describe('@kosmic/router - Route Sorting', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('sorts shorter paths before longer paths with same prefix', async () => {
+  test('sorts shorter paths before longer paths with same prefix', async () => {
     const routesDir = join(testDir, 'depth');
     createTestRoute(
       routesDir,
@@ -149,7 +149,7 @@ void describe('@kosmic/router - Route Sorting', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('sorts dynamic routes after static routes', async () => {
+  test('sorts dynamic routes after static routes', async () => {
     const routesDir = join(testDir, 'dynamic');
     createTestRoute(
       routesDir,
@@ -176,7 +176,7 @@ void describe('@kosmic/router - Route Sorting', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('handles complex mixed sorting scenarios', async () => {
+  test('handles complex mixed sorting scenarios', async () => {
     const routesDir = join(testDir, 'complex');
     createTestRoute(
       routesDir,
@@ -230,7 +230,7 @@ void describe('@kosmic/router - Route Sorting', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('sorts root route first', async () => {
+  test('sorts root route first', async () => {
     const routesDir = join(testDir, 'root-first');
     createTestRoute(
       routesDir,
@@ -256,7 +256,7 @@ void describe('@kosmic/router - Route Sorting', async () => {
   });
 });
 
-void describe('@kosmic/router - Middleware Collection', async () => {
+void describe('@kosmic/router - Middleware Collection', () => {
   const testDir = join(import.meta.dirname, '.test-routes-middleware');
 
   after(() => {
@@ -265,7 +265,7 @@ void describe('@kosmic/router - Middleware Collection', async () => {
     }
   });
 
-  await test('collects single middleware function from parent', async () => {
+  test('collects single middleware function from parent', async () => {
     const routesDir = join(testDir, 'single-middleware');
     createTestRoute(
       routesDir,
@@ -286,7 +286,7 @@ void describe('@kosmic/router - Middleware Collection', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('collects array of middleware functions', async () => {
+  test('collects array of middleware functions', async () => {
     const routesDir = join(testDir, 'array-middleware');
     createTestRoute(
       routesDir,
@@ -307,7 +307,7 @@ void describe('@kosmic/router - Middleware Collection', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('collects method-specific middleware from object', async () => {
+  test('collects method-specific middleware from object', async () => {
     const routesDir = join(testDir, 'method-middleware');
     createTestRoute(
       routesDir,
@@ -329,7 +329,7 @@ void describe('@kosmic/router - Middleware Collection', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('collects middleware only for routes that include parent path', async () => {
+  test('collects middleware only for routes that include parent path', async () => {
     const routesDir = join(testDir, 'path-inheritance');
     createTestRoute(
       routesDir,
@@ -360,7 +360,7 @@ void describe('@kosmic/router - Middleware Collection', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('combines all middleware with method-specific middleware', async () => {
+  test('combines all middleware with method-specific middleware', async () => {
     const routesDir = join(testDir, 'combined-middleware');
     createTestRoute(
       routesDir,
@@ -384,7 +384,7 @@ void describe('@kosmic/router - Middleware Collection', async () => {
   });
 });
 
-void describe('@kosmic/router - Route Matching & Handler Execution', async () => {
+void describe('@kosmic/router - Route Matching & Handler Execution', () => {
   const testDir = join(import.meta.dirname, '.test-routes-matching');
 
   after(() => {
@@ -393,7 +393,7 @@ void describe('@kosmic/router - Route Matching & Handler Execution', async () =>
     }
   });
 
-  await test('matches exact path and executes handler', async () => {
+  test('matches exact path and executes handler', async () => {
     const routesDir = join(testDir, 'exact-match');
     createTestRoute(
       routesDir,
@@ -414,7 +414,7 @@ void describe('@kosmic/router - Route Matching & Handler Execution', async () =>
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('extracts path parameters to ctx.params', async () => {
+  test('extracts path parameters to ctx.params', async () => {
     const routesDir = join(testDir, 'param-extraction');
     createTestRoute(
       routesDir,
@@ -444,7 +444,7 @@ void describe('@kosmic/router - Route Matching & Handler Execution', async () =>
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('handles multiple path parameters', async () => {
+  test('handles multiple path parameters', async () => {
     const routesDir = join(testDir, 'multi-params');
     createTestRoute(
       routesDir,
@@ -473,7 +473,7 @@ void describe('@kosmic/router - Route Matching & Handler Execution', async () =>
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('splits query string before matching', async () => {
+  test('splits query string before matching', async () => {
     const routesDir = join(testDir, 'query-string');
     createTestRoute(
       routesDir,
@@ -496,7 +496,7 @@ void describe('@kosmic/router - Route Matching & Handler Execution', async () =>
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('routes to correct HTTP method', async () => {
+  test('routes to correct HTTP method', async () => {
     const routesDir = join(testDir, 'http-methods');
     createTestRoute(
       routesDir,
@@ -507,9 +507,9 @@ void describe('@kosmic/router - Route Matching & Handler Execution', async () =>
     const {middleware} = await createFsRouter(routesDir);
 
     // Test GET
-    const getCtx = createMockContext({method: 'GET', originalUrl: '/form'});
-    await middleware(getCtx, createMockNext());
-    assert.strictEqual((getCtx as {body?: string}).body, 'GET');
+    const mockCtx = createMockContext({method: 'GET', originalUrl: '/form'});
+    await middleware(mockCtx, createMockNext());
+    assert.strictEqual((mockCtx as {body?: string}).body, 'GET');
 
     // Test POST
     const postCtx = createMockContext({method: 'POST', originalUrl: '/form'});
@@ -519,7 +519,7 @@ void describe('@kosmic/router - Route Matching & Handler Execution', async () =>
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('calls next() when no route matches', async () => {
+  test('calls next() when no route matches', async () => {
     const routesDir = join(testDir, 'no-match');
     createTestRoute(
       routesDir,
@@ -539,7 +539,7 @@ void describe('@kosmic/router - Route Matching & Handler Execution', async () =>
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('calls next() when route exists but method not defined', async () => {
+  test('calls next() when route exists but method not defined', async () => {
     const routesDir = join(testDir, 'method-not-defined');
     createTestRoute(
       routesDir,
@@ -559,7 +559,7 @@ void describe('@kosmic/router - Route Matching & Handler Execution', async () =>
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('handles del export as delete method', async () => {
+  test('handles del export as delete method', async () => {
     const routesDir = join(testDir, 'del-method');
     createTestRoute(
       routesDir,
@@ -583,7 +583,7 @@ void describe('@kosmic/router - Route Matching & Handler Execution', async () =>
   });
 });
 
-void describe('@kosmic/router - App Event Emission', async () => {
+void describe('@kosmic/router - App Event Emission', () => {
   const testDir = join(import.meta.dirname, '.test-routes-events');
 
   after(() => {
@@ -592,7 +592,7 @@ void describe('@kosmic/router - App Event Emission', async () => {
     }
   });
 
-  await test('emits router:loaded event with route metadata', async () => {
+  test('emits router:loaded event with route metadata', async () => {
     const routesDir = join(testDir, 'event-emission');
     createTestRoute(
       routesDir,
@@ -641,7 +641,7 @@ void describe('@kosmic/router - App Event Emission', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('works without app parameter', async () => {
+  test('works without app parameter', async () => {
     const routesDir = join(testDir, 'no-app');
     createTestRoute(
       routesDir,
@@ -657,7 +657,7 @@ void describe('@kosmic/router - App Event Emission', async () => {
   });
 });
 
-void describe('@kosmic/router - Edge Cases', async () => {
+void describe('@kosmic/router - Edge Cases', () => {
   const testDir = join(import.meta.dirname, '.test-routes-edge');
 
   after(() => {
@@ -666,7 +666,7 @@ void describe('@kosmic/router - Edge Cases', async () => {
     }
   });
 
-  await test('handles empty routes directory', async () => {
+  test('handles empty routes directory', async () => {
     const routesDir = join(testDir, 'empty');
     mkdirSync(routesDir, {recursive: true});
 
@@ -676,7 +676,7 @@ void describe('@kosmic/router - Edge Cases', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('handles originalUrl being undefined', async () => {
+  test('handles originalUrl being undefined', async () => {
     const routesDir = join(testDir, 'undefined-url');
     createTestRoute(
       routesDir,
@@ -698,7 +698,7 @@ void describe('@kosmic/router - Edge Cases', async () => {
     rmSync(routesDir, {recursive: true, force: true});
   });
 
-  await test('handles lowercase method names', async () => {
+  test('handles lowercase method names', async () => {
     const routesDir = join(testDir, 'lowercase-method');
     createTestRoute(
       routesDir,

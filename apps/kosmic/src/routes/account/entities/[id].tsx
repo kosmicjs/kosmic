@@ -4,7 +4,9 @@ import * as Entities from '#models/entities.js';
 import {EntityCard} from '#components/entities/entity-card.js';
 
 export const del = async (ctx: Context, next: Next) => {
-  if (!ctx.params?.id) throw new Error('id is required');
+  if (!ctx.params?.id) {
+    throw new Error('id is required');
+  }
 
   ctx.log.debug(
     {...(ctx.params as Record<string, unknown>)},
@@ -23,7 +25,9 @@ export const del = async (ctx: Context, next: Next) => {
 };
 
 export const get = async (ctx: Context, next: Next) => {
-  if (!ctx.params?.id) throw new Error('id is required');
+  if (!ctx.params?.id) {
+    throw new Error('id is required');
+  }
 
   const entity = await db
     .selectFrom('entities')
@@ -38,7 +42,9 @@ export const get = async (ctx: Context, next: Next) => {
 };
 
 export const put = async (ctx: Context, next: Next) => {
-  if (!ctx.params?.id) throw new Error('id is required');
+  if (!ctx.params?.id) {
+    throw new Error('id is required');
+  }
 
   const {name, description} = await Entities.updateSchema.parseAsync(
     ctx.request.body,

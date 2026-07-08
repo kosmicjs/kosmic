@@ -6,11 +6,11 @@ import {createLogger, logger} from '../src/index.ts';
 describe('createLogger', () => {
   test('returns a pino logger with default name "kosmic"', () => {
     const log = createLogger();
-    assert.ok(typeof log.info === 'function');
-    assert.ok(typeof log.error === 'function');
-    assert.ok(typeof log.warn === 'function');
-    assert.ok(typeof log.debug === 'function');
-    assert.ok(typeof log.fatal === 'function');
+    assert.strictEqual(typeof log.info, 'function');
+    assert.strictEqual(typeof log.error, 'function');
+    assert.strictEqual(typeof log.warn, 'function');
+    assert.strictEqual(typeof log.debug, 'function');
+    assert.strictEqual(typeof log.fatal, 'function');
   });
 
   test('accepts custom options', () => {
@@ -43,8 +43,8 @@ describe('createLogger', () => {
 
 describe('logger', () => {
   test('is a valid pino logger instance', () => {
-    assert.ok(typeof logger.info === 'function');
-    assert.ok(typeof logger.error === 'function');
-    assert.ok(typeof logger.warn === 'function');
+    assert.strictEqual(typeof logger.info, 'function');
+    assert.strictEqual(typeof logger.error, 'function');
+    assert.strictEqual(typeof logger.warn, 'function');
   });
 });

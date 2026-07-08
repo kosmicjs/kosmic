@@ -6,7 +6,7 @@ function Toast({
   isSuccess = false,
 }: {
   readonly children?: preact.ComponentChildren;
-  // eslint-disable-next-line react/boolean-prop-naming
+
   readonly show: boolean;
   readonly isSuccess?: boolean;
 }) {

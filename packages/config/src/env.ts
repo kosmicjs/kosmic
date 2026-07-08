@@ -25,7 +25,7 @@ export const kosmicEnv = z
 
 const parsedEnv: Record<string, string> = {};
 
-const envPath = path.resolve(import.meta.dirname, process.cwd(), `.env`);
+const envPath = path.resolve(import.meta.dirname, process.cwd(), '.env');
 
 // laod .env first
 dotenv.config({

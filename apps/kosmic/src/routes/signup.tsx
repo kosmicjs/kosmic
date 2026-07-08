@@ -38,7 +38,10 @@ export async function post(ctx: Context, next: Next) {
       {err: error, body: ctx.request.body},
       'Error validating user data',
     );
-    if (!(error instanceof z.ZodError)) throw error;
+    if (!(error instanceof z.ZodError)) {
+      throw error;
+    }
+
     errors.push(...error.issues);
   }
 
@@ -55,7 +58,10 @@ export async function post(ctx: Context, next: Next) {
       .parseAsync(ctx.request.body);
   } catch (error) {
     ctx.log.error(error, 'Error validating passwords');
-    if (!(error instanceof z.ZodError)) throw error;
+    if (!(error instanceof z.ZodError)) {
+      throw error;
+    }
+
     errors.push(...error.issues);
   }
 

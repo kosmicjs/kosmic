@@ -12,9 +12,9 @@ declare global {
     /**
      * Add event listener to a node and delegate to a selector jQuery style
      *
-     * @param {string} name - Event name
-     * @param {string} selector - optional CSS selector
-     * @param {function} fn - Callback function
+     * @param name - Event name
+     * @param selector - optional CSS selector
+     * @param fn - Callback function
      */
     on(
       name: string,
@@ -56,6 +56,5 @@ export const $$ = (s: string, c?: Element) =>
   // eslint-disable-next-line @typescript-eslint/no-deprecated
   (c ?? document).querySelectorAll.bind(c ?? document)(s);
 
-export const isHtmlElement = (el: Element): el is HTMLElement => {
-  return el instanceof HTMLElement;
-};
+export const isHtmlElement = (element: Element): element is HTMLElement =>
+  element instanceof HTMLElement;

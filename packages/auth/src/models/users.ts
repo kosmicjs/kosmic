@@ -37,7 +37,7 @@ if (process.env.KOSMIC_ENV !== 'development') {
     .refine((password) => /\d/v.test(password), {
       message: 'Password must contain a digit',
     })
-    .refine((password) => /[!@#$%^\u0026*]/v.test(password), {
+    .refine((password) => /[!#$%\u{26}*@^]/v.test(password), {
       message: 'Password must contain a special character',
     });
 }

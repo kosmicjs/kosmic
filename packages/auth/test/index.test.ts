@@ -4,6 +4,6 @@ import * as kosmicAuth from '../src/index.ts';
 
 describe('auth', () => {
   it('should be a function', () => {
-    assert.ok(kosmicAuth !== undefined);
+    assert.notStrictEqual(kosmicAuth, undefined);
   });
 });

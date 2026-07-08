@@ -71,7 +71,7 @@ const fullDbModulePath = path.resolve(
   cwd,
   cli.values.db ?? path.join('src', 'db', 'index.ts'),
 );
-// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+
 const dbModule = (await import(fullDbModulePath)) as {db: Kysely<any>};
 
 const migrationsPath = path.resolve(

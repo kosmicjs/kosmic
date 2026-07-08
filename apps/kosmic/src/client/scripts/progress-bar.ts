@@ -50,7 +50,10 @@ export function initializeProgressBar($content: Element) {
   $content.on('htmx:afterSettle', () => {
     const $progressBar = $('.progress-bar');
     $progressBar?.classList.add('w-100');
-    if (timeout) clearTimeout(timeout);
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+
     timeout = setTimeout(() => {
       $progressBar?.classList.remove('w-100', 'w-50');
     }, 200);

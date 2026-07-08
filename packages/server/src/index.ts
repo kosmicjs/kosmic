@@ -122,7 +122,6 @@ export class KosmicServer {
       throw new Error('No context found');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
     return ctx as Context;
   }
 
@@ -157,7 +156,6 @@ export class KosmicServer {
       throw new Error('No context found');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
     return ctx as Context;
   }
 
@@ -238,7 +236,6 @@ export class KosmicServer {
 
     if (config.kosmicEnv === 'production') {
       koa.use(async (ctx, next) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
         const manifest = JSON.parse(
           await fs.readFile(manifestPath, 'utf8'),
         ) as Manifest;

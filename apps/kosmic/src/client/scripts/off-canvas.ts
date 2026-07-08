@@ -2,10 +2,10 @@ import '@popperjs/core';
 import {Offcanvas} from 'bootstrap';
 import {$$} from './query.ts';
 
-export function initializeOffcanvas($el: Element) {
-  const offcanvasElementList = $$('.offcanvas', $el);
-  for (const offcanvasEl of offcanvasElementList) {
+export function initializeOffcanvas($element: Element) {
+  const offcanvasElementList = $$('.offcanvas', $element);
+  for (const offcanvasElement of offcanvasElementList) {
     // eslint-disable-next-line no-new
-    new Offcanvas(offcanvasEl);
+    new Offcanvas(offcanvasElement);
   }
 }

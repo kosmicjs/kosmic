@@ -13,13 +13,11 @@ export function createLogger(options: LoggerOptions = {}) {
   return pino({
     name: 'kosmic',
     level: process.env.LOG_LEVEL ?? 'info',
-    ...(process.env.NODE_ENV === 'production'
-      ? {}
-      : {
-          transport: {
-            target: 'pino-princess',
-          },
-        }),
+    ...(process.env.NODE_ENV !== 'production' && {
+      transport: {
+        target: 'pino-princess',
+      },
+    }),
     ...options,
   });
 }

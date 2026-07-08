@@ -56,7 +56,9 @@ export function createPinoMiddleware(
   let id: UUID | string | number = 0;
   options.genReqId ??= function (request, response) {
     const existingId = request.id ?? request.headers[XRID_HEADER];
-    if (existingId) return existingId;
+    if (existingId) {
+      return existingId;
+    }
 
     if (config?.environment === 'production') {
       id = randomUUID();

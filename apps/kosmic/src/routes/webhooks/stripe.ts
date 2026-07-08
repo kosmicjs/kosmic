@@ -52,7 +52,6 @@ export const post: Middleware = stripe
       // Return a 200 response to acknowledge receipt of the event
       ctx.status = 200;
     }
-  : async (ctx, next) => {
+  : async (ctx, next) =>
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return next();
-    };
+      next();

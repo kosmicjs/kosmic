@@ -38,7 +38,7 @@ declare module 'koa' {
 export async function renderMiddleware(context: Context, next: Next) {
   context.render = async (component: VNode) => {
     context.type = 'text/html';
-    context.body = `<!DOCTYPE html>` + (await renderToStringAsync(component));
+    context.body = '<!DOCTYPE html>' + (await renderToStringAsync(component));
   };
 
   context.partial = async (component: VNode) => {

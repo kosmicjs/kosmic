@@ -91,8 +91,9 @@ export async function createFsRouter(
         importedModule !== null &&
         'default' in importedModule
       ) {
-        if (isClass(importedModule.default))
-          module = routeModuleSchema.parse(new importedModule.default()); // eslint-disable-line new-cap
+        if (isClass(importedModule.default)) {
+          module = routeModuleSchema.parse(new importedModule.default());
+        }
 
         if (typeof importedModule.default === 'function') {
           module = routeModuleSchema.parse(await importedModule.default()); // eslint-disable-line @typescript-eslint/no-unsafe-call
@@ -105,8 +106,9 @@ export async function createFsRouter(
         module = routeModuleSchema.parse(importedModule);
       }
 
-      if (!module)
+      if (!module) {
         throw new Error(`No valid route module found in file: ${filePath}`);
+      }
 
       if (module?.del) {
         module.delete = module.del;
@@ -231,12 +233,16 @@ export async function createFsRouter(
       return match;
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-    if (!matchedRoute) return next() as Promise<void>;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+    if (!matchedRoute) {
+      return next() as Promise<void>;
+    }
+
     const fn = matchedRoute?.[ctx.method?.toLowerCase() as HttpVerb];
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-    if (!fn || typeof fn !== 'function') return next() as Promise<void>;
+
+    if (!fn || typeof fn !== 'function') {
+      return next() as Promise<void>;
+    }
+
     ctx.request.params = matchedRoute?.params;
     ctx.params = matchedRoute?.params;
     await fn(ctx, next);

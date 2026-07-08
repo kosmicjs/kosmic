@@ -12,18 +12,18 @@ export function createMockContext(overrides?: Partial<Context>): Context {
     ...overrides,
   };
   // @eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+
   return baseCtx as Context;
 }
 
 // Mock next function
 export function createMockNext() {
-  let called = false;
+  let isCalled = false;
   const next = async () => {
-    called = true;
+    isCalled = true;
   };
 
-  next.wasCalled = () => called;
+  next.wasCalled = () => isCalled;
   return next;
 }
 

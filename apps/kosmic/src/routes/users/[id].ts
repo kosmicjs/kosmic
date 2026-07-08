@@ -14,7 +14,9 @@ export const use: Middleware[] = [
 ];
 
 export const put = async (ctx: Context, next: Next) => {
-  if (!ctx.params?.id) throw new Error('id is required');
+  if (!ctx.params?.id) {
+    throw new Error('id is required');
+  }
 
   ctx.log.debug(ctx.request.body, 'updating user');
 
@@ -31,5 +33,5 @@ export const put = async (ctx: Context, next: Next) => {
 
   ctx.status = 303;
 
-  ctx.redirect(`/account`);
+  ctx.redirect('/account');
 };

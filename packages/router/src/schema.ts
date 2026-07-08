@@ -2,7 +2,6 @@ import {z} from 'zod';
 import type {Middleware as KoaMiddleware} from 'koa';
 import type {MatchFunction} from 'path-to-regexp';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
 export const middlewareSchema = z
   .custom<(...args: unknown[]) => unknown>(
     (value) => typeof value === 'function',

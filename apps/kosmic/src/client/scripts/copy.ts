@@ -2,14 +2,17 @@ import copyToClipboard from 'copy-to-clipboard';
 import {Tooltip} from 'bootstrap';
 import {$$} from './query.ts';
 
-export function initializeCodeCopy($el: Element) {
-  const $code = $$('code', $el);
+export function initializeCodeCopy($element: Element) {
+  const $code = $$('code', $element);
 
-  for (const $el of $code) {
-    if (!($el instanceof HTMLElement)) continue;
+  for (const $element of $code) {
+    if (!($element instanceof HTMLElement)) {
+      continue;
+    }
+
     let copiedTimeout: NodeJS.Timeout;
-    $el.on('click', () => {
-      if (!$el.dataset.code) {
+    $element.on('click', () => {
+      if (!$element.dataset.code) {
         return;
       }
 
@@ -17,18 +20,18 @@ export function initializeCodeCopy($el: Element) {
         clearTimeout(copiedTimeout);
       }
 
-      copyToClipboard($el.dataset.code?.trim?.()).catch(() => {
+      copyToClipboard($element.dataset.code?.trim?.()).catch(() => {
         // ignore
       });
-      const previousTooltip = Tooltip.getOrCreateInstance($el);
+      const previousTooltip = Tooltip.getOrCreateInstance($element);
       previousTooltip.dispose();
-      const copiedTip = new Tooltip($el, {
+      const copiedTip = new Tooltip($element, {
         title: 'Copied!',
       });
       copiedTip.show();
       copiedTimeout = setTimeout(() => {
         copiedTip.dispose();
-        new Tooltip($el); // eslint-disable-line no-new
+        new Tooltip($element); // eslint-disable-line no-new
       }, 1000);
     });
   }

@@ -14,18 +14,18 @@ This README focuses on installing and using the packages in [packages/](packages
 
 ## Packages
 
-| Package | Purpose |
-| --- | --- |
-| `@kosmic/server` | Opinionated Koa server bootstrap with middleware, static assets, and file-system routing |
-| `@kosmic/router` | File-system based router for Koa |
-| `@kosmic/jsx` | JSX render middleware (Preact + server rendering) |
-| `@kosmic/error-handler` | Error middleware with Zod-aware formatting |
-| `@kosmic/logger` | Pino logger factory and HTTP logging middleware |
-| `@kosmic/helmet` | Helmet middleware wrapper for Koa |
-| `@kosmic/config` | Central typed runtime configuration |
-| `@kosmic/db` | Kysely + PostgreSQL integration utilities |
-| `@kosmic/auth` | Session and Passport-based authentication helpers |
-| `@kosmic/cli` | CLI for build/dev/test/migrate/create workflows |
+| Package                 | Purpose                                                                                  |
+| ----------------------- | ---------------------------------------------------------------------------------------- |
+| `@kosmic/server`        | Opinionated Koa server bootstrap with middleware, static assets, and file-system routing |
+| `@kosmic/router`        | File-system based router for Koa                                                         |
+| `@kosmic/jsx`           | JSX render middleware (Preact + server rendering)                                        |
+| `@kosmic/error-handler` | Error middleware with Zod-aware formatting                                               |
+| `@kosmic/logger`        | Pino logger factory and HTTP logging middleware                                          |
+| `@kosmic/helmet`        | Helmet middleware wrapper for Koa                                                        |
+| `@kosmic/config`        | Central typed runtime configuration                                                      |
+| `@kosmic/db`            | Kysely + PostgreSQL integration utilities                                                |
+| `@kosmic/auth`          | Session and Passport-based authentication helpers                                        |
+| `@kosmic/cli`           | CLI for build/dev/test/migrate/create workflows                                          |
 
 ## Install
 
@@ -75,7 +75,10 @@ import Koa from 'koa';
 import {createFsRouter} from '@kosmic/router';
 
 const app = new Koa();
-const {middleware} = await createFsRouter(new URL('./routes', import.meta.url).pathname, app);
+const {middleware} = await createFsRouter(
+  new URL('./routes', import.meta.url).pathname,
+  app,
+);
 
 app.use(middleware);
 ```
@@ -158,7 +161,11 @@ const db = kosmicDb.db;
 ### `@kosmic/auth`
 
 ```ts
-import {KosmicAuth, PostgresSessionStore, PostgresStorageAdapter} from '@kosmic/auth';
+import {
+  KosmicAuth,
+  PostgresSessionStore,
+  PostgresStorageAdapter,
+} from '@kosmic/auth';
 
 const auth = new KosmicAuth(
   new PostgresStorageAdapter(db),

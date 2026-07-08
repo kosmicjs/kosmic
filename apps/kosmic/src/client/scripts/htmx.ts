@@ -8,7 +8,7 @@ import {initializeOffcanvas} from './off-canvas.ts';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
 const htmx = _htmx as unknown as typeof _htmx.default; // fix ts types hack
 
-htmx.onLoad(function ($content) {
+htmx.onLoad(($content) => {
   if (!($content instanceof Element)) {
     return;
   }

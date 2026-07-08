@@ -32,7 +32,9 @@ export async function generateApiKey(): Promise<{
  */
 export function extractKeyPrefix(apiKey: string): string | undefined {
   const parts = apiKey.split('_');
-  if (parts.length < 2 || !parts[1]) return undefined;
+  if (parts.length < 2 || !parts[1]) {
+    return undefined;
+  }
 
   const prefix = parts[0];
   const identifier = parts[1].slice(0, 8);

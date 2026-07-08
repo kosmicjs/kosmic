@@ -2,11 +2,11 @@ import '@popperjs/core';
 import {Tooltip} from 'bootstrap';
 import {$$} from './query.ts';
 
-export function initializeTooltips($el: Element) {
-  const $tooltips = $$('[data-bs-toggle="tooltip"]', $el);
+export function initializeTooltips($element: Element) {
+  const $tooltips = $$('[data-bs-toggle="tooltip"]', $element);
 
-  for (const $el of $tooltips) {
+  for (const $element of $tooltips) {
     // eslint-disable-next-line no-new
-    new Tooltip($el);
+    new Tooltip($element);
   }
 }

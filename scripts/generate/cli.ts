@@ -84,7 +84,7 @@ function generate(): void {
   }
 
   // eslint-disable-next-line require-unicode-regexp
-  if (!/^[a-z\d][a-z\d-]*$/.test(name)) {
+  if (!/^[\da-z][\d\-a-z]*$/.test(name)) {
     throw new Error(
       '--name must be a valid package name (lowercase letters, numbers, and hyphens only).',
     );

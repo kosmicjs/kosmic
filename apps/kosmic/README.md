@@ -18,4 +18,3 @@ The Kosmic JS template aims to be a production ready starter kit for modern busi
 Kosmic is the personal framework of me, [spence-s](https://www.github.com/spence-s). With the original intent to create a Node.JS framework for front end developers to see the benefits of monolithic development and to utilize the best of modern, client side heavy, JS frameworks, without the client side bloat, and magic like complexity that often accompanies it.
 
 > Kosmic is highly inspired by and borrows many practices from [lad.js](https://github.com/ladjs/lad).
-

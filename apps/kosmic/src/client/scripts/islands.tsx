@@ -27,7 +27,9 @@ export function initializeIslands($content: Element) {
   const $islands = $$('[data-island]', $content);
 
   for (const $island of $islands) {
-    if (!($island instanceof HTMLElement)) continue;
+    if (!($island instanceof HTMLElement)) {
+      continue;
+    }
 
     const islandName = camelcase($island.dataset.island ?? '', {
       pascalCase: true,

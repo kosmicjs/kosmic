@@ -5,10 +5,12 @@ import {db} from '#db/index.js';
 
 export const use: Use = async (ctx, next) => {
   if (!ctx.isAuthenticated()) {
-    if (ctx.session)
+    if (ctx.session) {
       ctx.session.messages = [
         'Not authorized. Please log in to access this page.',
       ];
+    }
+
     ctx.redirect(`/login?redirect=${ctx.request.url}`);
     return;
   }

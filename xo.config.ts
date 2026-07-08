@@ -1,4 +1,5 @@
 import type {XoConfigItem} from 'xo';
+import configReact from 'eslint-config-xo-react';
 
 const xoConfig: XoConfigItem[] = [
   {
@@ -13,8 +14,10 @@ const xoConfig: XoConfigItem[] = [
     prettier: true,
     space: true,
     rules: {
+      'jsdoc/require-asterisk-prefix': 'off',
       'capitalized-comments': 'off',
       '@typescript-eslint/naming-convention': 'off',
+      'unicorn/max-nested-calls': 'off',
     },
   },
   {
@@ -22,6 +25,7 @@ const xoConfig: XoConfigItem[] = [
     rules: {
       // Ensure we don't get empty module imports while using verbatim module syntax
       '@typescript-eslint/no-import-type-side-effects': 'error',
+      '@typescript-eslint/strict-boolean-expressions': 'off',
     },
   },
   {
@@ -48,10 +52,10 @@ const xoConfig: XoConfigItem[] = [
     },
   },
   {
+    ...configReact({space: true})[0],
     files: ['apps/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}'],
     space: true,
     prettier: true,
-    react: true,
     rules: {
       'capitalized-comments': 'off',
       'import-x/extensions': 'off',
@@ -61,6 +65,7 @@ const xoConfig: XoConfigItem[] = [
       'react/no-unknown-property': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/self-closing-comp': 'off',
+      'react/forward-ref-uses-ref': 'off',
       'unicorn/prevent-abbreviations': 'off',
       '@typescript-eslint/no-unsafe-type-assertion': 'error',
       '@typescript-eslint/consistent-type-imports': [

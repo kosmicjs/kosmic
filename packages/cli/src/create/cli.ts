@@ -73,7 +73,7 @@ function normalizeProjectName(value: string): string {
     value
       .trim()
       .toLowerCase()
-      .replaceAll(/[^a-z0-9_\-]+/gv, '-')
+      .replaceAll(/[^\-0-9_a-z]+/gv, '-')
       .replaceAll(/^-+/gv, '')
       .replaceAll(/-+$/gv, '') || 'kosmic-app'
   );
