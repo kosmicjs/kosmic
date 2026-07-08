@@ -20,6 +20,7 @@ export const middlewareArraySchema = z
 
 export const useObjectSchema = z.object({
   get: middlewareArraySchema.optional(),
+  query: middlewareArraySchema.optional(),
   post: middlewareArraySchema.optional(),
   put: middlewareArraySchema.optional(),
   patch: middlewareArraySchema.optional(),
@@ -40,6 +41,7 @@ export type Use = z.infer<typeof useSchema>;
 
 export const routeModuleSchema = z.object({
   get: middlewareSchema.optional(),
+  query: middlewareSchema.optional(),
   post: middlewareSchema.optional(),
   put: middlewareSchema.optional(),
   patch: middlewareSchema.optional(),
@@ -48,7 +50,7 @@ export const routeModuleSchema = z.object({
   use: useSchema.optional(),
 });
 
-export type HttpVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
+export type HttpVerb = 'get' | 'query' | 'post' | 'put' | 'patch' | 'delete';
 
 export type HttpVerbsAll = HttpVerb | 'all';
 

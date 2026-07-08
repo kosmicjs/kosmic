@@ -40,7 +40,7 @@ declare module 'koa' {
   }
 }
 
-const verbs: HttpVerb[] = ['get', 'post', 'put', 'patch', 'delete'];
+const verbs: HttpVerb[] = ['get', 'query', 'post', 'put', 'patch', 'delete'];
 
 const verbsWithAll: HttpVerbsAll[] = [...verbs, 'all'];
 
@@ -145,6 +145,7 @@ export async function createFsRouter(
   for (const route of routes) {
     const collectedMiddleware: Record<HttpVerbsAll, Middleware[]> = {
       get: [],
+      query: [],
       post: [],
       put: [],
       patch: [],
