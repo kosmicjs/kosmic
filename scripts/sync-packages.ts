@@ -19,8 +19,7 @@ const __dirname = path.dirname(__filename);
 function deepMerge(target: PackageJson, source: PackageJson): PackageJson {
   const result = {...target};
 
-  for (const key of Object.keys(source)) {
-    const sourceValue = source[key];
+  for (const [key, sourceValue] of Object.entries(source)) {
     const targetValue = target[key];
 
     if (

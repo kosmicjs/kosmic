@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/prefer-module */
+/* eslint-disable unicorn/prefer-module -- Vite config relies on __dirname-compatible resolution in this setup. */
 import path from 'node:path';
 import {type UserConfig, createLogger} from 'vite'; // eslint-disable-line import-x/no-extraneous-dependencies, n/no-extraneous-import
 import {createLogger as createKosmicLogger} from '@kosmic/logger';

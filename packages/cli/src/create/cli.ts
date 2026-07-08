@@ -24,7 +24,7 @@ Options
 `.trim();
 
 type PromptOptions = {
-  readonly defaultValue?: string;
+  readonly defaultText?: string;
 };
 
 /**
@@ -35,12 +35,12 @@ async function promptText(
   message: string,
   options: PromptOptions = {},
 ): Promise<string> {
-  const suffix = options.defaultValue ? ` (${options.defaultValue})` : '';
+  const suffix = options.defaultText ? ` (${options.defaultText})` : '';
   const promptResult = await rl.question(`${message}${suffix}: `);
   const value = promptResult.trim();
 
-  if (value.length === 0 && options.defaultValue) {
-    return options.defaultValue;
+  if (value.length === 0 && options.defaultText) {
+    return options.defaultText;
   }
 
   return value;
@@ -52,14 +52,14 @@ async function promptText(
 async function promptYesNo(
   rl: readline.Interface,
   message: string,
-  defaultValue: boolean,
+  shouldDefaultYes: boolean,
 ): Promise<boolean> {
-  const label = defaultValue ? 'Y/n' : 'y/N';
+  const label = shouldDefaultYes ? 'Y/n' : 'y/N';
   const promptResult = await rl.question(`${message} (${label}): `);
   const rawValue = promptResult.trim().toLowerCase();
 
   if (rawValue.length === 0) {
-    return defaultValue;
+    return shouldDefaultYes;
   }
 
   return rawValue === 'y' || rawValue === 'yes';
@@ -69,14 +69,21 @@ async function promptYesNo(
  * Convert a package name candidate into an npm-compatible name.
  */
 function normalizeProjectName(value: string): string {
-  return (
-    value
-      .trim()
-      .toLowerCase()
-      .replaceAll(/[^\-0-9_a-z]+/gv, '-')
-      .replaceAll(/^-+/gv, '')
-      .replaceAll(/-+$/gv, '') || 'kosmic-app'
-  );
+  const trimmedValue = value.trim().toLowerCase();
+  const normalized = trimmedValue.replaceAll(/[^\-0-9_a-z]+/gv, '-');
+
+  let start = 0;
+  let end = normalized.length;
+
+  while (start < end && normalized[start] === '-') {
+    start += 1;
+  }
+
+  while (end > start && normalized[end - 1] === '-') {
+    end -= 1;
+  }
+
+  return normalized.slice(start, end) || 'kosmic-app';
 }
 
 const cli = parseArgs({

@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return -- typescript watch APIs use broad internal types. */
+/* eslint-disable @typescript-eslint/no-unsafe-argument -- callback signatures are provided by TypeScript internals. */
+/* eslint-disable @typescript-eslint/no-unsafe-call -- watch host/reporters are callable internal API values. */
 
 import ts from 'typescript';
 

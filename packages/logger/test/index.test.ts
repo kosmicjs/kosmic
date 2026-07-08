@@ -1,5 +1,5 @@
 import process from 'node:process';
-import {describe, test} from 'node:test';
+import {after, before, describe, test} from 'node:test';
 import assert from 'node:assert';
 import {createLogger, logger} from '../src/index.ts';
 
@@ -17,27 +17,40 @@ describe('createLogger', () => {
     const log = createLogger({level: 'debug'});
     assert.strictEqual(log.level, 'debug');
   });
+});
 
-  test('defaults to info level when LOG_LEVEL is not set', () => {
-    const original = process.env.LOG_LEVEL;
-    delete process.env.LOG_LEVEL;
-    const log = createLogger();
-    assert.strictEqual(log.level, 'info');
-    if (original !== undefined) {
-      process.env.LOG_LEVEL = original;
-    }
-  });
+describe('createLogger env behavior', () => {
+  const original = process.env.LOG_LEVEL;
 
-  test('respects LOG_LEVEL env var', () => {
-    const original = process.env.LOG_LEVEL;
-    process.env.LOG_LEVEL = 'warn';
-    const log = createLogger();
-    assert.strictEqual(log.level, 'warn');
+  after(() => {
     if (original === undefined) {
       delete process.env.LOG_LEVEL;
-    } else {
-      process.env.LOG_LEVEL = original;
+      return;
     }
+
+    process.env.LOG_LEVEL = original;
+  });
+
+  describe('when LOG_LEVEL is unset', () => {
+    before(() => {
+      delete process.env.LOG_LEVEL;
+    });
+
+    test('defaults to info level', () => {
+      const log = createLogger();
+      assert.strictEqual(log.level, 'info');
+    });
+  });
+
+  describe('when LOG_LEVEL is set', () => {
+    before(() => {
+      process.env.LOG_LEVEL = 'warn';
+    });
+
+    test('respects LOG_LEVEL env var', () => {
+      const log = createLogger();
+      assert.strictEqual(log.level, 'warn');
+    });
   });
 });
 

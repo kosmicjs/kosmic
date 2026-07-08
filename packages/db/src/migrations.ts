@@ -319,7 +319,7 @@ export class AuditLogMigration extends KosmicMigration {
   }
 }
 
-const addAuditTriggersKyselyMigration: Migration = {
+const auditTriggersKyselyMigration: Migration = {
   async up(db: Kysely<any>): Promise<void> {
     logger.debug('Adding audit triggers to tables...');
 
@@ -358,7 +358,7 @@ export class AddAuditTriggersMigration extends KosmicMigration {
   constructor({sequence}: {sequence: string}) {
     super({
       sequence,
-      ...addAuditTriggersKyselyMigration,
+      ...auditTriggersKyselyMigration,
     });
   }
 }

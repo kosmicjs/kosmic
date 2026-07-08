@@ -32,7 +32,7 @@ const migrator = createMigrator({
   ),
 });
 
-await describe('server integration', async () => {
+describe('server integration', () => {
   let server: Server;
 
   const got = _got.extend({
@@ -53,7 +53,13 @@ await describe('server integration', async () => {
     server = await kosmicServer.listen(4567);
   });
 
-  await test('GET / 200 ok', async () => {
+  after(async () => {
+    server.close();
+    const resetResult = await migrator.migrateTo(NO_MIGRATIONS);
+    assertNoMigrationError(resetResult);
+  });
+
+  test('GET / 200 ok', async () => {
     const response = await got('');
 
     assert.strictEqual(response.statusCode, 200);
@@ -64,7 +70,7 @@ await describe('server integration', async () => {
     assert.strictEqual($h1.text(), 'Kosmic');
   });
 
-  await test('Get / 404 not found returns expected response', async () => {
+  test('Get / 404 not found returns expected response', async () => {
     const response = await got('404', {
       throwHttpErrors: false,
     });
@@ -72,7 +78,7 @@ await describe('server integration', async () => {
     assert.strictEqual(response.body, 'Not Found');
   });
 
-  await test('Get /docs 302 redirects to /docs/installation', async () => {
+  test('Get /docs 302 redirects to /docs/installation', async () => {
     const response = await got('docs', {
       throwHttpErrors: false,
       followRedirect: false,
@@ -80,7 +86,7 @@ await describe('server integration', async () => {
     assert.strictEqual(response.statusCode, 302);
   });
 
-  await test('Get /account - no auth - 401 response', async () => {
+  test('Get /account - no auth - 401 response', async () => {
     const response = await got('account', {
       throwHttpErrors: false,
       followRedirect: false,
@@ -88,7 +94,7 @@ await describe('server integration', async () => {
     assert.strictEqual(response.statusCode, 302);
   });
 
-  await test('POST /signup - 201 success', async () => {
+  test('POST /signup - 201 success', async () => {
     const email = `test-${Date.now()}@test.com`;
 
     const response = await got.post('signup', {
@@ -122,17 +128,17 @@ await describe('server integration', async () => {
     assert.strictEqual(welcomeEmail?.status, 'pending');
   });
 
-  await test('GET /account - 200 response', async () => {
+  test('GET /account - 200 response', async () => {
     const response = await got('account');
     assert.strictEqual(response.statusCode, 200);
   });
 
-  await test('GET /logout - 302 response', async () => {
+  test('GET /logout - 302 response', async () => {
     const response = await got('logout');
     assert.strictEqual(response.statusCode, 302);
   });
 
-  await test('POST /signup - invalid email - 400 response', async () => {
+  test('POST /signup - invalid email - 400 response', async () => {
     const email = `test-${Date.now()}@test`;
 
     const response = await got.post('signup', {
@@ -167,17 +173,17 @@ await describe('server integration', async () => {
     await assert.rejects(
       db.selectFrom('users').selectAll().where('email', '=', email)
         .executeTakeFirstOrThrow,
-      'User should not be created with invalid email format',
+      Error,
     );
 
     await assert.rejects(
       db.selectFrom('emails').selectAll().where('to', '=', email)
         .executeTakeFirstOrThrow,
-      'Email should not be queued with invalid email format',
+      Error,
     );
   });
 
-  await test('POST /signup - password mismatch - 400 response', async () => {
+  test('POST /signup - password mismatch - 400 response', async () => {
     const email = `test-${Date.now()}@test.com`;
 
     const response = await got.post('signup', {
@@ -215,17 +221,17 @@ await describe('server integration', async () => {
     await assert.rejects(
       db.selectFrom('users').selectAll().where('email', '=', email)
         .executeTakeFirstOrThrow,
-      'User should not be created with mismatched passwords',
+      Error,
     );
 
     await assert.rejects(
       db.selectFrom('emails').selectAll().where('to', '=', email)
         .executeTakeFirstOrThrow,
-      'Email should not be queued with mismatched passwords',
+      Error,
     );
   });
 
-  await test('POST /login - success - 200', async () => {
+  test('POST /login - success - 200', async () => {
     const response = await got.post('login', {
       form: {
         email: 'superuser@kosmic.com',
@@ -237,7 +243,7 @@ await describe('server integration', async () => {
     assert.strictEqual(response.headers['hx-redirect'], '/account');
   });
 
-  await test('POST /login - invalid email - 401 response', async () => {
+  test('POST /login - invalid email - 401 response', async () => {
     const response = await got.post('login', {
       form: {
         email: 'invalid-email',
@@ -249,26 +255,12 @@ await describe('server integration', async () => {
     assert.strictEqual(response.headers['hx-redirect'], '/login');
   });
 
-  await test('GET /api/me - 401 unauthorized', async () => {
+  test('GET /api/me - 401 unauthorized', async () => {
     const response = await got.get('api/me');
     assert.strictEqual(response.statusCode, 401);
     assert.strictEqual(response.body, 'Unauthorized');
   });
 
-  // TODO: Extract api key from migrations or use a test key
-  await test.skip('GET /api/me - 200 ok with auth', async () => {
-    const loginResponse = await got.post('api/me', {
-      headers: {
-        Authorization: 'Bearer kosmic',
-      },
-    });
-
-    assert.strictEqual(loginResponse.statusCode, 200);
-  });
-
-  after(async () => {
-    server.close();
-    const resetResult = await migrator.migrateTo(NO_MIGRATIONS);
-    assertNoMigrationError(resetResult);
-  });
+  // TODO: Extract api key from migrations or use a test key.
+  test.todo('GET /api/me - 200 ok with auth');
 });

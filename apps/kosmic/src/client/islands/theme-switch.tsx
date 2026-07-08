@@ -21,13 +21,13 @@ export function ThemeSwitch({isChecked = false}: Props = {}) {
         id="color-mode-switch"
         checked={isCheckedState}
         onChange={(ev) => {
-          const colorMode = ev.currentTarget.checked ? 'light' : 'dark';
-          setCookie('kosmic-color-mode', colorMode);
+          const nextColorMode = ev.currentTarget.checked ? 'light' : 'dark';
+          setCookie('kosmic-color-mode', nextColorMode);
           setColorMode(ev.currentTarget.checked ? Sun : Moon);
           setIsCheckedState(ev.currentTarget.checked);
           const body = document.querySelector('body');
           if (body instanceof HTMLBodyElement) {
-            body.dataset.bsTheme = colorMode;
+            body.dataset.bsTheme = nextColorMode;
           }
         }}
       />

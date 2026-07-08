@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-top-level-side-effects -- env loading/validation must run on module import. */
 import process from 'node:process';
 import path from 'node:path';
 import dotenv from 'dotenv';

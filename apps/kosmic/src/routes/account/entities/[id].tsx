@@ -15,7 +15,7 @@ export const del = async (ctx: Context, next: Next) => {
 
   await db
     .deleteFrom('entities')
-    .where('id', '=', Number.parseInt(ctx.params.id, 10))
+    .where('id', '=', Number(ctx.params.id))
     .execute();
 
   ctx.req.log.info({id: ctx.params.id}, 'deleted entity');
@@ -31,7 +31,7 @@ export const get = async (ctx: Context, next: Next) => {
 
   const entity = await db
     .selectFrom('entities')
-    .where('id', '=', Number.parseInt(ctx.params.id, 10))
+    .where('id', '=', Number(ctx.params.id))
     .selectAll()
     .executeTakeFirstOrThrow();
 
@@ -61,7 +61,7 @@ export const put = async (ctx: Context, next: Next) => {
       name,
       description,
     })
-    .where('id', '=', Number.parseInt(ctx.params.id, 10))
+    .where('id', '=', Number(ctx.params.id))
     .returningAll()
     .executeTakeFirstOrThrow();
 

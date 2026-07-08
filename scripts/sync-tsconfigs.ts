@@ -27,8 +27,7 @@ type TsConfig = {
 function deepMerge(target: TsConfig, source: TsConfig): TsConfig {
   const result = {...target};
 
-  for (const key of Object.keys(source)) {
-    const sourceValue = source[key];
+  for (const [key, sourceValue] of Object.entries(source)) {
     const targetValue = target[key];
 
     if (

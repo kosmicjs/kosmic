@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-/* eslint-disable no-await-in-loop */
+/* eslint-disable no-await-in-loop -- migrations must load and run sequentially to preserve ordering. */
 
 import path from 'node:path';
 import fs from 'node:fs/promises';

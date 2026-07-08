@@ -106,6 +106,8 @@ export type KosmicServerOptions = {
  * ```
  */
 export class KosmicServer {
+  static #instance: KosmicServer | undefined;
+
   /**
    * Retrieve the current Koa `Context` via async-local-storage.
    *
@@ -125,8 +127,6 @@ export class KosmicServer {
     return ctx as Context;
   }
 
-  static #instance: KosmicServer | undefined;
-
   koa: Koa;
   options: KosmicServerOptions;
   server?: Server | undefined;
@@ -137,39 +137,6 @@ export class KosmicServer {
     this.options = options;
     this.preRegisterRoutes = options.preRegisterRoutes;
     KosmicServer.#instance = this;
-  }
-
-  /** The underlying Koa application. */
-  get app(): Koa {
-    return this.koa;
-  }
-
-  /**
-   * Retrieve the current Koa `Context` via async-local-storage.
-   *
-   * @throws When called outside of a request lifecycle.
-   */
-  get ctx(): Context {
-    const ctx = this.koa.currentContext;
-
-    if (!ctx) {
-      throw new Error('No context found');
-    }
-
-    return ctx as Context;
-  }
-
-  /**
-   * Bootstrap middleware, load file-system routes, and start listening.
-   *
-   * @returns The raw `http.Server` for lifecycle management.
-   */
-  async listen(port = config.port, host = config.host): Promise<Server> {
-    await this.#bootstrap();
-
-    this.server = this.koa.listen(port, host);
-
-    return this.server;
   }
 
   /**
@@ -276,6 +243,39 @@ export class KosmicServer {
         this.#mergeHelmetOptions(config.kosmicEnv, helmetOptions),
       ),
     );
+  }
+
+  /** The underlying Koa application. */
+  get app(): Koa {
+    return this.koa;
+  }
+
+  /**
+   * Retrieve the current Koa `Context` via async-local-storage.
+   *
+   * @throws When called outside of a request lifecycle.
+   */
+  get ctx(): Context {
+    const ctx = this.koa.currentContext;
+
+    if (!ctx) {
+      throw new Error('No context found');
+    }
+
+    return ctx as Context;
+  }
+
+  /**
+   * Bootstrap middleware, load file-system routes, and start listening.
+   *
+   * @returns The raw `http.Server` for lifecycle management.
+   */
+  async listen(port = config.port, host = config.host): Promise<Server> {
+    await this.#bootstrap();
+
+    this.server = this.koa.listen(port, host);
+
+    return this.server;
   }
 }
 

@@ -34,7 +34,7 @@ export type ErrorHandlerOptions = {
  * Requires a render middleware to be installed that augments Context with:
  * - render(component: unknown): Promise<void>
  *
- * Compatible with @kosmic/jsx or any other JSX rendering middleware
+ * Compatible with \@kosmic/jsx or any other JSX rendering middleware
  *
  * @param options - Configuration options
  * @returns Koa middleware function

@@ -1,5 +1,4 @@
-/* eslint-disable complexity */
-/* eslint-disable max-depth */
+/* eslint-disable max-depth -- middleware collection logic is nested by route/use/verb dimensions. */
 import process from 'node:process';
 import path from 'node:path';
 import {METHODS} from 'node:http';
@@ -43,6 +42,60 @@ declare module 'koa' {
 const verbs: HttpVerb[] = ['get', 'query', 'post', 'put', 'patch', 'delete'];
 
 const verbsWithAll: HttpVerbsAll[] = [...verbs, 'all'];
+
+/**
+ * Build the middleware map for a route by walking all routes up to and including itself.
+ */
+function collectMiddlewareForRoute(
+  currentRoute: RouteDefinition,
+  routes: RouteDefinition[],
+): Record<HttpVerbsAll, Middleware[]> {
+  const collectedMiddleware: Record<HttpVerbsAll, Middleware[]> = {
+    get: [],
+    query: [],
+    post: [],
+    put: [],
+    patch: [],
+    delete: [],
+    all: [],
+  };
+
+  for (const {module, uriPath} of routes) {
+    if (typeof module.use === 'function') {
+      if (currentRoute.uriPath.includes(uriPath)) {
+        collectedMiddleware.all.push(module.use);
+      }
+    } else if (Array.isArray(module.use)) {
+      for (const use of module.use) {
+        if (typeof use === 'function') {
+          if (currentRoute.uriPath.includes(uriPath)) {
+            collectedMiddleware.all.push(use);
+          }
+        } else if (typeof use === 'object') {
+          for (const verb of verbsWithAll) {
+            const useVerb = use[verb];
+            if (useVerb && typeof useVerb === 'function') {
+              collectedMiddleware[verb].push(useVerb);
+            }
+          }
+        }
+      }
+    } else if (module.use && typeof module.use === 'object') {
+      for (const verb of verbsWithAll) {
+        const useVerb = module.use[verb];
+        if (useVerb && typeof useVerb === 'function') {
+          collectedMiddleware[verb].push(useVerb);
+        }
+      }
+    }
+
+    if (currentRoute.uriPath === uriPath) {
+      return collectedMiddleware;
+    }
+  }
+
+  return collectedMiddleware;
+}
 
 export async function createFsRouter(
   routesDir = path.join(process.cwd(), 'routes'),
@@ -92,7 +145,8 @@ export async function createFsRouter(
         'default' in importedModule
       ) {
         if (isClass(importedModule.default)) {
-          module = routeModuleSchema.parse(new importedModule.default());
+          const RouteConstructor = importedModule.default;
+          module = routeModuleSchema.parse(new RouteConstructor());
         }
 
         if (typeof importedModule.default === 'function') {
@@ -145,57 +199,7 @@ export async function createFsRouter(
 
   // After sorting, we can pre-compose the middleware for each route
   for (const route of routes) {
-    const collectedMiddleware: Record<HttpVerbsAll, Middleware[]> = {
-      get: [],
-      query: [],
-      post: [],
-      put: [],
-      patch: [],
-      delete: [],
-      all: [],
-    };
-
-    // for each route, loop over the routes and collect the middleware
-    // stopping when we reach the current route. In this way we can pre-compose
-    // the middleware combinations needed for each route and avoid doing it at runtime in the handler
-    for (const {module, uriPath} of routes) {
-      // function condition
-      if (typeof module.use === 'function') {
-        if (route.uriPath.includes(uriPath)) {
-          collectedMiddleware.all.push(module.use);
-        }
-        // array condition
-      } else if (Array.isArray(module.use)) {
-        for (const use of module.use) {
-          // function condition in array
-          if (typeof use === 'function') {
-            if (route.uriPath.includes(uriPath)) {
-              collectedMiddleware.all.push(use);
-            }
-            // object condition in array
-          } else if (typeof use === 'object') {
-            for (const verb of verbsWithAll) {
-              const useVerb = use[verb];
-              if (useVerb && typeof useVerb === 'function') {
-                collectedMiddleware[verb].push(useVerb);
-              }
-            }
-          }
-        }
-        // object condition
-      } else if (module.use && typeof module.use === 'object') {
-        for (const verb of verbsWithAll) {
-          const useVerb = module.use[verb];
-          if (useVerb && typeof useVerb === 'function') {
-            collectedMiddleware[verb].push(useVerb);
-          }
-        }
-      }
-
-      if (route.uriPath === uriPath) {
-        break;
-      }
-    }
+    const collectedMiddleware = collectMiddlewareForRoute(route, routes);
 
     // now for each http verb, we have a fully pre-composed method
     // that excutes all the middleware in the correct order including the route handler

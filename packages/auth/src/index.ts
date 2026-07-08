@@ -20,20 +20,11 @@ declare module 'koa' {
 }
 
 export class KosmicAuth {
+  readonly #passport: typeof passport;
+  #isInitialized = false;
+
   storage: AbstractDataStorage;
   sessionStore: AbstractSessionStore;
-
-  #isInitialized = false;
-  readonly #passport: typeof passport;
-
-  constructor(
-    storage: AbstractDataStorage,
-    sessionStore: AbstractSessionStore,
-  ) {
-    this.storage = storage;
-    this.sessionStore = sessionStore;
-    this.#passport = createPassport(this.storage);
-  }
 
   initialize = async (koa: Koa): Promise<void> => {
     // --- Session & Passport ---
@@ -89,6 +80,15 @@ export class KosmicAuth {
       session: false,
     })(ctx, next);
   };
+
+  constructor(
+    storage: AbstractDataStorage,
+    sessionStore: AbstractSessionStore,
+  ) {
+    this.storage = storage;
+    this.sessionStore = sessionStore;
+    this.#passport = createPassport(this.storage);
+  }
 }
 
 export {type default as passport} from 'koa-passport';

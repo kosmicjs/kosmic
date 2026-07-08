@@ -97,6 +97,12 @@ const xoConfig: XoConfigItem[] = [
       '@typescript-eslint/no-unsafe-type-assertion': 'off',
     },
   },
+  {
+    files: ['packages/cli/src/test_/cli.ts'],
+    rules: {
+      'unicorn/filename-case': 'off',
+    },
+  },
 ];
 
 export default xoConfig;

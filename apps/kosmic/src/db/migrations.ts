@@ -55,6 +55,6 @@ export const auditLog = new AuditLogMigration({
   sequence: '2025-01-07',
 });
 
-export const addAuditTriggers = new AddAuditTriggersMigration({
+export const auditTriggers = new AddAuditTriggersMigration({
   sequence: '2025-01-08',
 });

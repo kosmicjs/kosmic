@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-extraneous-class */
+/* eslint-disable @typescript-eslint/no-extraneous-class -- tests intentionally exercise class-constructor acceptance paths. */
 
 import {test, describe} from 'node:test';
 import assert from 'node:assert';
@@ -12,9 +12,11 @@ describe('Router Schema Tests', () => {
   test('middlewareSchema: accepts function', () => {
     let result = schema.middlewareSchema.safeParse(fn);
     assert.ok(result.success, 'Should accept regular function');
-    if (result.success) {
-      assert.deepStrictEqual(result.data, fn);
+    if (!result.success) {
+      throw new Error('Expected middlewareSchema to accept regular function');
     }
+
+    assert.deepStrictEqual(result.data, fn);
 
     result = schema.middlewareSchema.safeParse(undefined);
     assert.ok(result.success, 'Should accept undefined');

@@ -25,7 +25,7 @@ export const put = async (ctx: Context, next: Next) => {
   const user = await db
     .updateTable('users')
     .set(userData)
-    .where('id', '=', Number.parseInt(ctx.params.id, 10))
+    .where('id', '=', Number(ctx.params.id))
     .returning(['id', 'first_name', 'last_name', 'phone', 'email'])
     .executeTakeFirstOrThrow();
 

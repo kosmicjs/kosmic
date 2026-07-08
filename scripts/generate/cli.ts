@@ -52,7 +52,7 @@ function copyTemplate(
       const content = fs.readFileSync(sourcePath, 'utf8');
       fs.writeFileSync(
         destinationPath,
-        content.replaceAll('{{name}}', packageName),
+        content.split('{{name}}').join(packageName),
         'utf8',
       );
     }
@@ -77,11 +77,11 @@ function generate(): void {
     return;
   }
 
-  const {name} = values;
-
-  if (!name) {
+  if (!values.name) {
     throw new Error('--name is required. Run with --help for usage.');
   }
+
+  const {name} = values;
 
   // eslint-disable-next-line require-unicode-regexp
   if (!/^[\da-z][\d\-a-z]*$/.test(name)) {
@@ -92,11 +92,12 @@ function generate(): void {
 
   const rootDir = path.resolve(__dirname, '../..');
   const targetDir = path.join(rootDir, 'packages', name);
-  const templateDir = path.join(__dirname, 'package-template');
 
   if (fs.existsSync(targetDir)) {
     throw new Error(`Package "${name}" already exists at ${targetDir}.`);
   }
+
+  const templateDir = path.join(__dirname, 'package-template');
 
   console.log(`Scaffolding @kosmic/${name} in packages/${name}...`);
   copyTemplate(templateDir, targetDir, name);

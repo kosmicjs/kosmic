@@ -52,11 +52,11 @@
 
 ### Minor Changes
 
-- # Server bootstrap migration
+- Server bootstrap migration
 
   Extract app server bootstrap logic into `@kosmic/server` with an injected factory API, and migrate `apps/kosmic/src/server.ts` to a thin compatibility shim.
 
-  ## `@kosmic/server`
+  **@kosmic/server**
   - Add reusable Koa bootstrap API via `createServerApp`, `createServer`, and `getCtx`.
   - Move middleware pipeline wiring from the app into package internals:
     - response time
@@ -73,7 +73,7 @@
   - Support app-level dependency injection for logger, env, session store, passport, directories, and middleware hooks.
   - Add focused package tests covering pipeline order, production manifest behavior, `getCtx`, session/passport/router attachment, and event logging.
 
-  ## `kosmic`
+  **kosmic**
   - Replace app-local server bootstrap implementation with a thin shim that calls into `@kosmic/server` while preserving `#server` import compatibility.
   - Rebalance dependencies so bootstrap-owned middleware dependencies are owned by `@kosmic/server`.
 
@@ -94,11 +94,11 @@
 
 ### Minor Changes
 
-- # Server bootstrap migration
+- Server bootstrap migration
 
   Extract app server bootstrap logic into `@kosmic/server` with an injected factory API, and migrate `apps/kosmic/src/server.ts` to a thin compatibility shim.
 
-  ## `@kosmic/server`
+  **@kosmic/server**
   - Add reusable Koa bootstrap API via `createServerApp`, `createServer`, and `getCtx`.
   - Move middleware pipeline wiring from the app into package internals:
     - response time
@@ -115,7 +115,7 @@
   - Support app-level dependency injection for logger, env, session store, passport, directories, and middleware hooks.
   - Add focused package tests covering pipeline order, production manifest behavior, `getCtx`, session/passport/router attachment, and event logging.
 
-  ## `kosmic`
+  **kosmic**
   - Replace app-local server bootstrap implementation with a thin shim that calls into `@kosmic/server` while preserving `#server` import compatibility.
   - Rebalance dependencies so bootstrap-owned middleware dependencies are owned by `@kosmic/server`.
 

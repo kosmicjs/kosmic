@@ -5,8 +5,8 @@ import {$$} from './query.ts';
 export function initializeTooltips($element: Element) {
   const $tooltips = $$('[data-bs-toggle="tooltip"]', $element);
 
-  for (const $element of $tooltips) {
+  for (const $tooltipElement of $tooltips) {
     // eslint-disable-next-line no-new
-    new Tooltip($element);
+    new Tooltip($tooltipElement);
   }
 }
