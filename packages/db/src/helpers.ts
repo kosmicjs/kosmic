@@ -62,3 +62,15 @@ export function addIdColumn(ctb: CreateTableBuilder<any, any>) {
     col.primaryKey().generatedAlwaysAsIdentity(),
   );
 }
+
+/**
+ * Adds a UUIDv7 primary key `id` column to a table definition.
+ *
+ * @param ctb - Kysely create-table builder to extend.
+ * @returns The same builder with a UUIDv7 `id` primary key column.
+ */
+export function addUuidColumn(ctb: CreateTableBuilder<any, any>) {
+  return ctb.addColumn('id', 'uuid', (col) =>
+    col.primaryKey().defaultTo(sql`uuidv7()`),
+  );
+}
