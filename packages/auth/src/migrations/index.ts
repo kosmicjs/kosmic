@@ -112,7 +112,9 @@ const sessionsKyselyMigration: Migration = {
     await db.schema
       .createTable('sessions')
       .ifNotExists()
-      .$call(addUuidColumn)
+      .addColumn('key', 'uuid', (col) =>
+        col.primaryKey().defaultTo(sql`uuidv7()`),
+      )
       .addColumn('value', 'json')
       .execute();
 
