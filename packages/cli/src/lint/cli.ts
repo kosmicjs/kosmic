@@ -16,7 +16,9 @@ Options
 `.trim();
 
 const cli = parseArgs({
+  args: process.argv.slice(2),
   allowPositionals: true,
+  strict: false,
   options: {
     cwd: {
       type: 'string',
@@ -33,11 +35,13 @@ if (cli.values.help) {
   process.exit(0);
 }
 
-try {
-  const cwd = cli.values.cwd ?? process.cwd();
-  const $$ = execa({cwd, stdio: 'inherit'});
+const cwd = typeof cli.values.cwd === 'string' ? cli.values.cwd : process.cwd();
 
-  await $$`xo`;
+try {
+  await execa('xo', cli.positionals, {
+    cwd,
+    stdio: 'inherit',
+  });
 } catch {
   process.exit(1);
 }
