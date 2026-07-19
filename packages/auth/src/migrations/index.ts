@@ -10,6 +10,7 @@ import {
   addTimestampsColumns,
   addIdColumn,
   KosmicMigration,
+  addUuidColumn,
 } from '@kosmic/db/migrations';
 import {generateApiKey} from '../generate-api-key.ts';
 
@@ -29,7 +30,7 @@ const usersKyselyMigration: Migration = {
       .addColumn('role', 'text', (col) =>
         col
           .notNull()
-          .check(sql`role in ('admin', 'user')`)
+          .check(sql`role IN ('admin', 'user')`)
           .defaultTo('user'),
       )
       .addColumn('is_active', 'boolean', (col) => col.notNull().defaultTo(true))
@@ -37,7 +38,7 @@ const usersKyselyMigration: Migration = {
         col.notNull().defaultTo(false),
       )
       .addColumn('verification_token', 'uuid')
-      .addColumn('verification_token_expires_at', 'timestamp')
+      .addColumn('verification_token_expires_at', 'timestamptz')
       .addColumn('first_name', 'text')
       .addColumn('last_name', 'text')
       .addColumn('phone', 'text')
@@ -111,12 +112,7 @@ const sessionsKyselyMigration: Migration = {
     await db.schema
       .createTable('sessions')
       .ifNotExists()
-      .addColumn('key', 'uuid', (col) =>
-        col
-          .notNull()
-          .primaryKey()
-          .defaultTo(sql`gen_random_uuid()`),
-      )
+      .$call(addUuidColumn)
       .addColumn('value', 'json')
       .execute();
 
@@ -154,8 +150,8 @@ const apiKeysKyselyMigration: Migration = {
       .addColumn('name', 'text', (col) => col.notNull())
       .addColumn('key_prefix', 'text', (col) => col.notNull())
       .addColumn('key_hash', 'text', (col) => col.notNull())
-      .addColumn('last_used_at', 'timestamp')
-      .addColumn('expires_at', 'timestamp')
+      .addColumn('last_used_at', 'timestamptz')
+      .addColumn('expires_at', 'timestamptz')
       .addColumn('is_active', 'boolean', (col) => col.notNull().defaultTo(true))
       .addColumn('permissions', 'json')
       .$call(addTimestampsColumns)

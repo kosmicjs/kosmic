@@ -126,7 +126,7 @@ const emailsKyselyMigration: Migration = {
       .addColumn('user_id', 'integer', (col) =>
         col.references('users.id').onDelete('cascade'),
       )
-      .addColumn('sent_at', 'timestamp')
+      .addColumn('sent_at', 'timestamptz')
       .addColumn('html', 'text')
       .addColumn('to', 'text')
       .addColumn('from', 'text')
@@ -136,7 +136,7 @@ const emailsKyselyMigration: Migration = {
       .addColumn('status', 'text', (col) =>
         col
           .notNull()
-          .check(sql`status in ('pending', 'sent', 'failed')`)
+          .check(sql`status IN ('pending', 'sent', 'failed')`)
           .defaultTo('pending'),
       )
       .addColumn('description', 'text')
@@ -184,7 +184,7 @@ const auditLogKyselyMigration: Migration = {
       .addColumn('table_name', 'varchar(50)', (col) => col.notNull())
       .addColumn('record_id', 'text', (col) => col.notNull())
       .addColumn('action', 'varchar(10)', (col) =>
-        col.notNull().check(sql`action in ('INSERT', 'UPDATE', 'DELETE')`),
+        col.notNull().check(sql`action IN ('INSERT', 'UPDATE', 'DELETE')`),
       )
       .addColumn('old_values', 'json')
       .addColumn('new_values', 'json')
