@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 import process from 'node:process';
 import {parseArgs} from 'node:util';
+import {config} from '@kosmic/config';
 import {execa} from 'execa';
+import pg from 'pg';
 
 const HELP_TEXT = `
 Generate types and schemas from your database for a kosmic application.
@@ -41,8 +43,18 @@ try {
   });
 
   const outfile = `${cwd}/src/db/generated.ts`;
+  const client = new pg.Client(config.db?.pg);
+  const databaseUrl = new URL(
+    config.db?.pg.connectionString ?? 'postgresql://localhost',
+  );
 
-  await $$kosmic`kysely-codegen --url=postgresql://postgres:postgres@localhost:5432/spencer --out-file=${outfile}`;
+  databaseUrl.hostname = client.host;
+  databaseUrl.port = String(client.port);
+  databaseUrl.pathname = `/${client.database ?? ''}`;
+  databaseUrl.username = client.user ?? '';
+  databaseUrl.password = client.password ?? '';
+
+  await $$kosmic`kysely-codegen --url=${databaseUrl.href} --out-file=${outfile}`;
 } catch {
   // console.error('Error generating types and schemas:', error);
   process.exit(1);
