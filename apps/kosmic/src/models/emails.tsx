@@ -7,7 +7,7 @@ import WelcomeEmail from '#emails/welcome.js';
 
 export const schema = zod.object({
   id: zod.number().int().positive(),
-  user_id: zod.number().int().positive().nullable(),
+  user_id: zod.uuid().nullable(),
   sent_at: zod.date().nullable(),
   html: zod.string().max(255).nullable(),
   to: zod.string().max(255).nullable(),
@@ -25,7 +25,7 @@ export type InsertableEmail = Insertable<Email>;
 export type UpdatedableEmail = Updateable<Email>;
 
 // Example function to queue a welcome email
-export async function queueWelcomeEmail(userId: number, email: string) {
+export async function queueWelcomeEmail(userId: string, email: string) {
   const emailComponent = (
     <WelcomeEmail verificationLink="http://localhost:3000/account/verify" />
   );
@@ -47,7 +47,7 @@ export async function queueWelcomeEmail(userId: number, email: string) {
 
 // Email verification function for better-auth
 export async function queueEmailVerification(
-  userId: number,
+  userId: string,
   email: string,
   verificationUrl: string,
 ) {
@@ -73,7 +73,7 @@ export async function queueEmailVerification(
 
 // Password reset function for better-auth
 export async function queuePasswordReset(
-  userId: number,
+  userId: string,
   email: string,
   resetUrl: string,
 ) {

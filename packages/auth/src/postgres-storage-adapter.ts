@@ -14,11 +14,11 @@ export class PostgresStorageAdapter implements AbstractDataStorage {
     this.#db = new Kysely<AuthDatabase>({dialect});
   }
 
-  async getUserById(userId: string | number) {
+  async getUserById(userId: string) {
     const user = await this.#db
       .selectFrom('users')
       .select(['id', 'email', 'first_name', 'last_name', 'role', 'hash'])
-      .where('id', '=', Number(userId))
+      .where('id', '=', userId)
       .where('is_active', '=', true)
       .executeTakeFirstOrThrow();
 

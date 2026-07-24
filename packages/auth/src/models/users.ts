@@ -3,10 +3,10 @@ import type {Insertable, Selectable, Updateable, Generated} from 'kysely';
 import type {Simplify} from 'type-fest';
 import zod from 'zod';
 
-type GeneratedId<T> = Simplify<Omit<T, 'id'> & {id: Generated<number>}>;
+type GeneratedId<T> = Simplify<Omit<T, 'id'> & {id: Generated<string>}>;
 
 export const userSchema = zod.object({
-  id: zod.number().int().positive(),
+  id: zod.uuid(),
   role: zod.enum(['admin', 'user']).default('user'),
   first_name: zod.string().max(255).nullable(),
   last_name: zod.string().max(255).nullable(),

@@ -18,6 +18,11 @@ export const put = async (ctx: Context, next: Next) => {
     throw new Error('id is required');
   }
 
+  const userId = User.userSchema.shape.id.safeParse(ctx.params.id);
+  if (!userId.success) {
+    ctx.throw(400, 'invalid user id');
+  }
+
   ctx.log.debug(ctx.request.body, 'updating user');
 
   const userData = await User.updateSchema.parseAsync(ctx.request.body);
@@ -25,7 +30,7 @@ export const put = async (ctx: Context, next: Next) => {
   const user = await db
     .updateTable('users')
     .set(userData)
-    .where('id', '=', Number(ctx.params.id))
+    .where('id', '=', userId.data)
     .returning(['id', 'first_name', 'last_name', 'phone', 'email'])
     .executeTakeFirstOrThrow();
 

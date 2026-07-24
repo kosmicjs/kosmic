@@ -1,5 +1,5 @@
 export interface User {
-  id: number;
+  id: string;
   email: string;
   first_name?: string;
   last_name?: string;
@@ -21,8 +21,8 @@ export interface Session {
 }
 
 export interface ApiKey {
-  id: number;
-  user_id: number;
+  id: string;
+  user_id: string;
   key_prefix: string;
   key_hash: string;
   is_active: boolean;

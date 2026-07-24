@@ -85,7 +85,7 @@ const entitiesKyselyMigration: Migration = {
       .createTable('entities')
       .ifNotExists()
       .$call(addIdColumn)
-      .addColumn('user_id', 'integer', (col) =>
+      .addColumn('user_id', 'uuid', (col) =>
         col.references('users.id').onDelete('cascade').notNull(),
       )
       .addColumn('name', 'text')
@@ -123,7 +123,7 @@ const emailsKyselyMigration: Migration = {
       .createTable('emails')
       .ifNotExists()
       .$call(addIdColumn)
-      .addColumn('user_id', 'integer', (col) =>
+      .addColumn('user_id', 'uuid', (col) =>
         col.references('users.id').onDelete('cascade'),
       )
       .addColumn('sent_at', 'timestamptz')
@@ -189,7 +189,7 @@ const auditLogKyselyMigration: Migration = {
       .addColumn('old_values', 'json')
       .addColumn('new_values', 'json')
       .addColumn('changed_fields', 'text') // Store as comma-separated string
-      .addColumn('user_id', 'integer', (col) =>
+      .addColumn('user_id', 'uuid', (col) =>
         col.references('users.id').onDelete('set null'),
       )
       .addColumn('session_id', 'uuid')
@@ -225,13 +225,13 @@ const auditLogKyselyMigration: Migration = {
         old_data json;
         new_data json;
         changed_fields text;
-        current_user_id integer;
+        current_user_id uuid;
         current_session_id text;
         current_ip text;
         current_user_agent text;
       BEGIN
         -- Get context from session variables
-        current_user_id := nullif(current_setting('app.current_user_id', true), '')::integer;
+        current_user_id := nullif(current_setting('app.current_user_id', true), '')::uuid;
         current_session_id := nullif(current_setting('app.session_id', true), '');
         current_ip := nullif(current_setting('app.ip_address', true), '');
         current_user_agent := nullif(current_setting('app.user_agent', true), '');

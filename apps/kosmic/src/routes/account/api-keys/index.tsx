@@ -89,9 +89,8 @@ export const del: Middleware = async (ctx, next) => {
 
   const userId = ctx.state.user.id;
 
-  const keyIdRaw = ctx.params?.id;
-  const keyId = keyIdRaw ? Number(keyIdRaw) : undefined;
-  if (!keyId || Number.isNaN(keyId)) {
+  const keyId = z.uuid().safeParse(ctx.params?.id);
+  if (!keyId.success) {
     ctx.status = 400;
     ctx.body = {error: 'API key ID required'};
     return;
@@ -100,7 +99,7 @@ export const del: Middleware = async (ctx, next) => {
   // Only allow deleting keys owned by the user
   const deleted = await db
     .deleteFrom('api_keys')
-    .where('id', '=', keyId)
+    .where('id', '=', keyId.data)
     .where('user_id', '=', userId)
     .executeTakeFirst();
 

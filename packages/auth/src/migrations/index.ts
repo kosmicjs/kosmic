@@ -8,7 +8,6 @@ import {
   createTimestampTrigger,
   dropTimestampTrigger,
   addTimestampsColumns,
-  addIdColumn,
   KosmicMigration,
   addUuidColumn,
 } from '@kosmic/db/migrations';
@@ -24,7 +23,7 @@ const usersKyselyMigration: Migration = {
     await db.schema
       .createTable('users')
       .ifNotExists()
-      .$call(addIdColumn)
+      .$call(addUuidColumn)
       .addColumn('email', 'text', (col) => col.notNull().unique())
       .addColumn('hash', 'text', (col) => col.notNull())
       .addColumn('role', 'text', (col) =>
@@ -145,8 +144,8 @@ const apiKeysKyselyMigration: Migration = {
     await db.schema
       .createTable('api_keys')
       .ifNotExists()
-      .$call(addIdColumn)
-      .addColumn('user_id', 'integer', (col) =>
+      .$call(addUuidColumn)
+      .addColumn('user_id', 'uuid', (col) =>
         col.notNull().references('users.id').onDelete('cascade'),
       )
       .addColumn('name', 'text', (col) => col.notNull())
@@ -192,10 +191,16 @@ const apiKeysKyselyMigration: Migration = {
       );
     }
 
+    const admin = await db
+      .selectFrom('users')
+      .select('id')
+      .where('email', '=', 'superuser@kosmic.com')
+      .executeTakeFirstOrThrow();
+
     await db
       .insertInto('api_keys')
       .values({
-        user_id: 1, // Assuming the admin user has ID 1
+        user_id: admin.id,
         name: 'Kosmic Admin Key',
         key_prefix: keyPrefix,
         key_hash: keyHash,

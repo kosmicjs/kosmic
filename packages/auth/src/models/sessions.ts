@@ -4,7 +4,7 @@ import zod from 'zod';
 export const sessionSchema = zod.object({
   key: zod.string().min(1).max(255),
   value: zod.string(),
-  user_id: zod.number().int().positive().nullable(),
+  user_id: zod.uuid().nullable(),
   expires_at: zod.date().nullable(),
 });
 

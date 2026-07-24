@@ -3,9 +3,9 @@ import type {Simplify} from 'type-fest';
 import {z as zod} from 'zod';
 import argon2 from 'argon2';
 
-type GeneratedId<T> = Simplify<Omit<T, 'id'> & {id: Generated<number>}>;
+type GeneratedId<T> = Simplify<Omit<T, 'id'> & {id: Generated<string>}>;
 export const apiKeySchema = zod.object({
-  user_id: zod.number(),
+  user_id: zod.uuid(),
   name: zod.string().min(1).max(255),
   key_prefix: zod.string().min(1).max(50),
   key_hash: zod.string().min(1),
