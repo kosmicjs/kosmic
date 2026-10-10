@@ -9,7 +9,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <i class="bi bi-github fs-3"></i>
+            <i class="bi bi-github fs-3" />
             <span class="ps-2">GitHub</span>
           </a>
         </div>

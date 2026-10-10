@@ -61,7 +61,7 @@ export const get: Middleware = async (ctx) => {
                 export const post = async (ctx) => { /* handle POST */ }
                 export const del = async (ctx) => { /* handle DELETE */ }
               `}
-        ></CodeBlock>
+        />
       </section>
 
       <section className="mb-5">

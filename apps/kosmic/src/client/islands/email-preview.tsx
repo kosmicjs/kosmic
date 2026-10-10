@@ -47,7 +47,7 @@ export default function EmailPreview({html}: Props) {
             maxWidth: '600px',
             display: 'block',
           }}
-        ></iframe>
+        />
         <CodeBlock
           isMultiline
           class={clsx({'visually-hidden': tab !== 'source'})}

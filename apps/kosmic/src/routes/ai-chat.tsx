@@ -46,7 +46,7 @@ export const get: Middleware = async function (ctx) {
         </div>
       </div>
       <div class="row d-flex justify-content-center align-items-center">
-        <div class="col-12 col-sm-8 col-md-6 col-lg-4" id="chat-response"></div>
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4" id="chat-response" />
       </div>
     </Layout>,
   );

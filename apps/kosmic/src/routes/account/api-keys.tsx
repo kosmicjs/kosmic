@@ -55,11 +55,7 @@ export const post: Middleware = async (ctx, next) => {
             </button>
           </div>
         </div>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" />
       </div>,
     );
   } catch (error) {
@@ -68,11 +64,7 @@ export const post: Middleware = async (ctx, next) => {
     await ctx.render(
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <strong>Error!</strong> Failed to create API key. Please try again.
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" />
       </div>,
     );
   }

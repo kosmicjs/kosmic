@@ -9,13 +9,13 @@
   "include": ["src", "test"],
   "exclude": ["node_modules", "dist"],
   "references": [
-    { "path": "../config" },
-    { "path": "../db" },
-    { "path": "../router" },
-    { "path": "../helmet" },
-    { "path": "../logger" },
-    { "path": "../jsx" },
-    { "path": "../cli" },
-    { "path": "../error-handler" }
+    {"path": "../config"},
+    {"path": "../db"},
+    {"path": "../router"},
+    {"path": "../helmet"},
+    {"path": "../logger"},
+    {"path": "../jsx"},
+    {"path": "../cli"},
+    {"path": "../error-handler"}
   ]
 }

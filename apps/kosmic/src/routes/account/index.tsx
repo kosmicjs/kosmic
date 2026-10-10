@@ -191,7 +191,7 @@ export const get: Middleware = async (ctx, next) => {
                 </form>
 
                 {/* Result container for the API key response */}
-                <div id="api-key-result" class="mt-3"></div>
+                <div id="api-key-result" class="mt-3" />
               </div>
 
               {/* Actions */}

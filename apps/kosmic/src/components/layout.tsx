@@ -32,11 +32,7 @@ function Css({files}: {readonly files?: string[] | undefined}) {
 }
 
 function Script({file}: {readonly file?: string | undefined}) {
-  if (!file) {
-    return null;
-  }
-
-  return <script type="module" src={`/${file}`} />;
+  return file ? <script type="module" src={`/${file}`} /> : null;
 }
 
 export function Layout({

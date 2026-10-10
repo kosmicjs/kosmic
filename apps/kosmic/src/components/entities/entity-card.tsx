@@ -59,14 +59,14 @@ export function EntityCard({
               name="name"
               value={entity.name ?? ''}
             />
-            <div class="mb-1"></div>
+            <div class="mb-1" />
             <input
               type="text"
               class="form-control"
               name="description"
               value={entity.description ?? ''}
             />
-            <div class="mb-1"></div>
+            <div class="mb-1" />
             <div class="d-flex justify-content-between">
               <EntitySaveButton />
               <EntityDeleteButton entity={entity} />

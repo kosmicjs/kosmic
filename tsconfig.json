@@ -6,16 +6,16 @@
  */
 {
   "references": [
-    { "path": "./packages/auth" },
-    { "path": "./packages/config" },
-    { "path": "./packages/router" },
-    { "path": "./packages/helmet" },
-    { "path": "./packages/logger" },
-    { "path": "./packages/jsx" },
-    { "path": "./packages/error-handler" },
-    { "path": "./packages/server" },
-    { "path": "./packages/cli" },
-    { "path": "./apps/kosmic" }
+    {"path": "./packages/auth"},
+    {"path": "./packages/config"},
+    {"path": "./packages/router"},
+    {"path": "./packages/helmet"},
+    {"path": "./packages/logger"},
+    {"path": "./packages/jsx"},
+    {"path": "./packages/error-handler"},
+    {"path": "./packages/server"},
+    {"path": "./packages/cli"},
+    {"path": "./apps/kosmic"}
   ],
   "compilerOptions": {
     "outDir": "dist",

@@ -5,8 +5,8 @@ export type Props = {
   readonly isChecked?: boolean;
 };
 
-const Sun = <i class="bi bi-sun"></i>;
-const Moon = <i class="bi bi-moon-stars"></i>;
+const Sun = <i class="bi bi-sun" />;
+const Moon = <i class="bi bi-moon-stars" />;
 
 export function ThemeSwitch({isChecked = false}: Props = {}) {
   const [colorMode, setColorMode] = useState(isChecked ? Sun : Moon);

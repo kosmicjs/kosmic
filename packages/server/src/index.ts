@@ -77,19 +77,33 @@ declare module 'node:http' {
   }
 }
 
-/** Options accepted by the KosmicServer constructor. All fields are optional. */
+/**
+Options accepted by the KosmicServer constructor. All fields are optional.
+*/
 export type KosmicServerOptions = {
-  /** Pino-compatible logger instance. Defaults to a console-based logger. */
+  /**
+  Pino-compatible logger instance. Defaults to a console-based logger.
+  */
   logger?: Logger | undefined;
-  /** Absolute path to the file-system routes directory. Defaults to `<cwd>/src/routes`. */
+  /**
+  Absolute path to the file-system routes directory. Defaults to `<cwd>/src/routes`.
+  */
   routesDir?: string | undefined;
-  /** Absolute path to the public / static assets directory. Defaults to `<cwd>/src/public`. */
+  /**
+  Absolute path to the public / static assets directory. Defaults to `<cwd>/src/public`.
+  */
   publicDir?: string | undefined;
-  /** Override the default Vite manifest path (`<publicDir>/.vite/manifest.json`). */
+  /**
+  Override the default Vite manifest path (`<publicDir>/.vite/manifest.json`).
+  */
   manifestPath?: string | undefined;
-  /** Helmet options — merged with sensible defaults for CSP. */
+  /**
+  Helmet options — merged with sensible defaults for CSP.
+  */
   helmetOptions?: HelmetOptions | undefined;
-  /** Keys used for cookie signing / session encryption. Defaults to `config.sessionKeys`. */
+  /**
+  Keys used for cookie signing / session encryption. Defaults to `config.sessionKeys`.
+  */
   sessionKeys?: string[];
   preRegisterRoutes?: ((server: Koa) => Promise<void>) | undefined;
 };
@@ -245,7 +259,9 @@ export class KosmicServer {
     );
   }
 
-  /** The underlying Koa application. */
+  /**
+  The underlying Koa application.
+  */
   get app(): Koa {
     return this.koa;
   }

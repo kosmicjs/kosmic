@@ -38,16 +38,16 @@
   },
   "dependencies": {
     "koa": "^3.2.1",
-    "zod": "^4.4.3"
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@kosmic/jsx": "^0.0.3",
     "@types/koa": "^3.0.3",
-    "preact": "^10.29.7"
+    "preact": "^11.0.1"
   },
   "peerDependencies": {
     "@kosmic/jsx": "^0.0.3",
-    "preact": "^10.28.2"
+    "preact": ">=10.28.2 <12"
   },
   "engines": {
     "node": ">=22"

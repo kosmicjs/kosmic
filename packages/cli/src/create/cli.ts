@@ -39,11 +39,9 @@ async function promptText(
   const promptResult = await rl.question(`${message}${suffix}: `);
   const value = promptResult.trim();
 
-  if (value.length === 0 && options.defaultText) {
-    return options.defaultText;
-  }
-
-  return value;
+  return value.length === 0 && options.defaultText
+    ? options.defaultText
+    : value;
 }
 
 /**
@@ -58,11 +56,9 @@ async function promptYesNo(
   const promptResult = await rl.question(`${message} (${label}): `);
   const rawValue = promptResult.trim().toLowerCase();
 
-  if (rawValue.length === 0) {
-    return shouldDefaultYes;
-  }
-
-  return rawValue === 'y' || rawValue === 'yes';
+  return rawValue.length === 0
+    ? shouldDefaultYes
+    : rawValue === 'y' || rawValue === 'yes';
 }
 
 /**

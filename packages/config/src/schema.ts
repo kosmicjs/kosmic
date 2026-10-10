@@ -12,17 +12,27 @@ const envVar = z.string().or(z.undefined());
  */
 export const configSchema = z.object({
   kosmicEnv: z.literal(kosmicEnv).default(kosmicEnv),
-  /** The validated value of the NODE_ENV env var */
+  /**
+  The validated value of the NODE_ENV env var
+  */
   nodeEnv: z.literal(nodeEnv).default(nodeEnv),
-  /** The port the server is started on, defaults to 3000 */
+  /**
+  The port the server is started on, defaults to 3000
+  */
   port: z.coerce.number().prefault(env.PORT),
-  /** The host the server is started on, defaults to 127.0.0.1 */
+  /**
+  The host the server is started on, defaults to 127.0.0.1
+  */
   host: z.string().default(env.SERVER_HOST),
-  /** logger */
+  /**
+  logger
+  */
   logLevel: z.string().default(env.LOG_LEVEL),
   db: z
     .object({
-      /** Passed directly to the postgres pool */
+      /**
+      Passed directly to the postgres pool
+      */
       pg: z.object({
         max: z.number().optional().default(10),
         idleTimeoutMillis: z.number().optional().default(30_000),

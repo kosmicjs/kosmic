@@ -69,10 +69,15 @@ await fs.cp(path.resolve(cwd, 'src', 'public'), publicFolder, {
 
 const server = await createServer();
 
+/**
+ * Runs the application server and forwards its ready notifications to Vite.
+ * Execa's asynchronous IPC iterator keeps this task alive for the lifetime of
+ * the child process and propagates child-process failures to the caller.
+ */
 async function runKosmicDevServer() {
-  const cp = $$`node --watch --watch-preserve-output --enable-source-maps ${path.join('dist', 'src', 'index.js')}`;
+  const subprocess = $$`node --watch --watch-preserve-output --enable-source-maps ${path.join('dist', 'src', 'index.js')}`;
 
-  cp.on('message', (message: unknown) => {
+  for await (const message of subprocess.getEachMessage()) {
     if (
       typeof message === 'object' &&
       message !== null &&
@@ -83,7 +88,7 @@ async function runKosmicDevServer() {
         type: 'full-reload',
       });
     }
-  });
+  }
 }
 
 await Promise.all([

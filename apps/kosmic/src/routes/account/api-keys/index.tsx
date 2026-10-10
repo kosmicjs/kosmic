@@ -57,11 +57,7 @@ export const post: Middleware = async (ctx, next) => {
             </button>
           </div>
         </div>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" />
       </div>,
     );
   } catch (error) {
@@ -70,11 +66,7 @@ export const post: Middleware = async (ctx, next) => {
     await ctx.render(
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <strong>Error!</strong> Failed to create API key. Please try again.
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" />
       </div>,
     );
   }
@@ -108,11 +100,7 @@ export const del: Middleware = async (ctx, next) => {
     await ctx.render(
       <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>API Key Revoked!</strong> The key has been deleted.
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" />
       </div>,
     );
   } else {
@@ -120,11 +108,7 @@ export const del: Middleware = async (ctx, next) => {
     await ctx.render(
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <strong>Error!</strong> API key not found or not owned by you.
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" />
       </div>,
     );
   }

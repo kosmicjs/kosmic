@@ -40,9 +40,9 @@
   "dependencies": {
     "@kosmic/config": "^0.1.0",
     "@kosmic/logger": "^0.1.0",
-    "@types/pg": "^8.20.0",
-    "kysely": "^0.29.3",
-    "pg": "^8.22.0"
+    "@types/pg": "^8.23.1",
+    "kysely": "^0.29.6",
+    "pg": "^8.23.1"
   },
   "engines": {
     "node": ">=22"

@@ -9,11 +9,9 @@ type ProgressDetail = {
 };
 
 function isProgressDetail(value: unknown): value is ProgressDetail {
-  if (typeof value !== 'object' || value === null) {
-    return false;
-  }
-
   if (
+    typeof value !== 'object' ||
+    value === null ||
     !('lengthComputable' in value) ||
     !('loaded' in value) ||
     !('total' in value)

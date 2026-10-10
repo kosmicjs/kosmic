@@ -55,7 +55,7 @@
     "koa-response-time": "^2.1.0",
     "koa-session": "^6.4.0",
     "koa-static": "^5.0.0",
-    "zod": "^4.4.3"
+    "zod": "^4.6.5"
   },
   "engines": {
     "node": ">=22"

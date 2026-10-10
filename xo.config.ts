@@ -1,11 +1,15 @@
 import type {XoConfigItem} from 'xo';
 import configReact from 'eslint-config-xo-react';
 
+const reactConfig = configReact({space: true});
+
 const xoConfig: XoConfigItem[] = [
   {
     ignores: [
       'test/temp',
       'coverage',
+      '**/.vscode/**',
+      '**/package.json',
       'packages/*/dist',
       'scripts/generate/package-template/**',
     ],
@@ -17,7 +21,13 @@ const xoConfig: XoConfigItem[] = [
       'jsdoc/require-asterisk-prefix': 'off',
       'capitalized-comments': 'off',
       '@typescript-eslint/naming-convention': 'off',
+      'node-test/no-import-test-files': 'off',
+      'unicorn/consistent-boolean-name': 'off',
       'unicorn/max-nested-calls': 'off',
+      'unicorn/no-useless-re-export': 'off',
+      'unicorn/prefer-continue': 'off',
+      'unicorn/prefer-early-return': 'off',
+      'unicorn/prefer-simple-condition-first': 'off',
     },
   },
   {
@@ -52,20 +62,31 @@ const xoConfig: XoConfigItem[] = [
     },
   },
   {
-    ...configReact({space: true})[0],
+    ...reactConfig[0],
     files: ['apps/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}'],
-    space: true,
-    prettier: true,
+  },
+  {
+    ...reactConfig[1],
+    files: ['apps/**/*.{ts,tsx,cts,mts}'],
+  },
+  {
+    files: ['apps/**/*.{ts,tsx,cts,mts,js,jsx,cjs,mjs}'],
     rules: {
+      '@eslint-react/dom-no-dangerously-set-innerhtml': 'off',
+      '@eslint-react/dom-no-unknown-property': 'off',
+      '@eslint-react/no-missing-key': 'off',
+      '@eslint-react/no-unstable-default-props': 'off',
+      '@stylistic/jsx-child-element-spacing': 'off',
+      '@stylistic/jsx-tag-spacing': 'off',
       'capitalized-comments': 'off',
       'import-x/extensions': 'off',
+      'jsx-a11y-x/anchor-is-valid': 'off',
+      'jsx-a11y-x/autocomplete-valid': 'off',
+      'jsx-a11y-x/iframe-has-title': 'off',
+      'jsx-a11y-x/label-has-associated-control': 'off',
       'no-console': 'error',
       'no-warning-comments': 'off',
-      'react/jsx-key': 'off',
-      'react/no-unknown-property': 'off',
-      'react/react-in-jsx-scope': 'off',
-      'react/self-closing-comp': 'off',
-      'react/forward-ref-uses-ref': 'off',
+      'react-hooks/immutability': 'off',
       'unicorn/prevent-abbreviations': 'off',
       '@typescript-eslint/no-unsafe-type-assertion': 'error',
       '@typescript-eslint/consistent-type-imports': [

@@ -20,11 +20,9 @@ function isObject(value: unknown): value is Record<string, unknown> {
 }
 
 function isClass(value: unknown): value is new () => unknown {
-  if (typeof value !== 'function') {
-    return false;
-  }
-
-  return /^class\s/v.test(Function.prototype.toString.call(value));
+  return typeof value === 'function'
+    ? /^class\s/v.test(Function.prototype.toString.call(value))
+    : false;
 }
 
 declare module 'koa' {
@@ -115,13 +113,11 @@ export async function createFsRouter(
         '',
       )
       .split(path.sep)
-      .map((part) => {
-        if (/^\[.*\]$/v.test(part)) {
-          return part.replace(/^\[/v, ':').replace(/\]$/v, '');
-        }
-
-        return part;
-      })
+      .map((part) =>
+        /^\[.*\]$/v.test(part)
+          ? part.replace(/^\[/v, ':').replace(/\]$/v, '')
+          : part,
+      )
       .join('/');
 
   /**
